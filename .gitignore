@@ -1,4 +1,9 @@
 *.patch
 *.diff
+
 *.log
 
+*.ii
+*.s
+*.o
+*.out
