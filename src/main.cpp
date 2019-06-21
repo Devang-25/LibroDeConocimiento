@@ -4,10 +4,11 @@
 
 int main(int argc, char** argv)
 {
-    std::cout << "\nArguments supplied:";
-    for (int ctr = 1 ; ctr < argc; ctr++)
+    for (int ctr = 0 ; ctr < argc; ctr++)
     {
-        std::cout << "\n\t" << *(argv+ctr) << " or " << argv[ctr];
+        if (ctr == 0 && argc > 1) continue;
+
+        std::cout << "Input to main is " << *(argv+ctr) << " or " << argv[ctr];
 
         root::Dispatcher::dispatch(argv[ctr]);
     }
