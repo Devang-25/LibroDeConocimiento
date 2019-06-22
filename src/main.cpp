@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 
         std::cout << "Input to main is " << *(argv+ctr) << " or " << argv[ctr];
 
-        root::Dispatcher::dispatch(argv[ctr]);
+        root::Dispatcher().dispatch(argv[ctr]);
     }
 
     std::cout << std::endl;

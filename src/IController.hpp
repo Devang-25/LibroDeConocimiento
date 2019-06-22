@@ -7,6 +7,7 @@ namespace root
 class IController
 {
 public:
+    virtual ~IController(){}
     virtual void execute() = 0;
 };
 

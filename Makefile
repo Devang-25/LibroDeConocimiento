@@ -1,34 +1,48 @@
 # Variables
-BUILD_DIR = build
-INCLUDE_DIR1 = .
-INCLUDE_DIR2 = src
+BUILD_DIR = ./build
+BIN_DIR = ./bin
+SRC_INCLUDE_DIR = ./src
+
+CC = g++
+CFLAGS = -I$(SRC_INCLUDE_DIR) -Wall
+
+CPP =  \
+ $(wildcard src/*.cpp) \
+ $(wildcard src/Help/*.cpp)
+OBJ = $(CPP:%.cpp=$(BUILD_DIR)/%.o)
+DEP = $(OBJ:%.o=%.d) # or can be as above : DEP = $(CPP:%.cpp=$(BUILD_DIR)/%.d)
+TARGET = a.out
 
 # Artificial targets
-.PHONY : all clean buildDirectory
+.PHONY : all clean
 
 # Primary rule
-all : buildDirectory $(BUILD_DIR)/a.out
+all : $(BIN_DIR)/$(TARGET)
 
-# Setup build directory
-buildDirectory : $(BUILD_DIR)
+# Setup build and bin directories
+# buildDirectory : $(BUILD_DIR)
 
-$(BUILD_DIR) :
-	mkdir -p $(BUILD_DIR)
+# $(BUILD_DIR) :
+# 	mkdir -p $(BUILD_DIR)
+
+# binDirectory : $(BIN_DIR)
+
+# $(BIN_DIR) :
+# 	mkdir -p $(BIN_DIR)
 
 # Setup target executable
-$(BUILD_DIR)/a.out : $(BUILD_DIR)/main.o $(BUILD_DIR)/Dispatcher.o $(BUILD_DIR)/HelpController.o
-	g++ $^ -o $@
+$(BIN_DIR)/$(TARGET) : $(OBJ)
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) $^ -o $@
+
+-include $(DEP)
 
 # Setup object files
-$(BUILD_DIR)/main.o : src/main.cpp
-	g++ -I$(INCLUDE_DIR1) -I$(INCLUDE_DIR2) -c $< -o $@
-
-$(BUILD_DIR)/Dispatcher.o : src/Dispatcher.cpp src/Dispatcher.hpp
-	g++ -I$(INCLUDE_DIR1) -I$(INCLUDE_DIR2) -c $< -o $@
-
-$(BUILD_DIR)/HelpController.o : src/Help/HelpController.cpp src/Help/HelpController.hpp
-	g++ -I$(INCLUDE_DIR1) -I$(INCLUDE_DIR2) -c $< -o $@
+$(BUILD_DIR)/%.o : %.cpp
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
 # Clean rule
 clean :
 	rm -rf $(BUILD_DIR)
+	rm -rf $(BIN_DIR)
