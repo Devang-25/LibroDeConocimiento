@@ -10,8 +10,9 @@ namespace detail
 {
 
 template<typename... Args>
-typename std::enable_if<sizeof...(Args) == 0>::type
-concatenateMessages(std::ostream& os) {}
+typename std::enable_if<sizeof...(Args) == 0>::type concatenateMessages(std::ostream& os)
+{
+}
 
 template <typename T, typename... Args>
 std::ostream& concatenateMessages(
@@ -39,11 +40,6 @@ public:
     {
     }
 
-    void print()
-    {
-        std::cout << "\n[" << fileName_ << "] ";
-    }
-
     template <typename T, typename... Args>
     void print(T&& message, Args&&... args)
     {
@@ -51,6 +47,11 @@ public:
         ss << "\n[" << fileName_ << "] ";
         detail::concatenateMessages(ss, message, std::forward<Args>(args)...);
         std::cout << ss.str();
+    }
+
+    void print()
+    {
+        print("");
     }
 
 private:
