@@ -1,18 +1,19 @@
-#ifndef ROOT_HELP_HELPCONTROLLER_HPP
-#define ROOT_HELP_HELPCONTROLLER_HPP
+#ifndef SRC_HELP_HELPCONTROLLER_HPP
+#define SRC_HELP_HELPCONTROLLER_HPP
 
 #include "IController.hpp"
 
-namespace root::help
+namespace src::help
 {
 
 class HelpController : public IController
 {
 public:
     HelpController();
+
     virtual void execute() override;
 };
 
-} // namespace root::help
+} // namespace src::help
 
-#endif // ROOT_HELP_HELPCONTROLLER_HPP
+#endif // SRC_HELP_HELPCONTROLLER_HPP

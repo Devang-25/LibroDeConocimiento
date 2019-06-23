@@ -5,6 +5,9 @@ SRC_DIR = ./src
 
 CPP =  \
  $(wildcard src/*.cpp) \
+ $(wildcard src/CoderByte/*.cpp) \
+ $(wildcard src/CoderByte/Challenges/*.cpp) \
+ $(wildcard src/CoderByte/Challenges/EasyDifficulty/*.cpp) \
  $(wildcard src/Help/*.cpp)
 OBJ = $(CPP:%.cpp=$(BUILD_DIR)/%.o)
 DEP = $(OBJ:%.o=%.d)

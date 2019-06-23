@@ -1,7 +1,7 @@
-#ifndef ROOT_ICONTROLLER_HPP
-#define ROOT_ICONTROLLER_HPP
+#ifndef SRC_ICONTROLLER_HPP
+#define SRC_ICONTROLLER_HPP
 
-namespace root
+namespace src
 {
 
 class IController
@@ -11,6 +11,6 @@ public:
     virtual void execute() = 0;
 };
 
-} // namespace root
+} // namespace src
 
-#endif // ROOT_ICONTROLLER_HPP
+#endif // SRC_ICONTROLLER_HPP

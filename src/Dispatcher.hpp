@@ -1,9 +1,9 @@
-#ifndef ROOT_DISPATCHER_HPP
-#define ROOT_DISPATCHER_HPP
+#ifndef SRC_DISPATCHER_HPP
+#define SRC_DISPATCHER_HPP
 
 #include <memory>
 
-namespace root
+namespace src
 {
 
 class IController;
@@ -14,9 +14,11 @@ public:
     Dispatcher();
 
     void dispatch(const char* message);
-    std::unique_ptr<IController> createControllerForMessage(const char* message);
+
+private:
+    std::unique_ptr<IController> createController(const char* message);
 };
 
-} // namespace root
+} // namespace src
 
-#endif // ROOT_DISPATCHER_HPP
+#endif // SRC_DISPATCHER_HPP

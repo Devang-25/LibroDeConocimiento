@@ -2,11 +2,12 @@
 
 #include <string>
 
+#include "CoderByte/CoderByteController.hpp"
 #include "Help/HelpController.hpp"
 #include "IController.hpp"
 #include "Utilities/Logger.hpp"
 
-namespace root
+namespace src
 {
 namespace
 {
@@ -21,7 +22,7 @@ Dispatcher::Dispatcher()
 
 void Dispatcher::dispatch(const char* message)
 {
-    auto controller = createControllerForMessage(message);
+    auto controller = createController(message);
 
     if (controller)
     {
@@ -34,14 +35,14 @@ void Dispatcher::dispatch(const char* message)
     }
 }
 
-std::unique_ptr<IController> Dispatcher::createControllerForMessage(const char* message)
+std::unique_ptr<IController> Dispatcher::createController(const char* message)
 {
     std::string messageStr = message;
 
     if (messageStr == "--help")           return std::make_unique<help::HelpController>();
-    else if (messageStr == "--coderbyte") return nullptr;
+    else if (messageStr == "--coderbyte") return std::make_unique<coderbyte::CoderByteController>();
 
     return nullptr;
 }
 
-} // namespace root
+} // namespace src

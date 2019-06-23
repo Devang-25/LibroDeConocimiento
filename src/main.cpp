@@ -4,7 +4,7 @@
 namespace
 {
 
-root::utilities::Logger logger("main");
+src::utilities::Logger logger("main");
 
 } // namespace
 
@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 
         logger.print("Input to main is ", *(argv+ctr), " or ", argv[ctr]);
 
-        root::Dispatcher().dispatch(argv[ctr]);
+        src::Dispatcher().dispatch(argv[ctr]);
     }
 
     std::cout << std::endl;
