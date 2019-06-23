@@ -11,6 +11,6 @@ public:
     virtual void execute() = 0;
 };
 
-}
+} // namespace root
 
 #endif // ROOT_ICONTROLLER_HPP

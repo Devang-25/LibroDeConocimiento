@@ -1,6 +1,12 @@
-#include <iostream>
-
 #include "Dispatcher.hpp"
+#include "Utilities/Logger.hpp"
+
+namespace
+{
+
+root::utilities::Logger logger("main");
+
+} // namespace
 
 int main(int argc, char** argv)
 {
@@ -8,7 +14,7 @@ int main(int argc, char** argv)
     {
         if (ctr == 0 && argc > 1) continue;
 
-        std::cout << "Input to main is " << *(argv+ctr) << " or " << argv[ctr];
+        logger.print("Input to main is ", *(argv+ctr), " or ", argv[ctr]);
 
         root::Dispatcher().dispatch(argv[ctr]);
     }

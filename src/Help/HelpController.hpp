@@ -3,9 +3,7 @@
 
 #include "IController.hpp"
 
-namespace root
-{
-namespace help
+namespace root::help
 {
 
 class HelpController : public IController
@@ -15,7 +13,6 @@ public:
     virtual void execute() override;
 };
 
-} // namespace help
-} // namespace root
+} // namespace root::help
 
 #endif // ROOT_HELP_HELPCONTROLLER_HPP

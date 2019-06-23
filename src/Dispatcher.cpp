@@ -1,13 +1,19 @@
 #include "Dispatcher.hpp"
 
-#include <iostream>
 #include <string>
 
 #include "Help/HelpController.hpp"
 #include "IController.hpp"
+#include "Utilities/Logger.hpp"
 
 namespace root
 {
+namespace
+{
+
+utilities::Logger logger("Dispatcher");
+
+} // namespace
 
 Dispatcher::Dispatcher()
 {
@@ -23,8 +29,8 @@ void Dispatcher::dispatch(const char* message)
     }
     else
     {
-        std::cout << "\nUnsupported message. Cannot recognize " << message;
-        std::cout << "\nTry with --help to display usage, sample command: ./bin/a.out --help";
+        logger.print("Unsupported message ", message);
+        logger.print("Try with --help to display usage, sample command: ./bin/a.out --help");
     }
 }
 
@@ -32,13 +38,10 @@ std::unique_ptr<IController> Dispatcher::createControllerForMessage(const char* 
 {
     std::string messageStr = message;
 
-    // using if-else because switch statement can only be used for integral values, not for values
-    // of user-defined type (even with overloaded == > < operators)
     if (messageStr == "--help")           return std::make_unique<help::HelpController>();
     else if (messageStr == "--coderbyte") return nullptr;
 
     return nullptr;
-
 }
 
 } // namespace root
