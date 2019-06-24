@@ -1,6 +1,8 @@
 #ifndef SRC_UTILITIES_USERINPUTHANDLER_HPP
 #define SRC_UTILITIES_USERINPUTHANDLER_HPP
 
+#include <type_traits>
+
 #include "Utilities/Logger.hpp"
 
 namespace src::utilities
@@ -25,6 +27,12 @@ inline std::string getUserInputString()
 template<typename IntegralOrFloatingType>
 inline IntegralOrFloatingType getUserInputIntegralOrFloating()
 {
+    if (!std::is_integral<IntegralOrFloatingType>::value && !std::is_floating_point<IntegralOrFloatingType>::value)
+    {
+        logger.print("Error, usage of method ", __FUNCTION__, " for non-integral/floating type!");
+        return IntegralOrFloatingType{};
+    }
+
     logger.print("Input:");
     IntegralOrFloatingType input;
     std::cin >> input;
