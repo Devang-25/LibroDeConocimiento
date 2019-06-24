@@ -20,6 +20,18 @@ inline std::string getUserInputString()
     return input;
 }
 
+// To be used for user inputs such as int, unsigned, long, short, char, bool and float, double
+// Need not to be explicitly written as inline, just for clarity here
+template<typename IntegralOrFloatingType>
+inline IntegralOrFloatingType getUserInputIntegralOrFloating()
+{
+    logger.print("Input:");
+    IntegralOrFloatingType input;
+    std::cin >> input;
+    std::cin.ignore();
+    return input;
+}
+
 } // namespace src::utilities
 
 #endif // SRC_UTILITIES_USERINPUTHANDLER_HPP

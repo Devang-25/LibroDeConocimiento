@@ -12,17 +12,16 @@ utilities::Logger logger("FirstReverse");
 
 std::string firstReverse(const std::string& str)
 {
-  // code goes here
-  std::string result;
-  for (int ctr = str.size() - 1; ctr >= 0; ctr--)
-  {
+    // code goes here
+    std::string result;
+    for (int ctr = str.size() - 1; ctr >= 0; ctr--)
+    {
       result += str.at(ctr);
-  }
-  return result;
+    }
+    return result;
 }
 
 } // namespace
-
 
 const std::string FirstReverse::CHALLENGE_NAME_ = "FirstReverse";
 
