@@ -9,7 +9,7 @@ namespace src::utilities
 namespace detail
 {
 
-template<typename... Args>
+template <typename... Args>
 typename std::enable_if<sizeof...(Args) == 0>::type concatenateMessages(std::ostream& os)
 {
 }

@@ -16,7 +16,7 @@ std::string firstReverse(const std::string& str)
     std::string result;
     for (int ctr = str.size() - 1; ctr >= 0; ctr--)
     {
-      result += str.at(ctr);
+        result += str.at(ctr);
     }
     return result;
 }

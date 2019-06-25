@@ -22,10 +22,11 @@ inline std::string getUserInputString()
     return input;
 }
 
-// To be used for user inputs such as int, unsigned, long, short, char, bool and float, double
-// Need not to be explicitly written as inline, just for clarity here
-template<typename IntegralOrFloatingType>
-inline IntegralOrFloatingType getUserInputIntegralOrFloating()
+// To be used for user inputs such as int, unsigned, long, short, char, bool and float, double.
+// Need not to be explicitly declared as inline because the method is a template, thus, is automatically
+// compiled as a weak (W) symbol as opposed to text (T) symbol for non-template non-inline methods.
+template <typename IntegralOrFloatingType>
+IntegralOrFloatingType getUserInputIntegralOrFloating()
 {
     if (!std::is_integral<IntegralOrFloatingType>::value && !std::is_floating_point<IntegralOrFloatingType>::value)
     {

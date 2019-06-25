@@ -46,7 +46,7 @@ void CoderByteController::displayUserInputOptions() const
     logger.print();
     logger.print("What CoderByte challenge do you want to run?");
     logger.print(" - To see list of available challenges, enter <listall>");
-    logger.print(" - If you already know the name or ID of the challenge, enter either the <ChallengeName> or the <ChallengeID>");
+    logger.print(" - If you already know the name or ID of the challenge, enter either the <ChallengeID> or the <ChallengeName>");
     logger.print(" - To exit, enter <exit>");
 }
 
