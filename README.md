@@ -17,7 +17,7 @@ REQUIREMENTS
 
 USAGE
 1. git clone https://github.com/nponcian/LibroDeConocimiento.git
-    1. If Git is not available, just download the ZIP from the remote repository
+    1. If Git is not available, just download and extract the ZIP from the remote repository
 2. cd LibroDeConocimiento
 3. make all
 4. ./bin/a.out --target_command

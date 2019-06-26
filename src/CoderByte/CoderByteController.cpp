@@ -14,7 +14,6 @@ namespace
 
 utilities::Logger logger("CoderByteController");
 
-
 bool doesStringContainOnlyDigits(const std::string& str)
 {
     return !str.empty() &&
