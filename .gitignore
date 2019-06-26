@@ -7,3 +7,6 @@
 *.s
 *.o
 *.out
+
+bin/
+build/
