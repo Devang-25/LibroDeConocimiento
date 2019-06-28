@@ -64,6 +64,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(CoderByte)
 add_subdirectory(Help)
 
+# This can be transformed to regex: file(GLOB libro_src_cpp "*.cpp")
+# Keeping it as set currently for reference as all other CMakeLists already use the regex format
 set(libro_src_cpp
     Dispatcher.cpp
     main.cpp)
