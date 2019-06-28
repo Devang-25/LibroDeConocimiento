@@ -9,5 +9,6 @@ file(GLOB libro_src_coderbyte_cpp
 
 add_library(libro_src_coderbyte ${libro_src_coderbyte_cpp})
 
-# In case of fire caused by #include errors...
-# target_include_directories(libro_src_coderbyte PUBLIC ..)
+# The target_include_directories is used if you want that during target_link_libraries, it will have
+# automatically those include directories added. So in case of fire caused by #include errors, do below.
+# target_include_directories(libro_src_coderbyte PUBLIC ../your/included/directories/for/this/library)
