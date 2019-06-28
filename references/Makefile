@@ -1,3 +1,6 @@
+# This manually written Makefile will not anymore be maintained. The project will now be using CMake
+# for the automatic generation of Makefile.
+
 # Variables
 BUILD_DIR = ./build
 BIN_DIR = ./bin
