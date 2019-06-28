@@ -4,3 +4,5 @@ project(libro)
 add_subdirectory(src)
 
 set(CMAKE_CXX_STANDARD 14)
+
+add_compile_options(-Wall -Wextra -Werror -pedantic)

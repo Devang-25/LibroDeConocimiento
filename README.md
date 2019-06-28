@@ -34,6 +34,7 @@ cmake ..
 ## RUNNING
 ~~~
 cd LibroDeConocimiento/build
+cmake ..
 make
 src/libro_src --help
 ~~~
