@@ -1,7 +1,7 @@
 #ifndef SRC_CODERBYTE_CHALLENGES_EASYDIFFICULTY_FIRSTFACTORIAL_HPP
 #define SRC_CODERBYTE_CHALLENGES_EASYDIFFICULTY_FIRSTFACTORIAL_HPP
 
-#include "CoderByte/Challenges/IChallenge.hpp"
+#include <CoderByte/Challenges/IChallenge.hpp>
 
 namespace src::coderbyte::challenges::easy
 {

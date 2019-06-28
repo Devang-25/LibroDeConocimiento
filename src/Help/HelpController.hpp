@@ -1,7 +1,7 @@
 #ifndef SRC_HELP_HELPCONTROLLER_HPP
 #define SRC_HELP_HELPCONTROLLER_HPP
 
-#include "IController.hpp"
+#include <IController.hpp>
 
 namespace src::help
 {

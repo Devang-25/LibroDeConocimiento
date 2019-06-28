@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-#include "Utilities/Logger.hpp"
+#include <Utilities/Logger.hpp>
 
 namespace src::utilities
 {

@@ -1,7 +1,7 @@
-#include "CoderByte/Challenges/EasyDifficulty/LongestWord.hpp"
+#include <CoderByte/Challenges/EasyDifficulty/LongestWord.hpp>
 
-#include "Utilities/Logger.hpp"
-#include "Utilities/UserInputHandler.hpp"
+#include <Utilities/Logger.hpp>
+#include <Utilities/UserInputHandler.hpp>
 
 namespace src::coderbyte::challenges::easy
 {

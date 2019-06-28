@@ -1,11 +1,11 @@
-#include "CoderByte/Challenges/ChallengesGetter.hpp"
+#include <CoderByte/Challenges/ChallengesGetter.hpp>
 
-#include "CoderByte/Challenges/EasyDifficulty/FirstFactorial.hpp"
-#include "CoderByte/Challenges/EasyDifficulty/FirstReverse.hpp"
-#include "CoderByte/Challenges/EasyDifficulty/LetterChanges.hpp"
-#include "CoderByte/Challenges/EasyDifficulty/LongestWord.hpp"
-#include "CoderByte/Challenges/EasyDifficulty/SimpleAdding.hpp"
-#include "CoderByte/Challenges/IChallenge.hpp"
+#include <CoderByte/Challenges/EasyDifficulty/FirstFactorial.hpp>
+#include <CoderByte/Challenges/EasyDifficulty/FirstReverse.hpp>
+#include <CoderByte/Challenges/EasyDifficulty/LetterChanges.hpp>
+#include <CoderByte/Challenges/EasyDifficulty/LongestWord.hpp>
+#include <CoderByte/Challenges/EasyDifficulty/SimpleAdding.hpp>
+#include <CoderByte/Challenges/IChallenge.hpp>
 
 namespace src::coderbyte::challenges
 {

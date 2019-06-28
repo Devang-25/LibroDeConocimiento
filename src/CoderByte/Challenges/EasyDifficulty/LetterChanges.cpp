@@ -1,9 +1,9 @@
-#include "CoderByte/Challenges/EasyDifficulty/LetterChanges.hpp"
+#include <CoderByte/Challenges/EasyDifficulty/LetterChanges.hpp>
 
 #include <set>
 
-#include "Utilities/Logger.hpp"
-#include "Utilities/UserInputHandler.hpp"
+#include <Utilities/Logger.hpp>
+#include <Utilities/UserInputHandler.hpp>
 
 namespace src::coderbyte::challenges::easy
 {
