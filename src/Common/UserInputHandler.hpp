@@ -1,11 +1,11 @@
-#ifndef SRC_UTILITIES_USERINPUTHANDLER_HPP
-#define SRC_UTILITIES_USERINPUTHANDLER_HPP
+#ifndef SRC_COMMON_USERINPUTHANDLER_HPP
+#define SRC_COMMON_USERINPUTHANDLER_HPP
 
 #include <type_traits>
 
-#include <Utilities/Logger.hpp>
+#include <Common/Logger.hpp>
 
-namespace src::utilities
+namespace src::common
 {
 namespace
 {
@@ -41,6 +41,6 @@ IntegralOrFloatingType getUserInputIntegralOrFloating()
     return input;
 }
 
-} // namespace src::utilities
+} // namespace src::common
 
-#endif // SRC_UTILITIES_USERINPUTHANDLER_HPP
+#endif // SRC_COMMON_USERINPUTHANDLER_HPP

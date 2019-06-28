@@ -1,14 +1,14 @@
 #include <CoderByte/Challenges/EasyDifficulty/LongestWord.hpp>
 
-#include <Utilities/Logger.hpp>
-#include <Utilities/UserInputHandler.hpp>
+#include <Common/Logger.hpp>
+#include <Common/UserInputHandler.hpp>
 
 namespace src::coderbyte::challenges::easy
 {
 namespace
 {
 
-utilities::Logger logger("LongestWord");
+common::Logger logger("LongestWord");
 
 std::string longestWord(const std::string& sen)
 {
@@ -53,7 +53,7 @@ std::string LongestWord::name() const
 void LongestWord::run()
 {
     displayProblem();
-    auto input = utilities::getUserInputString();
+    auto input = common::getUserInputString();
     auto result = longestWord(input);
     logger.print(result);
 }

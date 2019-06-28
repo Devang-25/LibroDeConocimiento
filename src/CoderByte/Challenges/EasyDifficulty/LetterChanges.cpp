@@ -2,15 +2,15 @@
 
 #include <set>
 
-#include <Utilities/Logger.hpp>
-#include <Utilities/UserInputHandler.hpp>
+#include <Common/Logger.hpp>
+#include <Common/UserInputHandler.hpp>
 
 namespace src::coderbyte::challenges::easy
 {
 namespace
 {
 
-utilities::Logger logger("LetterChanges");
+common::Logger logger("LetterChanges");
 
 const std::set<char> VOWELS =
 {
@@ -66,7 +66,7 @@ std::string LetterChanges::name() const
 void LetterChanges::run()
 {
     displayProblem();
-    auto input = utilities::getUserInputString();
+    auto input = common::getUserInputString();
     auto result = letterChanges(input);
     logger.print(result);
 }

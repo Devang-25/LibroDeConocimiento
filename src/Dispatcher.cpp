@@ -5,14 +5,14 @@
 #include <CoderByte/CoderByteController.hpp>
 #include <Help/HelpController.hpp>
 #include <IController.hpp>
-#include <Utilities/Logger.hpp>
+#include <Common/Logger.hpp>
 
 namespace src
 {
 namespace
 {
 
-utilities::Logger logger("Dispatcher");
+common::Logger logger("Dispatcher");
 
 } // namespace
 
@@ -31,7 +31,7 @@ void Dispatcher::dispatch(const char* message)
     else
     {
         logger.print("Unsupported message ", message);
-        logger.print("Try with --help to display usage, sample command: ./bin/a.out --help");
+        logger.print("Try with --help to display usage, sample command: ./libro_src --help");
     }
 }
 

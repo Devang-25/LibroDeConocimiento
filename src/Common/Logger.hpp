@@ -1,10 +1,10 @@
-#ifndef SRC_UTILITIES_LOGGER_HPP
-#define SRC_UTILITIES_LOGGER_HPP
+#ifndef SRC_COMMON_LOGGER_HPP
+#define SRC_COMMON_LOGGER_HPP
 
 #include <iostream>
 #include <sstream>
 
-namespace src::utilities
+namespace src::common
 {
 namespace detail
 {
@@ -58,6 +58,6 @@ private:
     const char* fileName_;
 };
 
-} // namespace src::utilities
+} // namespace src::common
 
-#endif // SRC_UTILITIES_LOGGER_HPP
+#endif // SRC_COMMON_LOGGER_HPP

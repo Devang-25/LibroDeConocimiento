@@ -1,14 +1,14 @@
 #include <CoderByte/Challenges/EasyDifficulty/FirstFactorial.hpp>
 
-#include <Utilities/Logger.hpp>
-#include <Utilities/UserInputHandler.hpp>
+#include <Common/Logger.hpp>
+#include <Common/UserInputHandler.hpp>
 
 namespace src::coderbyte::challenges::easy
 {
 namespace
 {
 
-utilities::Logger logger("FirstFactorial");
+common::Logger logger("FirstFactorial");
 
 int firstFactorial(int num)
 {
@@ -37,7 +37,7 @@ std::string FirstFactorial::name() const
 void FirstFactorial::run()
 {
     displayProblem();
-    auto input = utilities::getUserInputIntegralOrFloating<int>();
+    auto input = common::getUserInputIntegralOrFloating<int>();
     auto result = firstFactorial(input);
     logger.print(result);
 }

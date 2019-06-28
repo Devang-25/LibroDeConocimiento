@@ -1,14 +1,14 @@
 #include <CoderByte/Challenges/EasyDifficulty/SimpleAdding.hpp>
 
-#include <Utilities/Logger.hpp>
-#include <Utilities/UserInputHandler.hpp>
+#include <Common/Logger.hpp>
+#include <Common/UserInputHandler.hpp>
 
 namespace src::coderbyte::challenges::easy
 {
 namespace
 {
 
-utilities::Logger logger("SimpleAdding");
+common::Logger logger("SimpleAdding");
 
 int simpleAdding(int num)
 {
@@ -37,7 +37,7 @@ std::string SimpleAdding::name() const
 void SimpleAdding::run()
 {
     displayProblem();
-    auto input = utilities::getUserInputIntegralOrFloating<int>();
+    auto input = common::getUserInputIntegralOrFloating<int>();
     auto result = simpleAdding(input);
     logger.print(result);
 }

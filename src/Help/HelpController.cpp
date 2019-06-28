@@ -1,13 +1,13 @@
 #include <Help/HelpController.hpp>
 
-#include <Utilities/Logger.hpp>
+#include <Common/Logger.hpp>
 
 namespace src::help
 {
 namespace
 {
 
-utilities::Logger logger("HelpController");
+common::Logger logger("HelpController");
 
 } // namespace
 
@@ -21,8 +21,8 @@ void HelpController::execute()
     logger.print("This project is being developed to study and try different concepts in C++ software development.");
     logger.print("This project not only contains C++ source files but also the tools normally used alongside with it such as the Makefile, among others.");
     logger.print();
-    logger.print("Topics maintained here can be accessed by postfixing the following commands upon running ./bin/a.out");
-    logger.print("sample command: ./bin/a.out --help");
+    logger.print("Topics maintained here can be accessed by postfixing the following commands upon running ./libro_src");
+    logger.print("sample command: ./libro_src --help");
     logger.print();
     logger.print("\t--help");
     logger.print("\t\tDisplay the information about this project.");

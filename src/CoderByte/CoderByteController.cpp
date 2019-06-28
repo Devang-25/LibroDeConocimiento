@@ -4,15 +4,15 @@
 
 #include <CoderByte/Challenges/ChallengesGetter.hpp>
 #include <CoderByte/Challenges/IChallenge.hpp>
-#include <Utilities/Logger.hpp>
-#include <Utilities/UserInputHandler.hpp>
+#include <Common/Logger.hpp>
+#include <Common/UserInputHandler.hpp>
 
 namespace src::coderbyte
 {
 namespace
 {
 
-utilities::Logger logger("CoderByteController");
+common::Logger logger("CoderByteController");
 
 bool doesStringContainOnlyDigits(const std::string& str)
 {
@@ -35,7 +35,7 @@ void CoderByteController::execute()
     while (keepRunning)
     {
         displayUserInputOptions();
-        auto input = utilities::getUserInputString();
+        auto input = common::getUserInputString();
         processUserInput(input, challenges, challengesNameAndIdMap, keepRunning);
     }
 }

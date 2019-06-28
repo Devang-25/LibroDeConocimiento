@@ -1,10 +1,10 @@
 #include <Dispatcher.hpp>
-#include <Utilities/Logger.hpp>
+#include <Common/Logger.hpp>
 
 namespace
 {
 
-src::utilities::Logger logger("main");
+src::common::Logger logger("main");
 
 } // namespace
 

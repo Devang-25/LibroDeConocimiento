@@ -1,14 +1,14 @@
 #include <CoderByte/Challenges/EasyDifficulty/FirstReverse.hpp>
 
-#include <Utilities/Logger.hpp>
-#include <Utilities/UserInputHandler.hpp>
+#include <Common/Logger.hpp>
+#include <Common/UserInputHandler.hpp>
 
 namespace src::coderbyte::challenges::easy
 {
 namespace
 {
 
-utilities::Logger logger("FirstReverse");
+common::Logger logger("FirstReverse");
 
 std::string firstReverse(const std::string& str)
 {
@@ -37,7 +37,7 @@ std::string FirstReverse::name() const
 void FirstReverse::run()
 {
     displayProblem();
-    auto input = utilities::getUserInputString();
+    auto input = common::getUserInputString();
     auto result = firstReverse(input);
     logger.print(result);
 }
