@@ -19,6 +19,7 @@ Logger dataTypeLogger("DataTypeHandler");
 
 enum class DataType
 {
+    Unknown,
     Int,
     Unsigned,
     Long,
