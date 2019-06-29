@@ -65,7 +65,7 @@ add_subdirectory(CoderByte)
 add_subdirectory(Help)
 
 # This can be transformed to regex: file(GLOB libro_src_cpp "*.cpp")
-# Keeping it as set currently for reference as all other CMakeLists already use the regex format
+# The command set is used here for reference as all other CMakeLists already uses the regex format
 set(libro_src_cpp
     Dispatcher.cpp
     main.cpp)

@@ -37,6 +37,16 @@ cd LibroDeConocimiento/build
 cmake ..
 make
 src/libro_src --help
+src/libro_src --coderbyte
+~~~
+
+## TESTING
+~~~
+cd LibroDeConocimiento/build
+cmake ..
+make
+test/libro_test # this will run all tests
+test/CoderByte/libro_test_coderbyte
 ~~~
 
 Feliz aprendizaje mis AMIGOS!
