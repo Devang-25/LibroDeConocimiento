@@ -1,8 +1,7 @@
 #ifndef SRC_COMMON_USERINPUTHANDLER_HPP
 #define SRC_COMMON_USERINPUTHANDLER_HPP
 
-#include <type_traits>
-
+#include <Common/DataTypeHandler.hpp>
 #include <Common/Logger.hpp>
 
 namespace src::common
@@ -10,13 +9,13 @@ namespace src::common
 namespace
 {
 
-Logger logger("UserInputHandler");
+Logger userInputLogger("UserInputHandler");
 
 } // namespace
 
 inline std::string getUserInputString()
 {
-    logger.print("Input:");
+    userInputLogger.print("Input:");
     std::string input;
     std::getline(std::cin, input);
     return input;
@@ -28,13 +27,13 @@ inline std::string getUserInputString()
 template <typename IntegralOrFloatingType>
 IntegralOrFloatingType getUserInputIntegralOrFloating()
 {
-    if (!std::is_integral<IntegralOrFloatingType>::value && !std::is_floating_point<IntegralOrFloatingType>::value)
+    if (!isIntegralType<IntegralOrFloatingType>() && !isFloatingType<IntegralOrFloatingType>())
     {
-        logger.print("Error, usage of method ", __FUNCTION__, " for non-integral/floating type!");
+        userInputLogger.print("Error, usage of method ", __FUNCTION__, " for non-integral/floating type!");
         return IntegralOrFloatingType{};
     }
 
-    logger.print("Input:");
+    userInputLogger.print("Input:");
     IntegralOrFloatingType input;
     std::cin >> input;
     std::cin.ignore();

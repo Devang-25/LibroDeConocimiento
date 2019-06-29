@@ -50,12 +50,15 @@ std::string LongestWord::name() const
     return CHALLENGE_NAME_;
 }
 
-void LongestWord::run()
+common::Result LongestWord::run()
 {
     displayProblem();
     auto input = common::getUserInputString();
     auto result = longestWord(input);
     logger.print(result);
+
+    result_.set(result);
+    return result_;
 }
 
 void LongestWord::displayProblem() const

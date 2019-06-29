@@ -34,12 +34,15 @@ std::string SimpleAdding::name() const
     return CHALLENGE_NAME_;
 }
 
-void SimpleAdding::run()
+common::Result SimpleAdding::run()
 {
     displayProblem();
     auto input = common::getUserInputIntegralOrFloating<int>();
     auto result = simpleAdding(input);
     logger.print(result);
+
+    result_.set(result);
+    return result_;
 }
 
 void SimpleAdding::displayProblem() const

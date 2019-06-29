@@ -2,12 +2,22 @@
 
 #include <gtest/gtest.h>
 
-TEST(sample_test_case2, sample_test3)
-{
-    EXPECT_EQ(1, 1);
-}
+#include <CoderByte/Challenges/EasyDifficulty/FirstFactorial.hpp>
 
-TEST(sample_test_case2, sample_test4)
+using namespace src::coderbyte::challenges::easy;
+
+struct FirstFactorialTest : public ::testing::Test
 {
-    EXPECT_EQ(11, 11);
+    FirstFactorialTest(){}
+    virtual ~FirstFactorialTest(){}
+
+    virtual void SetUp(){}
+    virtual void TearDown(){}
+
+    FirstFactorial impl_;
+};
+
+TEST_F(FirstFactorialTest, NameIsCorrect)
+{
+    EXPECT_EQ(impl_.name(), "FirstFactorial");
 }

@@ -34,12 +34,15 @@ std::string FirstFactorial::name() const
     return CHALLENGE_NAME_;
 }
 
-void FirstFactorial::run()
+common::Result FirstFactorial::run()
 {
     displayProblem();
     auto input = common::getUserInputIntegralOrFloating<int>();
     auto result = firstFactorial(input);
     logger.print(result);
+
+    result_.set(result);
+    return result_;
 }
 
 void FirstFactorial::displayProblem() const

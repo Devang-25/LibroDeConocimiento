@@ -32,6 +32,7 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
 # if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include") # I have included this for the subdirectories to see
 # endif()
+include_directories(../src)
 
 # Set the variables that you need to pass to the subdirectories. The idea is to include all cpp files
 # of all subdirectories so that we can run here all tests within this libro_test executable.
@@ -52,4 +53,5 @@ add_executable(
     ${libro_test_cpp}
     ${parent_libro_test_coderbyte_cpp})
 target_link_libraries(libro_test gtest_main)
+target_link_libraries(libro_test libro_src_coderbyte)
 add_test(NAME libro_test COMMAND libro_test)

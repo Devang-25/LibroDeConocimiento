@@ -34,12 +34,15 @@ std::string FirstReverse::name() const
     return CHALLENGE_NAME_;
 }
 
-void FirstReverse::run()
+common::Result FirstReverse::run()
 {
     displayProblem();
     auto input = common::getUserInputString();
     auto result = firstReverse(input);
     logger.print(result);
+
+    result_.set(result);
+    return result_;
 }
 
 void FirstReverse::displayProblem() const

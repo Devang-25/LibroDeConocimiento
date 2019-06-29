@@ -2,12 +2,22 @@
 
 #include <gtest/gtest.h>
 
-TEST(sample_test_case, sample_test)
-{
-    EXPECT_EQ(1, 1);
-}
+#include <CoderByte/Challenges/EasyDifficulty/FirstReverse.hpp>
 
-TEST(sample_test_case, sample_test2)
+using namespace src::coderbyte::challenges::easy;
+
+struct FirstReverseTest : public ::testing::Test
 {
-    EXPECT_EQ(11, 11);
+    FirstReverseTest(){}
+    virtual ~FirstReverseTest(){}
+
+    virtual void SetUp(){}
+    virtual void TearDown(){}
+
+    FirstReverse impl_;
+};
+
+TEST_F(FirstReverseTest, NameIsCorrect)
+{
+    EXPECT_EQ(impl_.name(), "FirstReverse");
 }

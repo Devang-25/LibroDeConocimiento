@@ -63,12 +63,15 @@ std::string LetterChanges::name() const
     return CHALLENGE_NAME_;
 }
 
-void LetterChanges::run()
+common::Result LetterChanges::run()
 {
     displayProblem();
     auto input = common::getUserInputString();
     auto result = letterChanges(input);
     logger.print(result);
+
+    result_.set(result);
+    return result_;
 }
 
 void LetterChanges::displayProblem() const

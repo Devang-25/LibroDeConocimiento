@@ -58,12 +58,15 @@ std::string SimpleSymbols::name() const
     return CHALLENGE_NAME_;
 }
 
-void SimpleSymbols::run()
+common::Result SimpleSymbols::run()
 {
     displayProblem();
     auto input = common::getUserInputString();
     auto result = simpleSymbols(input);
     logger.print(result);
+
+    result_.set(result);
+    return result_;
 }
 
 void SimpleSymbols::displayProblem() const

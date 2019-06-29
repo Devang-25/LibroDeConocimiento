@@ -47,12 +47,15 @@ std::string LetterCapitalize::name() const
     return CHALLENGE_NAME_;
 }
 
-void LetterCapitalize::run()
+common::Result LetterCapitalize::run()
 {
     displayProblem();
     auto input = common::getUserInputString();
     auto result = letterCapitalize(input);
     logger.print(result);
+
+    result_.set(result);
+    return result_;
 }
 
 void LetterCapitalize::displayProblem() const

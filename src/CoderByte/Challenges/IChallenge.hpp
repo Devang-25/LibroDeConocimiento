@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <Common/ResultHandler.hpp>
+
 namespace src::coderbyte::challenges
 {
 
@@ -11,7 +13,7 @@ class IChallenge
 public:
     virtual ~IChallenge(){}
     virtual std::string name() const = 0;
-    virtual void run() = 0;
+    virtual common::Result run() = 0;
     virtual void displayProblem() const = 0;
 };
 

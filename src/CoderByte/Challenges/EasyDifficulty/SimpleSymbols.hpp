@@ -13,12 +13,14 @@ public:
 
     virtual std::string name() const override;
 
-    virtual void run() override;
+    virtual common::Result run() override;
 
     virtual void displayProblem() const override;
 
 private:
     static const std::string CHALLENGE_NAME_;
+
+    common::Result result_;
 };
 
 } // namespace src::coderbyte::challenges::easy
