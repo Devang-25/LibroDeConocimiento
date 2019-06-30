@@ -15,7 +15,6 @@ set(parent_libro_test_coderbyte_cpp
 # quotations "" within the argument libro_test_coderbyte_cpp below because if it is empty, then it is
 # substituted with totally nothing thus the add_executable command compiles error due to lack of
 # arguments. But actually, the quotations are not neccesary, just here for reference.
-add_executable(libro_test_coderbyte "${libro_test_coderbyte_cpp}")
-
-target_link_libraries(libro_test_coderbyte gtest_main)
-target_link_libraries(libro_test_coderbyte libro_src_coderbyte_FOR_TESTING)
+# add_executable(libro_test_coderbyte "${libro_test_coderbyte_cpp}")
+# target_link_libraries(libro_test_coderbyte gtest_main)
+# target_link_libraries(libro_test_coderbyte libro_src_coderbyte_FOR_TESTING)
