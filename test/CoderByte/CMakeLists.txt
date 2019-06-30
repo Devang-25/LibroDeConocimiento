@@ -18,4 +18,4 @@ set(parent_libro_test_coderbyte_cpp
 add_executable(libro_test_coderbyte "${libro_test_coderbyte_cpp}")
 
 target_link_libraries(libro_test_coderbyte gtest_main)
-target_link_libraries(libro_test_coderbyte libro_src_coderbyte)
+target_link_libraries(libro_test_coderbyte libro_src_coderbyte_FOR_TESTING)

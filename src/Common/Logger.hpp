@@ -10,7 +10,7 @@ namespace detail
 {
 
 template <typename... Args>
-typename std::enable_if<sizeof...(Args) == 0>::type concatenateMessages(std::ostream& os)
+typename std::enable_if<sizeof...(Args) == 0>::type concatenateMessages(std::ostream&)
 {
 }
 
@@ -46,7 +46,9 @@ public:
         std::ostringstream oss; // or std::stringstream
         oss << "\n[" << fileName_ << "] ";
         detail::concatenateMessages(oss, message, std::forward<Args>(args)...);
+        #ifndef DONT_PRINT_TO_SCREEN // If not defined hence, printing is allowed
         std::cout << oss.str();
+        #endif
     }
 
     void print()

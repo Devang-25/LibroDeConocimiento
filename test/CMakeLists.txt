@@ -1,6 +1,9 @@
 # Keep this up to date with setup process in https://github.com/google/googletest
 # Please see googletest/googletest README file
 
+cmake_minimum_required(VERSION 3.10.2)
+project(libro_test)
+
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
@@ -34,6 +37,15 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
 # endif()
 include_directories(../src)
 
+# Define macro flag DONT_PRINT_TO_SCREEN to compilation of all executables after this command, including
+# those in the subdirectories added after this. This is added specifically for everything under the
+# test folder to restrict the prints made by the src codes under test. Search the src code for more
+# info about handling this macro flag DONT_PRINT_TO_SCREEN. Other options:
+# 1. add_definitions(-DDONT_PRINT_TO_SCREEN)
+# 2. add_compile_options(-DDONT_PRINT_TO_SCREEN)
+# 3. target_compile_definitions(libro_test PUBLIC DONT_PRINT_TO_SCREEN)
+add_definitions(-DDONT_PRINT_TO_SCREEN)
+
 # Set the variables that you need to pass to the subdirectories. The idea is to include all cpp files
 # of all subdirectories so that we can run here all tests within this libro_test executable.
 set(parent_libro_test_coderbyte_cpp "")
@@ -53,5 +65,5 @@ add_executable(
     ${libro_test_cpp}
     ${parent_libro_test_coderbyte_cpp})
 target_link_libraries(libro_test gtest_main)
-target_link_libraries(libro_test libro_src_coderbyte)
+target_link_libraries(libro_test libro_src_coderbyte_FOR_TESTING)
 add_test(NAME libro_test COMMAND libro_test)

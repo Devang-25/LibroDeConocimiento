@@ -16,9 +16,10 @@ bool isLetter(const char ch)
             (ch >= 'a' && ch <= 'z');
 }
 
-bool isValidStringIndex(const std::string& str, const unsigned index)
+bool isValidStringIndex(const std::string& str, const int index)
 {
-    return index >= 0 && index < str.size();
+    int strSize = str.size();
+    return index >= 0 && index < strSize;
 }
 
 std::string simpleSymbols(const std::string& str)
@@ -29,8 +30,8 @@ std::string simpleSymbols(const std::string& str)
     {
         if (!isLetter(str.at(ctr))) continue;
 
-        unsigned left = ctr - 1;
-        unsigned right = ctr + 1;
+        int left = ctr - 1;
+        int right = ctr + 1;
         if (isValidStringIndex(str, left) && isValidStringIndex(str, right) &&
             str.at(left) == '+' && str.at(right) == '+')
         {
