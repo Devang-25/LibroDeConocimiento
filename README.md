@@ -45,8 +45,14 @@ src/libro_src --coderbyte
 cd LibroDeConocimiento/build
 cmake ..
 make
-test/libro_test # this will run all tests
-test/CoderByte/libro_test_coderbyte
+test/libro_test
+~~~
+To display result of specific testcase
+~~~
+cd LibroDeConocimiento/build
+../Tools/GoogleTestResultReader/setup
+../Tools/GoogleTestResultReader/GoogleTestResultReader/readgtest test/libro_test --all
+../Tools/GoogleTestResultReader/GoogleTestResultReader/readgtest test/libro_test --test FactorialTest
 ~~~
 
 Feliz aprendizaje mis AMIGOS!
