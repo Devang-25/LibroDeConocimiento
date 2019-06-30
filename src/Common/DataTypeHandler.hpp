@@ -19,7 +19,6 @@ Logger dataTypeLogger("DataTypeHandler");
 
 enum class DataType
 {
-    Unknown,
     Int,
     Unsigned,
     Long,
@@ -64,9 +63,16 @@ DataType getDataType()
                             {
                                 return idAndType.first == id;
                             });
-    return it != PRIMITIVES_ID_AND_TYPE.end() ?
-            it->second :
-            DataType::String;
+
+    if (it != PRIMITIVES_ID_AND_TYPE.end())
+    {
+        return it->second;
+    }
+    else if (typeid(T) != typeid(std::string))
+    {
+        dataTypeLogger.print("Unrecognized data type. Defaulting to string. This might lead to errors!");
+    }
+    return DataType::String;
 }
 
 } // namespace src::common

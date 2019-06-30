@@ -17,7 +17,7 @@ class Result
 {
 public:
     Result() :
-        type_(DataType::Unknown),
+        type_(DataType::String),
         data_(nullptr)
     {
     }
