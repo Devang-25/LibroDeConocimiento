@@ -13,7 +13,7 @@ class IChallenge
 public:
     virtual ~IChallenge(){}
     virtual std::string name() const = 0;
-    virtual common::Result run() = 0;
+    virtual common::Result run(std::istream& inputStream = std::cin) = 0;
     virtual void displayProblem() const = 0;
 };
 

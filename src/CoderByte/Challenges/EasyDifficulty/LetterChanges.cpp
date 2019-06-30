@@ -63,10 +63,10 @@ std::string LetterChanges::name() const
     return CHALLENGE_NAME_;
 }
 
-common::Result LetterChanges::run()
+common::Result LetterChanges::run(std::istream& inputStream)
 {
     displayProblem();
-    auto input = common::getUserInputString();
+    auto input = common::getUserInputString(inputStream);
     auto result = letterChanges(input);
     logger.print(result);
 

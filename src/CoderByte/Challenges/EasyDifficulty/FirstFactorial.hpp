@@ -13,7 +13,7 @@ public:
 
     virtual std::string name() const override;
 
-    virtual common::Result run() override;
+    virtual common::Result run(std::istream& inputStream = std::cin) override;
 
     virtual void displayProblem() const override;
 

@@ -19,6 +19,6 @@ int main(int argc, char** argv)
         src::Dispatcher().dispatch(argv[ctr]);
     }
 
-    std::cout << std::endl;
+    logger.print("End of execution\n");
     return 0;
 }

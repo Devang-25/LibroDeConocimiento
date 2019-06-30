@@ -47,10 +47,10 @@ std::string LetterCapitalize::name() const
     return CHALLENGE_NAME_;
 }
 
-common::Result LetterCapitalize::run()
+common::Result LetterCapitalize::run(std::istream& inputStream)
 {
     displayProblem();
-    auto input = common::getUserInputString();
+    auto input = common::getUserInputString(inputStream);
     auto result = letterCapitalize(input);
     logger.print(result);
 

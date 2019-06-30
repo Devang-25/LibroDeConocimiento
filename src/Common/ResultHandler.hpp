@@ -69,7 +69,7 @@ private:
             case DataType::Float :    { data_ = newData<float>(other.data_);       break; }
             case DataType::Double :   { data_ = newData<double>(other.data_);      break; }
             case DataType::String :   { data_ = newData<std::string>(other.data_); break; }
-            default: resultLogger.print("Unrecognized data type. Brace yourself, memory leak is coming!");
+            default: resultLogger.print("Error. Unrecognized data type. Brace yourself, memory leak is coming!");
         }
     }
 
@@ -93,7 +93,7 @@ private:
             case DataType::Float :    { deleteData<float>(data_);       break; }
             case DataType::Double :   { deleteData<double>(data_);      break; }
             case DataType::String :   { deleteData<std::string>(data_); break; }
-            default: resultLogger.print("Unrecognized data type. Brace yourself, memory leak is coming!");
+            default: resultLogger.print("Error. Unrecognized data type. Brace yourself, memory leak is coming!");
         }
     }
 

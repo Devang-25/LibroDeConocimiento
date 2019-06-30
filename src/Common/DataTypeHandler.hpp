@@ -70,7 +70,7 @@ DataType getDataType()
     }
     else if (typeid(T) != typeid(std::string))
     {
-        dataTypeLogger.print("Unrecognized data type. Defaulting to string. This might lead to errors!");
+        dataTypeLogger.print("Error. Unrecognized data type. Defaulting to string!");
     }
     return DataType::String;
 }

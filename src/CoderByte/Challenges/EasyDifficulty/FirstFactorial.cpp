@@ -10,10 +10,10 @@ namespace
 
 common::Logger logger("FirstFactorial");
 
-int firstFactorial(int num)
+long firstFactorial(long num)
 {
     // code goes here
-    int result = 1;
+    long result = 1;
     for (; num > 0; num--)
     {
         result = result * num;
@@ -34,10 +34,10 @@ std::string FirstFactorial::name() const
     return CHALLENGE_NAME_;
 }
 
-common::Result FirstFactorial::run()
+common::Result FirstFactorial::run(std::istream& inputStream)
 {
     displayProblem();
-    auto input = common::getUserInputIntegralOrFloating<int>();
+    auto input = common::getUserInputIntegralOrFloating<long>(inputStream);
     auto result = firstFactorial(input);
     logger.print(result);
 

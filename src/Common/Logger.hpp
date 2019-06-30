@@ -43,10 +43,10 @@ public:
     template <typename T, typename... Args>
     void print(T&& message, Args&&... args)
     {
-        std::stringstream ss;
-        ss << "\n[" << fileName_ << "] ";
-        detail::concatenateMessages(ss, message, std::forward<Args>(args)...);
-        std::cout << ss.str();
+        std::ostringstream oss; // or std::stringstream
+        oss << "\n[" << fileName_ << "] ";
+        detail::concatenateMessages(oss, message, std::forward<Args>(args)...);
+        std::cout << oss.str();
     }
 
     void print()

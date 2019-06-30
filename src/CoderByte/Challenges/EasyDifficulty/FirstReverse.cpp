@@ -34,10 +34,10 @@ std::string FirstReverse::name() const
     return CHALLENGE_NAME_;
 }
 
-common::Result FirstReverse::run()
+common::Result FirstReverse::run(std::istream& inputStream)
 {
     displayProblem();
-    auto input = common::getUserInputString();
+    auto input = common::getUserInputString(inputStream);
     auto result = firstReverse(input);
     logger.print(result);
 

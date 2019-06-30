@@ -34,10 +34,10 @@ std::string SimpleAdding::name() const
     return CHALLENGE_NAME_;
 }
 
-common::Result SimpleAdding::run()
+common::Result SimpleAdding::run(std::istream& inputStream)
 {
     displayProblem();
-    auto input = common::getUserInputIntegralOrFloating<int>();
+    auto input = common::getUserInputIntegralOrFloating<int>(inputStream);
     auto result = simpleAdding(input);
     logger.print(result);
 

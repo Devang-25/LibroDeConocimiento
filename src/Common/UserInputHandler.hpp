@@ -13,11 +13,11 @@ Logger userInputLogger("UserInputHandler");
 
 } // namespace
 
-inline std::string getUserInputString()
+inline std::string getUserInputString(std::istream& inputStream = std::cin)
 {
     userInputLogger.print("Input:");
     std::string input;
-    std::getline(std::cin, input);
+    std::getline(inputStream, input);
     return input;
 }
 
@@ -25,18 +25,18 @@ inline std::string getUserInputString()
 // Need not to be explicitly declared as inline because the method is a template, thus, is automatically
 // compiled as a weak (W) symbol as opposed to text (T) symbol for non-template non-inline methods.
 template <typename IntegralOrFloatingType>
-IntegralOrFloatingType getUserInputIntegralOrFloating()
+IntegralOrFloatingType getUserInputIntegralOrFloating(std::istream& inputStream = std::cin)
 {
     if (!isIntegralType<IntegralOrFloatingType>() && !isFloatingType<IntegralOrFloatingType>())
     {
-        userInputLogger.print("Error, usage of method ", __FUNCTION__, " for non-integral/floating type!");
+        userInputLogger.print("Error. Usage of method ", __FUNCTION__, " for non-integral/floating type!");
         return IntegralOrFloatingType{};
     }
 
     userInputLogger.print("Input:");
     IntegralOrFloatingType input;
-    std::cin >> input;
-    std::cin.ignore();
+    inputStream >> input;
+    inputStream.ignore();
     return input;
 }
 
