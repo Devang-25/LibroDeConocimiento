@@ -3,6 +3,7 @@ project(libro)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# -O0 # add least optimization flag if needed for debugging
 add_compile_options(-Wall -Wextra -Werror -pedantic)
 
 add_subdirectory(src)
