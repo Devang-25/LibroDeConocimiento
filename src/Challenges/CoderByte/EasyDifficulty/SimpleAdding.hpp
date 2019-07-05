@@ -1,9 +1,9 @@
-#ifndef SRC_CODERBYTE_CHALLENGES_EASYDIFFICULTY_SIMPLEADDING_HPP
-#define SRC_CODERBYTE_CHALLENGES_EASYDIFFICULTY_SIMPLEADDING_HPP
+#ifndef SRC_CHALLENGES_CODERBYTE_EASYDIFFICULTY_SIMPLEADDING_HPP
+#define SRC_CHALLENGES_CODERBYTE_EASYDIFFICULTY_SIMPLEADDING_HPP
 
-#include <CoderByte/Challenges/IChallenge.hpp>
+#include <Challenges/IChallenge.hpp>
 
-namespace src::coderbyte::challenges::easy
+namespace src::challenges::coderbyte::easy
 {
 
 class SimpleAdding : public IChallenge
@@ -23,6 +23,6 @@ private:
     common::Result result_;
 };
 
-} // namespace src::coderbyte::challenges::easy
+} // namespace src::challenges::coderbyte::easy
 
-#endif // SRC_CODERBYTE_CHALLENGES_EASYDIFFICULTY_SIMPLEADDING_HPP
+#endif // SRC_CHALLENGES_CODERBYTE_EASYDIFFICULTY_SIMPLEADDING_HPP

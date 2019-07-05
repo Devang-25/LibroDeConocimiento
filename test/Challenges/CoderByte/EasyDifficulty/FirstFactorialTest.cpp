@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 
-#include <CoderByte/Challenges/EasyDifficulty/FirstFactorial.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/FirstFactorial.hpp>
 
-using namespace src::coderbyte::challenges::easy;
+using namespace src::challenges::coderbyte::easy;
 
 struct FirstFactorialTest : public ::testing::Test
 {

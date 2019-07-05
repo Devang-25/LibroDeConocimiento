@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <CoderByte/CoderByteController.hpp>
+#include <Challenges/ChallengesController.hpp>
 #include <Help/HelpController.hpp>
 #include <IController.hpp>
 #include <Common/Logger.hpp>
@@ -39,8 +39,8 @@ std::unique_ptr<IController> Dispatcher::createController(const char* message)
 {
     std::string messageStr = message;
 
-    if (messageStr == "--help")           return std::make_unique<help::HelpController>();
-    else if (messageStr == "--coderbyte") return std::make_unique<coderbyte::CoderByteController>();
+    if (messageStr == "--help")            return std::make_unique<help::HelpController>();
+    else if (messageStr == "--challenges") return std::make_unique<challenges::ChallengesController>();
 
     return nullptr;
 }

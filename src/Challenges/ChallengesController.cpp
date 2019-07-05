@@ -1,18 +1,18 @@
-#include <CoderByte/CoderByteController.hpp>
+#include <Challenges/ChallengesController.hpp>
 
 #include <algorithm>
 
-#include <CoderByte/Challenges/ChallengesGetter.hpp>
-#include <CoderByte/Challenges/IChallenge.hpp>
+#include <Challenges/ChallengesGetter.hpp>
+#include <Challenges/IChallenge.hpp>
 #include <Common/Logger.hpp>
 #include <Common/UserInputHandler.hpp>
 
-namespace src::coderbyte
+namespace src::challenges
 {
 namespace
 {
 
-common::Logger logger("CoderByteController");
+common::Logger logger("ChallengesController");
 
 bool doesStringContainOnlyDigits(const std::string& str)
 {
@@ -22,13 +22,13 @@ bool doesStringContainOnlyDigits(const std::string& str)
 
 } // namespace
 
-CoderByteController::CoderByteController()
+ChallengesController::ChallengesController()
 {
 }
 
-void CoderByteController::execute()
+void ChallengesController::execute()
 {
-    auto challenges = challenges::getAllChallenges();
+    auto challenges = getAllChallenges();
     const auto challengesNameAndIdMap = getChallengesNameAndIdMap(challenges);
     bool keepRunning = true;
 
@@ -40,18 +40,18 @@ void CoderByteController::execute()
     }
 }
 
-void CoderByteController::displayUserInputOptions() const
+void ChallengesController::displayUserInputOptions() const
 {
     logger.print();
-    logger.print("What CoderByte challenge do you want to run?");
+    logger.print("What challenge do you want to run?");
     logger.print(" - To see list of available challenges, enter <listall>");
     logger.print(" - If you already know the name or ID of the challenge, enter either the <ChallengeID> or the <ChallengeName>");
     logger.print(" - To exit, enter <exit>");
 }
 
-void CoderByteController::processUserInput(
+void ChallengesController::processUserInput(
     const std::string& input,
-    const std::vector<std::shared_ptr<challenges::IChallenge>>& challenges,
+    const std::vector<std::shared_ptr<IChallenge>>& challenges,
     const std::map<std::string, unsigned>& challengesNameAndIdMap,
     bool& keepRunning) const
 {
@@ -99,7 +99,7 @@ void CoderByteController::processUserInput(
     }
 }
 
-UserInputCategory CoderByteController::parseUserInputCategory(const std::string& userInput) const
+UserInputCategory ChallengesController::parseUserInputCategory(const std::string& userInput) const
 {
     if (userInput == "exit")                         return UserInputCategory::Exit;
     else if (userInput == "listall")                 return UserInputCategory::ListAll;
@@ -107,4 +107,4 @@ UserInputCategory CoderByteController::parseUserInputCategory(const std::string&
     else                                             return UserInputCategory::ChallengeName;
 }
 
-} // namespace src::coderbyte
+} // namespace src::challenges

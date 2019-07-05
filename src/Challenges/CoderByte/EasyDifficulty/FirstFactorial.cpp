@@ -1,9 +1,9 @@
-#include <CoderByte/Challenges/EasyDifficulty/FirstFactorial.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/FirstFactorial.hpp>
 
 #include <Common/Logger.hpp>
 #include <Common/UserInputHandler.hpp>
 
-namespace src::coderbyte::challenges::easy
+namespace src::challenges::coderbyte::easy
 {
 namespace
 {
@@ -52,4 +52,4 @@ void FirstFactorial::displayProblem() const
     logger.print("For the test cases, the range will be between 1 and 18 and the input will always be an integer.");
 }
 
-} // namespace src::coderbyte::challenges::easy
+} // namespace src::challenges::coderbyte::easy

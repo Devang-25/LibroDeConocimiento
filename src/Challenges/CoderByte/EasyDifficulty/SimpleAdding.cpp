@@ -1,9 +1,9 @@
-#include <CoderByte/Challenges/EasyDifficulty/SimpleAdding.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/SimpleAdding.hpp>
 
 #include <Common/Logger.hpp>
 #include <Common/UserInputHandler.hpp>
 
-namespace src::coderbyte::challenges::easy
+namespace src::challenges::coderbyte::easy
 {
 namespace
 {
@@ -52,4 +52,4 @@ void SimpleAdding::displayProblem() const
     logger.print("For the test cases, the parameter num will be any number from 1 to 1000.");
 }
 
-} // namespace src::coderbyte::challenges::easy
+} // namespace src::challenges::coderbyte::easy

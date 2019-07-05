@@ -28,8 +28,8 @@ void HelpController::execute()
     logger.print("\t\tDisplay the information about this project.");
     logger.print("\t\tGuides you with the available commands to move through what the project can offer.");
     logger.print();
-    logger.print("\t--coderbyte");
-    logger.print("\t\tAccess the challenges in CoderByte.");
+    logger.print("\t--challenges");
+    logger.print("\t\tAccess the challenges.");
     logger.print("\t\tExecute and test the solutions written to the different challenges.");
 }
 

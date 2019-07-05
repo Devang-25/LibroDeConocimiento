@@ -1,9 +1,9 @@
-#include <CoderByte/Challenges/EasyDifficulty/SimpleSymbols.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/SimpleSymbols.hpp>
 
 #include <Common/Logger.hpp>
 #include <Common/UserInputHandler.hpp>
 
-namespace src::coderbyte::challenges::easy
+namespace src::challenges::coderbyte::easy
 {
 namespace
 {
@@ -77,4 +77,4 @@ void SimpleSymbols::displayProblem() const
     logger.print("So the string to the left would be false. The string will not be empty and will have at least one letter.");
 }
 
-} // namespace src::coderbyte::challenges::easy
+} // namespace src::challenges::coderbyte::easy

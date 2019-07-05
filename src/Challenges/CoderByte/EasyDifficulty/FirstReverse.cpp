@@ -1,9 +1,9 @@
-#include <CoderByte/Challenges/EasyDifficulty/FirstReverse.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/FirstReverse.hpp>
 
 #include <Common/Logger.hpp>
 #include <Common/UserInputHandler.hpp>
 
-namespace src::coderbyte::challenges::easy
+namespace src::challenges::coderbyte::easy
 {
 namespace
 {
@@ -51,4 +51,4 @@ void FirstReverse::displayProblem() const
     logger.print("For example: if the input string is \"Hello World and Coders\" then your program should return the string \"sredoC dna dlroW olleH\".");
 }
 
-} // namespace src::coderbyte::challenges::easy
+} // namespace src::challenges::coderbyte::easy

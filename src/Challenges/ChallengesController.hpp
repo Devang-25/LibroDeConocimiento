@@ -1,5 +1,5 @@
-#ifndef SRC_CODERBYTE_CODERBYTECONTROLLER_HPP
-#define SRC_CODERBYTE_CODERBYTECONTROLLER_HPP
+#ifndef SRC_CHALLENGES_CHALLENGESCONTROLLER_HPP
+#define SRC_CHALLENGES_CHALLENGESCONTROLLER_HPP
 
 #include <map>
 #include <memory>
@@ -8,14 +8,10 @@
 
 #include <IController.hpp>
 
-namespace src::coderbyte
-{
-namespace challenges
+namespace src::challenges
 {
 
 class IChallenge;
-
-} // namespace challenges
 
 enum class UserInputCategory
 {
@@ -25,10 +21,10 @@ enum class UserInputCategory
     ChallengeName,
 };
 
-class CoderByteController : public IController
+class ChallengesController : public IController
 {
 public:
-    CoderByteController();
+    ChallengesController();
 
     virtual void execute() override;
 
@@ -37,13 +33,13 @@ private:
 
     void processUserInput(
         const std::string& input,
-        const std::vector<std::shared_ptr<challenges::IChallenge>>& challenges,
+        const std::vector<std::shared_ptr<IChallenge>>& challenges,
         const std::map<std::string, unsigned>& challengesNameAndIdMap,
         bool& keepRunning) const;
 
     UserInputCategory parseUserInputCategory(const std::string& userInput) const;
 };
 
-} // namespace src::coderbyte
+} // namespace src::challenges
 
-#endif // SRC_CODERBYTE_CODERBYTECONTROLLER_HPP
+#endif // SRC_CHALLENGES_CHALLENGESCONTROLLER_HPP

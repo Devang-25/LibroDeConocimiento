@@ -5,7 +5,7 @@
 
 #include <Common/ResultHandler.hpp>
 
-namespace src::coderbyte::challenges
+namespace src::challenges
 {
 
 class IChallenge
@@ -17,6 +17,6 @@ public:
     virtual void displayProblem() const = 0;
 };
 
-} // namespace src::coderbyte::challenges
+} // namespace src::challenges
 
 #endif // SRC_CODERBYTE_CHALLENGES_ICHALLENGE_HPP

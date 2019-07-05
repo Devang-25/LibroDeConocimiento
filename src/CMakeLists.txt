@@ -61,7 +61,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # this project, just to make a point :)
 # add_subdirectory(Common) # Uncomment if cpp files are already in Common for linking
 
-add_subdirectory(CoderByte)
+add_subdirectory(Challenges)
 add_subdirectory(Help)
 
 # This can be transformed to regex: file(GLOB libro_src_cpp "*.cpp")
@@ -73,5 +73,5 @@ set(libro_src_cpp
 add_executable(libro_src ${libro_src_cpp})
 
 # target_link_libraries(libro_src libro_src_common) # Uncomment if cpp files are already in Common for linking
-target_link_libraries(libro_src libro_src_coderbyte)
+target_link_libraries(libro_src libro_src_challenges)
 target_link_libraries(libro_src libro_src_help)

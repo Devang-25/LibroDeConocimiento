@@ -1,9 +1,9 @@
-#include <CoderByte/Challenges/EasyDifficulty/LetterCapitalize.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/LetterCapitalize.hpp>
 
 #include <Common/Logger.hpp>
 #include <Common/UserInputHandler.hpp>
 
-namespace src::coderbyte::challenges::easy
+namespace src::challenges::coderbyte::easy
 {
 namespace
 {
@@ -64,4 +64,4 @@ void LetterCapitalize::displayProblem() const
     logger.print("Words will be separated by only one space.");
 }
 
-} // namespace src::coderbyte::challenges::easy
+} // namespace src::challenges::coderbyte::easy

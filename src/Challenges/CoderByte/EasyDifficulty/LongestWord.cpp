@@ -1,9 +1,9 @@
-#include <CoderByte/Challenges/EasyDifficulty/LongestWord.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/LongestWord.hpp>
 
 #include <Common/Logger.hpp>
 #include <Common/UserInputHandler.hpp>
 
-namespace src::coderbyte::challenges::easy
+namespace src::challenges::coderbyte::easy
 {
 namespace
 {
@@ -68,4 +68,4 @@ void LongestWord::displayProblem() const
     logger.print("Ignore punctuation and assume sen will not be empty.");
 }
 
-} // namespace src::coderbyte::challenges::easy
+} // namespace src::challenges::coderbyte::easy

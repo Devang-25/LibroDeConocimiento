@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 
-#include <CoderByte/Challenges/EasyDifficulty/FirstReverse.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/FirstReverse.hpp>
 
-using namespace src::coderbyte::challenges::easy;
+using namespace src::challenges::coderbyte::easy;
 
 struct FirstReverseTest : public ::testing::Test
 {

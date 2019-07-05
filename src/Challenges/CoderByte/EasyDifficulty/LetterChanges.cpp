@@ -1,11 +1,11 @@
-#include <CoderByte/Challenges/EasyDifficulty/LetterChanges.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/LetterChanges.hpp>
 
 #include <set>
 
 #include <Common/Logger.hpp>
 #include <Common/UserInputHandler.hpp>
 
-namespace src::coderbyte::challenges::easy
+namespace src::challenges::coderbyte::easy
 {
 namespace
 {
@@ -81,4 +81,4 @@ void LetterChanges::displayProblem() const
     logger.print("Then capitalize every vowel in this new string (a, e, i, o, u) and finally return this modified string.");
 }
 
-} // namespace src::coderbyte::challenges::easy
+} // namespace src::challenges::coderbyte::easy
