@@ -1,7 +1,8 @@
 file(GLOB libro_src_challenges_cpp
     "*.cpp"
     "CoderByte/*.cpp"
-    "CoderByte/EasyDifficulty/*.cpp")
+    "CoderByte/EasyDifficulty/*.cpp"
+    "ProjectEuler/*.cpp")
 
 # Do not overthink about the .. in <include_directories(..)>, it is just the parent directory.
 # This command is not needed anymore as ../CMakeLists.txt already included this.
