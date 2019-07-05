@@ -10,6 +10,8 @@ namespace
 
 common::Logger logger("MultiplesOf3And5");
 
+// Yes, the name should have been MultiplesOf3Or5 instead, but to be consistent with ProjectEuler,
+// thus the name :)
 unsigned multiplesOf3And5(unsigned number)
 {
     unsigned result = 0u;
