@@ -7,6 +7,7 @@
 #include <Challenges/CoderByte/EasyDifficulty/LongestWord.hpp>
 #include <Challenges/CoderByte/EasyDifficulty/SimpleAdding.hpp>
 #include <Challenges/CoderByte/EasyDifficulty/SimpleSymbols.hpp>
+#include <Challenges/ProjectEuler/LargestPrimeFactor.hpp>
 #include <Challenges/ProjectEuler/MultiplesOf3And5.hpp>
 #include <Challenges/IChallenge.hpp>
 
@@ -26,6 +27,7 @@ std::vector<std::shared_ptr<IChallenge>> getAllChallenges()
             std::make_shared<coderbyte::easy::SimpleSymbols>(),
 
             std::make_shared<euler::MultiplesOf3And5>(),
+            std::make_shared<euler::LargestPrimeFactor>(),
         };
 }
 
