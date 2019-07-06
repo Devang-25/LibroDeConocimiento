@@ -10,9 +10,9 @@ namespace
 
 common::Logger logger("LargestPrimeFactor");
 
-bool isPrime(long number) // 100 ... 50 ... 33
+bool isPrime(long number)
 {
-    long limit = number;
+    long limit = number - 1;
 
     for (long ctr = 2; ctr <= limit; ctr++)
     {
@@ -24,13 +24,15 @@ bool isPrime(long number) // 100 ... 50 ... 33
 
 long largestPrimeFactor(long number)
 {
-    long limit = number;
+    if (isPrime(number)) return number;
+
+    long limit = number - 1;
     long largestPrime = 0;
 
     for (long multiplicand = 2; multiplicand <= limit; multiplicand++)
     {
-        long multiplier = number / multiplicand; // 391 / 17 = 23 ===== 17 * 23 // 112
-        if (number % multiplicand == 0) // 20 % 5 = 102 / 6 = 17     20 / 5 = 4    21 / 3
+        long multiplier = number / multiplicand;
+        if (number % multiplicand == 0)
         {
             if (isPrime(multiplier) && multiplier > multiplicand)
             {
