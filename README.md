@@ -92,6 +92,14 @@ src/libro_src --challenges
 [ChessboardTraveling]           4 2
 [ChessboardTraveling]               4 3
 [ChessboardTraveling] Result: 3
+[ChallengesController] 
+[ChallengesController] What challenge do you want to run?
+[ChallengesController]  - To see list of available challenges, enter <listall>
+[ChallengesController]  - If you already know the name or ID of the challenge, enter either the <ChallengeID> or the <ChallengeName>
+[ChallengesController]  - To exit, enter <exit>
+[UserInputHandler] Input:exit
+
+[main] End of execution
 ~~~
 
 ## TESTING
