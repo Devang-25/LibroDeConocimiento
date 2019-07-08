@@ -1,6 +1,8 @@
 # Get all cpp files and put to local variable libro_test_challenges_cpp
 file(GLOB libro_test_challenges_cpp
-    "CoderByte/EasyDifficulty/*.cpp")
+    "CoderByte/EasyDifficulty/*.cpp"
+    "CoderByte/HardDifficulty/*.cpp"
+    "ProjectEuler/*.cpp")
 
 # Modify the parent variable parent_libro_test_challenges_cpp by adding the cpp files from here. The
 # cpp files from here will be used to create the common executable that will run all tests.
