@@ -12,6 +12,7 @@
 #include <Challenges/ProjectEuler/EvenFibonacciNumbers.hpp>
 #include <Challenges/ProjectEuler/LargestPrimeFactor.hpp>
 #include <Challenges/ProjectEuler/MultiplesOf3And5.hpp>
+#include <Challenges/ProjectEuler/SmallestMultiple.hpp>
 #include <Challenges/IChallenge.hpp>
 
 namespace src::challenges
@@ -35,6 +36,7 @@ std::vector<std::shared_ptr<IChallenge>> getAllChallenges()
             std::make_shared<euler::MultiplesOf3And5>(),
             std::make_shared<euler::EvenFibonacciNumbers>(),
             std::make_shared<euler::LargestPrimeFactor>(),
+            std::make_shared<euler::SmallestMultiple>(),
         };
 }
 
