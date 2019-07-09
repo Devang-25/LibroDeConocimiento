@@ -35,6 +35,25 @@ TEST_F(ChessboardTravelingTest, FullConfiguration)
     EXPECT_EQ(result.get<int>(), 3432);
 }
 
+TEST_F(ChessboardTravelingTest, BasicConfigurationWithIncompleteSymbols)
+{
+    std::string input("113  3)");
+    std::istringstream iss(input);
+
+    auto result = impl_.run(iss);
+    EXPECT_EQ(result.get<int>(), 6);
+}
+
+TEST_F(ChessboardTravelingTest, BasicConfigurationWithIncompleteNumberInput)
+{
+    std::string input("113");
+    std::istringstream iss(input);
+
+    auto result = impl_.run(iss);
+    EXPECT_EQ(result.get<int>(), 0);
+}
+
+
 TEST_F(ChessboardTravelingTest, SourceIsNearDestination)
 {
     std::string input("(2 2)(4 3)");

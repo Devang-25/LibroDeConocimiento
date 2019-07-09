@@ -63,6 +63,8 @@ src/libro_src --challenges
 [ChallengesController] ID:9 Name:MultiplesOf3And5
 [ChallengesController] ID:10    Name:EvenFibonacciNumbers
 [ChallengesController] ID:11    Name:LargestPrimeFactor
+[ChallengesController] ID:12    Name:LargestPalindromeProduct
+[ChallengesController] ID:13    Name:SmallestMultiple
 [ChallengesController] 
 [ChallengesController] What challenge do you want to run?
 [ChallengesController]  - To see list of available challenges, enter <listall>
