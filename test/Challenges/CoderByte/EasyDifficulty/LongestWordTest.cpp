@@ -66,7 +66,6 @@ TEST_F(LongestWordTest, WordsWithMoreThanOneSpace)
     EXPECT_EQ(result.get<std::string>(), answer);
 }
 
-
 TEST_F(LongestWordTest, WordsWithMoreThanOneSpaceAndLeadingCharacters)
 {
     std::string input(" it  maybe .stormy now, but it can't RAIN   ... forever!");
