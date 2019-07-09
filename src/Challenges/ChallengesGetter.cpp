@@ -9,6 +9,7 @@
 #include <Challenges/CoderByte/EasyDifficulty/SimpleSymbols.hpp>
 #include <Challenges/CoderByte/HardDifficulty/ChessboardTraveling.hpp>
 #include <Challenges/CoderByte/HardDifficulty/KaprekarsConstant.hpp>
+#include <Challenges/CoderByte/MediumDifficulty/EightQueens.hpp>
 #include <Challenges/ProjectEuler/EvenFibonacciNumbers.hpp>
 #include <Challenges/ProjectEuler/LargestPalindromeProduct.hpp>
 #include <Challenges/ProjectEuler/LargestPrimeFactor.hpp>
@@ -30,6 +31,8 @@ std::vector<std::shared_ptr<IChallenge>> getAllChallenges()
             std::make_shared<coderbyte::easy::SimpleAdding>(),
             std::make_shared<coderbyte::easy::LetterCapitalize>(),
             std::make_shared<coderbyte::easy::SimpleSymbols>(),
+
+            std::make_shared<coderbyte::medium::EightQueens>(),
 
             std::make_shared<coderbyte::hard::KaprekarsConstant>(),
             std::make_shared<coderbyte::hard::ChessboardTraveling>(),
