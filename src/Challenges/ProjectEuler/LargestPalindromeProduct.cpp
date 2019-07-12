@@ -41,16 +41,14 @@ unsigned largestPalindromeProduct(unsigned digitsCount)
             unsigned product = multiplicand * multiplier;
             unsigned productReverse = getReverseOfNumber(product);
 
-            if (product == productReverse)
+            if (product == productReverse && product > maxProduct)
             {
-                if (product > maxProduct)
-                {
-                    maxProductFactor1 = multiplicand;
-                    maxProductFactor2 = multiplier;
-                    maxProduct = product;
-                }
-                break;
+                maxProductFactor1 = multiplicand;
+                maxProductFactor2 = multiplier;
+                maxProduct = product;
             }
+
+            if (product <= maxProduct) break;
         }
     }
     logger.print(maxProductFactor1, " * ", maxProductFactor2, " = ", maxProduct);
