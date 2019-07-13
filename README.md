@@ -22,6 +22,10 @@ This program aims to try out different concepts within the C++ software developm
     ~~~
     sudo apt install cmake
     ~~~
+5. Boost
+    ~~~
+    sudo apt install libboost-all-dev
+    ~~~
 
 ## BUILDING
 ~~~
