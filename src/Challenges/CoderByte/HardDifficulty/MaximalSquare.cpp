@@ -59,8 +59,9 @@ unsigned maximalSquare(const std::string& input)
         {
             if (rowCharsVec[row][col] == '0') continue;
 
-            // This solution would count the maximum square length that each coordinate. Each coordinate
-            // will be trated as the origin node and thus would only be spanned to the right and down
+            // This solution would count the maximum square length that can be formed starting from
+            // each coordinate. Each coordinate will be treated as the origin node and thus would
+            // only be spanned to the right and down.
             unsigned horizontalCount = 0u;
             unsigned verticalCount = 0u;
             for (unsigned rowCtr = row; rowCtr < rowCharsVec.size(); rowCtr++)
