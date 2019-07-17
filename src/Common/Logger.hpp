@@ -51,6 +51,16 @@ public:
         #endif
     }
 
+    template <typename T, typename... Args>
+    void printNoFormatting(T&& message, Args&&... args)
+    {
+        std::ostringstream oss; // or std::stringstream
+        detail::concatenateMessages(oss, message, std::forward<Args>(args)...);
+        #ifndef DONT_PRINT_TO_SCREEN // If not defined hence, printing is allowed
+        std::cout << oss.str();
+        #endif
+    }
+
     void print()
     {
         print("");
