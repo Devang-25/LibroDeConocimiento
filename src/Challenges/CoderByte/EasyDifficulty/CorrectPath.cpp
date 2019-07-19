@@ -21,7 +21,7 @@ struct Coordinates
     int x;
     int y;
 
-    bool operator==(const Coordinates& other)
+    bool operator==(const Coordinates& other) const
     {
         return x == other.x && y == other.y;
     }
@@ -35,8 +35,35 @@ struct Coordinates
 40, 41, 42, 43, 44,
 */
 
-const int MAX_COORDINATES = 4;
-std::pair<bool, std::string> found = {false, ""};
+const int MAX_COORDINATES = 4; // Change this if you want to increase the matrix size
+std::pair<bool, std::string> found = {false, ""}; // Clear this before usage!
+
+std::pair<int, int> getNewCoordinatesMovement(const char ch)
+{
+    int x = 0;
+    int y = 0;
+
+    if (ch == 'l') y--;
+    else if (ch == 'r') y++;
+    else if (ch == 'u') x--;
+    else if (ch == 'd') x++;
+
+    return {x, y};
+}
+
+bool isCoordinatesExceedingBoundaries(const Coordinates& coordinates)
+{
+    return coordinates.x < 0 || coordinates.x > MAX_COORDINATES ||
+            coordinates.y < 0 || coordinates.y > MAX_COORDINATES;
+}
+
+bool isCoordinatesAlreadyVisited(
+    const Coordinates& coordinates,
+    const std::vector<Coordinates>& visitedCoordinates)
+{
+    auto it = std::find(visitedCoordinates.begin(), visitedCoordinates.end(), coordinates);
+    return it != visitedCoordinates.end();
+}
 
 std::string correctPathWithRepeatingNodes_shortestPath(
     std::string str,
@@ -59,19 +86,11 @@ std::string correctPathWithRepeatingNodes_shortestPath(
             continue;
         }
 
-        int newX = 0;
-        int newY = 0;
+        auto [newX, newY] = getNewCoordinatesMovement(str[ctr]);
+        currentCoordinates.x += newX;
+        currentCoordinates.y += newY;
 
-        if (str[ctr] == 'l') newY--;
-        else if (str[ctr] == 'r') newY++;
-        else if (str[ctr] == 'u') newX--;
-        else if (str[ctr] == 'd') newX++;
-
-        currentCoordinates.x = currentCoordinates.x + newX;
-        currentCoordinates.y = currentCoordinates.y + newY;
-
-        if (currentCoordinates.x < 0 || currentCoordinates.x > MAX_COORDINATES ||
-            currentCoordinates.y < 0 || currentCoordinates.y > MAX_COORDINATES)
+        if (isCoordinatesExceedingBoundaries(currentCoordinates))
         {
             return {};
         }
@@ -105,20 +124,12 @@ std::string correctPathWithoutRepeatingNodes_shortestPath(
             continue;
         }
 
-        int newX = 0;
-        int newY = 0;
+        auto [newX, newY] = getNewCoordinatesMovement(str[ctr]);
+        currentCoordinates.x += newX;
+        currentCoordinates.y += newY;
 
-        if (str[ctr] == 'l') newY--;
-        else if (str[ctr] == 'r') newY++;
-        else if (str[ctr] == 'u') newX--;
-        else if (str[ctr] == 'd') newX++;
-
-        currentCoordinates.x = currentCoordinates.x + newX;
-        currentCoordinates.y = currentCoordinates.y + newY;
-
-        if (currentCoordinates.x < 0 || currentCoordinates.x > MAX_COORDINATES ||
-            currentCoordinates.y < 0 || currentCoordinates.y > MAX_COORDINATES ||
-            std::find(visitedCoordinates.begin(), visitedCoordinates.end(), currentCoordinates) != visitedCoordinates.end())
+        if (isCoordinatesExceedingBoundaries(currentCoordinates) ||
+            isCoordinatesAlreadyVisited(currentCoordinates, visitedCoordinates))
         {
             return {};
         }
@@ -154,20 +165,12 @@ std::string correctPathWithoutRepeatingNodes(
             continue;
         }
 
-        int newX = 0;
-        int newY = 0;
+        auto [newX, newY] = getNewCoordinatesMovement(str[ctr]);
+        currentCoordinates.x += newX;
+        currentCoordinates.y += newY;
 
-        if (str[ctr] == 'l') newY--;
-        else if (str[ctr] == 'r') newY++;
-        else if (str[ctr] == 'u') newX--;
-        else if (str[ctr] == 'd') newX++;
-
-        currentCoordinates.x = currentCoordinates.x + newX;
-        currentCoordinates.y = currentCoordinates.y + newY;
-
-        if (currentCoordinates.x < 0 || currentCoordinates.x > MAX_COORDINATES ||
-            currentCoordinates.y < 0 || currentCoordinates.y > MAX_COORDINATES ||
-            std::find(visitedCoordinates.begin(), visitedCoordinates.end(), currentCoordinates) != visitedCoordinates.end())
+        if (isCoordinatesExceedingBoundaries(currentCoordinates) ||
+            isCoordinatesAlreadyVisited(currentCoordinates, visitedCoordinates))
         {
             return {};
         }
