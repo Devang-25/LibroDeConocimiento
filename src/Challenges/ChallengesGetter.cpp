@@ -7,6 +7,7 @@
 #include <Challenges/CoderByte/EasyDifficulty/LongestWord.hpp>
 #include <Challenges/CoderByte/EasyDifficulty/SimpleAdding.hpp>
 #include <Challenges/CoderByte/EasyDifficulty/SimpleSymbols.hpp>
+#include <Challenges/CoderByte/EasyDifficulty/CorrectPath.hpp>
 #include <Challenges/CoderByte/HardDifficulty/ChessboardTraveling.hpp>
 #include <Challenges/CoderByte/HardDifficulty/KaprekarsConstant.hpp>
 #include <Challenges/CoderByte/HardDifficulty/MaximalSquare.hpp>
@@ -33,6 +34,7 @@ std::vector<std::shared_ptr<IChallenge>> getAllChallenges()
             std::make_shared<coderbyte::easy::SimpleAdding>(),
             std::make_shared<coderbyte::easy::LetterCapitalize>(),
             std::make_shared<coderbyte::easy::SimpleSymbols>(),
+            std::make_shared<coderbyte::easy::CorrectPath>(), // Believe me, this is not easy! Harder than the hard ones!
 
             std::make_shared<coderbyte::medium::EightQueens>(),
 
