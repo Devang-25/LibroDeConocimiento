@@ -57,6 +57,11 @@ bool isCoordinatesExceedingBoundaries(const Coordinates& coordinates)
             coordinates.y < 0 || coordinates.y > MAX_COORDINATES;
 }
 
+bool isTargetCoordinatesReached(const Coordinates& coordinates)
+{
+    return coordinates.x == MAX_COORDINATES && coordinates.y == MAX_COORDINATES;
+}
+
 bool isCoordinatesAlreadyVisited(
     const Coordinates& coordinates,
     const std::vector<Coordinates>& visitedCoordinates)
@@ -94,7 +99,7 @@ std::string correctPathWithRepeatingNodes_shortestPath(
         {
             return {};
         }
-        else if (currentCoordinates.x == MAX_COORDINATES && currentCoordinates.y == MAX_COORDINATES)
+        else if (isTargetCoordinatesReached(currentCoordinates))
         {
             found = {true, str.substr(0, ctr+1)};
         }
@@ -133,7 +138,7 @@ std::string correctPathWithoutRepeatingNodes_shortestPath(
         {
             return {};
         }
-        else if (currentCoordinates.x == MAX_COORDINATES && currentCoordinates.y == MAX_COORDINATES)
+        else if (isTargetCoordinatesReached(currentCoordinates))
         {
             found = {true, str.substr(0, ctr+1)};
         }
@@ -174,7 +179,7 @@ std::string correctPathWithoutRepeatingNodes(
         {
             return {};
         }
-        else if (currentCoordinates.x == MAX_COORDINATES && currentCoordinates.y == MAX_COORDINATES && (ctr + 1) == str.size())
+        else if (isTargetCoordinatesReached(currentCoordinates) && (ctr + 1) == str.size())
         {
             found = {true, str.substr(0, ctr+1)};
         }
