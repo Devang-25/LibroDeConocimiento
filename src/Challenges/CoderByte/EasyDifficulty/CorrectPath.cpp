@@ -43,7 +43,7 @@ std::pair<int, int> getNewCoordinatesMovement(const char ch)
     int x = 0;
     int y = 0;
 
-    if (ch == 'l') y--;
+    if (ch == 'l')      y--;
     else if (ch == 'r') y++;
     else if (ch == 'u') x--;
     else if (ch == 'd') x++;
