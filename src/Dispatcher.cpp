@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include <Algorithms/AlgorithmsController.hpp>
 #include <Challenges/ChallengesController.hpp>
 #include <Help/HelpController.hpp>
 #include <IController.hpp>
@@ -40,6 +41,7 @@ std::unique_ptr<IController> Dispatcher::createController(const char* message)
     std::string messageStr = message;
 
     if (messageStr == "--help")            return std::make_unique<help::HelpController>();
+    else if (messageStr == "--algorithms") return std::make_unique<algo::AlgorithmsController>();
     else if (messageStr == "--challenges") return std::make_unique<challenges::ChallengesController>();
 
     return nullptr;

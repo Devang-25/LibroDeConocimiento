@@ -57,7 +57,7 @@ std::map<std::string, unsigned> getChallengesNameAndIdMap(
     std::map<std::string, unsigned> nameAndId;
 
     unsigned id = 0;
-    for(const auto& challenge : challenges)
+    for (const auto& challenge : challenges)
     {
         nameAndId[challenge->name()] = id;
         id++;

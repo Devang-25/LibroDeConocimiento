@@ -41,6 +41,7 @@ cd LibroDeConocimiento/build
 cmake ..
 make
 src/libro_src --help
+src/libro_src --algorithms
 src/libro_src --challenges
 ~~~
 Example
