@@ -14,7 +14,7 @@ namespace
 
 common::Logger logger("CorrectPath");
 
-const char directions[] = "lrud";
+const char directions[] = "rdlu"; // Order does not affect correctness of execution, but it does affect speed of finding correct solution, so r and d are prioritized as they are the directions that go towards the target
 
 struct Coordinates
 {
@@ -88,7 +88,9 @@ std::string correctPathWithRepeatingNodes_shortestPath(
                 correctPathWithRepeatingNodes_shortestPath(strCopy, ctr, currentCoordinates);
                 directionsCtr++;
             }
-            continue;
+
+            if (!found.first) return {}; // Means that regardless of what direction rdlu is set on current ?, the problem will not be solved, thus, earlier instances of ? should retry other directions, unless the input really cant reach the target
+            else              continue;
         }
 
         auto [newX, newY] = getNewCoordinatesMovement(str[ctr]);
@@ -126,7 +128,9 @@ std::string correctPathWithoutRepeatingNodes_shortestPath(
                 correctPathWithoutRepeatingNodes_shortestPath(strCopy, ctr, currentCoordinates, visitedCoordinates);
                 directionsCtr++;
             }
-            continue;
+
+            if (!found.first) return {};
+            else              continue;
         }
 
         auto [newX, newY] = getNewCoordinatesMovement(str[ctr]);
@@ -167,7 +171,9 @@ std::string correctPathWithoutRepeatingNodes(
                 correctPathWithoutRepeatingNodes(strCopy, ctr, currentCoordinates, visitedCoordinates);
                 directionsCtr++;
             }
-            continue;
+
+            if (!found.first) return {};
+            else              continue;
         }
 
         auto [newX, newY] = getNewCoordinatesMovement(str[ctr]);
