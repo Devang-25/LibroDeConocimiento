@@ -207,10 +207,17 @@ std::string correctPath(const std::string& input)
     found = {};
     auto output3 = correctPathWithoutRepeatingNodes(input, 0, {0,0});
 
-    logger.print("input                                         ", input);
-    logger.print("correctPathWithRepeatingNodes_shortestPath    ", output1);
-    logger.print("correctPathWithoutRepeatingNodes_shortestPath ", output2);
-    logger.print("correctPathWithoutRepeatingNodes              ", output3);
+    logger.print("Grid");
+    logger.print("    00 01 02 03 04");
+    logger.print("    10 11 12 13 14");
+    logger.print("    20 21 22 23 24");
+    logger.print("    30 31 32 33 34");
+    logger.print("    40 41 42 43 44");
+    logger.print("Input                                             = ", input);
+    logger.print("Output");
+    logger.print("    correctPathWithRepeatingNodes_shortestPath    = ", output1);
+    logger.print("    correctPathWithoutRepeatingNodes_shortestPath = ", output2);
+    logger.print("    correctPathWithoutRepeatingNodes              = ", output3);
 
     return output3;
 }
@@ -233,7 +240,7 @@ common::Result CorrectPath::run(std::istream& inputStream)
     displayProblem();
     auto input = common::getUserInputString(inputStream);
     auto result = correctPath(input);
-    logger.print(result);
+    logger.print("Result: ", result);
 
     result_.set(result);
     return result_;
@@ -247,12 +254,11 @@ void CorrectPath::displayProblem() const
     logger.print("Your goal is to determine what characters the question marks should be in order for a path to be created to go from the top left of the grid all the way to the bottom right without touching previously travelled on cells in the grid.");
     logger.print("For example: if str is r?d?drdd then your program should output the final correct string that will allow a path to be formed from the top left of a 5x5 grid to the bottom right. For this input, your program should therefore return the string rrdrdrdd.");
     logger.print("There will only ever be one correct path and there will always be at least one question mark within the input string.");
+    logger.print("Sample Test Cases");
     logger.print("Input: ???rrurdr?");
     logger.print("Output:dddrrurdrd");
-    logger.print();
     logger.print("Input: drdr??rrddd?");
     logger.print("Output:drdruurrdddd");
-    logger.print();
     logger.print("Input: ??rr???rrddd????rr??");
     logger.print("Output: ddrrulurrdddllldrrrr");
 }
