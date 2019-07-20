@@ -14,6 +14,7 @@ public:
     virtual ~IAlgorithm(){}
     virtual std::string name() const = 0;
     virtual common::Result run(std::istream& inputStream = std::cin) = 0;
+    virtual void displayGuide() const = 0;
 };
 
 } // namespace src::algo

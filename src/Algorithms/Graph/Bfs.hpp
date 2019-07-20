@@ -15,6 +15,8 @@ public:
 
     virtual common::Result run(std::istream& inputStream = std::cin) override;
 
+    virtual void displayGuide() const override;
+
 private:
     static const std::string ALGORITHM_NAME_;
 
