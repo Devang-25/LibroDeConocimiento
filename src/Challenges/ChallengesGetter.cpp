@@ -18,6 +18,7 @@
 #include <Challenges/ProjectEuler/LargestProductInASeries.hpp>
 #include <Challenges/ProjectEuler/MultiplesOf3And5.hpp>
 #include <Challenges/ProjectEuler/SmallestMultiple.hpp>
+#include <Challenges/Self/WordPermutations.hpp>
 #include <Challenges/IChallenge.hpp>
 
 namespace src::challenges
@@ -48,6 +49,8 @@ std::vector<std::shared_ptr<IChallenge>> getAllChallenges()
             std::make_shared<euler::LargestPalindromeProduct>(),
             std::make_shared<euler::SmallestMultiple>(),
             std::make_shared<euler::LargestProductInASeries>(),
+
+            std::make_shared<self::WordPermutations>(),
         };
 }
 
