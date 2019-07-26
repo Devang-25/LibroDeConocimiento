@@ -36,7 +36,39 @@ void wordPermutate(
     }
 }
 
-void wordPermutate(
+bool my_next_permutation(std::string& stringToPermutateSorted)
+{
+    for (int ctr = stringToPermutateSorted.size() - 1; ctr > 0; --ctr)
+    {
+        if (stringToPermutateSorted[ctr] > stringToPermutateSorted[ctr-1])
+        {
+            std::sort((stringToPermutateSorted.begin() + ctr), stringToPermutateSorted.end());
+            for (unsigned ctr2 = ctr; ctr2 < stringToPermutateSorted.size(); ++ctr2)
+            {
+                if (stringToPermutateSorted[ctr2] > stringToPermutateSorted[ctr-1])
+                {
+                    std::swap(stringToPermutateSorted[ctr2], stringToPermutateSorted[ctr-1]);
+                    std::sort((stringToPermutateSorted.begin() + ctr), (stringToPermutateSorted.begin() + ctr2));
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void wordPermutateNotUsingStl(
+    std::string stringToPermutateSorted,
+    std::set<std::string>& permutations)
+{
+    do
+    {
+        permutations.insert(stringToPermutateSorted);
+    }
+    while (my_next_permutation(stringToPermutateSorted));
+}
+
+void wordPermutateUsingStl(
     std::string stringToPermutateSorted,
     std::set<std::string>& permutations)
 {
@@ -65,21 +97,32 @@ std::pair<std::string, unsigned> wordPermutations(
     std::string permutationsString = "";
     std::set<std::string> permutations;
 
-    // Algorithm 1: Using std library
+    // Algorithm 1: Using STL library
     std::string stringToPermutateSorted = stringToPermutate;
     std::sort(stringToPermutateSorted.begin(), stringToPermutateSorted.end());
-    wordPermutate(stringToPermutateSorted, permutations);
+    wordPermutateUsingStl(stringToPermutateSorted, permutations);
     permutationsString = transformContainerToString(permutations);
     logger.print("Algorithm 1 result - NOTE: This DOES NOT CONSIDER the sample size) : ");
     logger.print("    Count: ", permutations.size());
     logger.print("    Permutations: ", permutationsString);
 
-    // Algorithm 2: Using my own function
+    // Algorithm 2: Using my version of the STL library
+    permutationsString.clear();
+    permutations.clear();
+    std::string stringToPermutateSorted2 = stringToPermutate;
+    std::sort(stringToPermutateSorted2.begin(), stringToPermutateSorted2.end());
+    wordPermutateNotUsingStl(stringToPermutateSorted2, permutations);
+    permutationsString = transformContainerToString(permutations);
+    logger.print("Algorithm 2 result - NOTE: This DOES NOT CONSIDER the sample size) : ");
+    logger.print("    Count: ", permutations.size());
+    logger.print("    Permutations: ", permutationsString);
+
+    // Algorithm 3: Using my own function
     permutationsString.clear();
     permutations.clear();
     wordPermutate(stringToPermutate, sampleSize, "", permutations);
     permutationsString = transformContainerToString(permutations);
-    logger.print("Algorithm 2 result - NOTE: This DOES CONSIDER the sample size) : ");
+    logger.print("Algorithm 3 result - NOTE: This DOES CONSIDER the sample size) : ");
     logger.print("    Count: ", permutations.size());
     logger.print("    Permutations: ", permutationsString);
 
