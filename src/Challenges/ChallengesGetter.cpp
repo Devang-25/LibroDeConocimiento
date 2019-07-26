@@ -12,6 +12,7 @@
 #include <Challenges/CoderByte/HardDifficulty/KaprekarsConstant.hpp>
 #include <Challenges/CoderByte/HardDifficulty/MaximalSquare.hpp>
 #include <Challenges/CoderByte/MediumDifficulty/EightQueens.hpp>
+#include <Challenges/HackerRank/MagicSquare.hpp>
 #include <Challenges/ProjectEuler/EvenFibonacciNumbers.hpp>
 #include <Challenges/ProjectEuler/LargestPalindromeProduct.hpp>
 #include <Challenges/ProjectEuler/LargestPrimeFactor.hpp>
@@ -49,6 +50,8 @@ std::vector<std::shared_ptr<IChallenge>> getAllChallenges()
             std::make_shared<euler::LargestPalindromeProduct>(),
             std::make_shared<euler::SmallestMultiple>(),
             std::make_shared<euler::LargestProductInASeries>(),
+
+            std::make_shared<hacker::MagicSquare>(),
 
             std::make_shared<self::WordPermutations>(),
         };

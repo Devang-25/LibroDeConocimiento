@@ -4,6 +4,7 @@ file(GLOB libro_src_challenges_cpp
     "CoderByte/EasyDifficulty/*.cpp"
     "CoderByte/HardDifficulty/*.cpp"
     "CoderByte/MediumDifficulty/*.cpp"
+    "HackerRank/*.cpp"
     "ProjectEuler/*.cpp"
     "Self/*.cpp")
 
