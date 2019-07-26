@@ -10,9 +10,7 @@ namespace
 
 common::Logger logger("MultiplesOf3And5");
 
-// Yes, the name should have been MultiplesOf3Or5 instead, but to be consistent with ProjectEuler,
-// thus the name :)
-unsigned multiplesOf3And5(unsigned number)
+unsigned multiplesOf3And5_version1(unsigned number)
 {
     unsigned result = 0u;
 
@@ -28,6 +26,71 @@ unsigned multiplesOf3And5(unsigned number)
             result = result + multiplesOfFive;
         }
     }
+
+    return result;
+}
+
+unsigned multiplesOf3And5_version2(unsigned number)
+{
+    unsigned result = 0u;
+    unsigned multiplesOfThree = 3u;
+    unsigned multiplesOfFive = 5u;
+
+    while (multiplesOfFive < number)
+    {
+        result += multiplesOfThree;
+        if (multiplesOfFive % 3)
+        {
+            result += multiplesOfFive;
+        }
+
+        multiplesOfThree += 3u;
+        multiplesOfFive += 5u;
+    }
+
+    while (multiplesOfThree < number)
+    {
+        result += multiplesOfThree;
+        multiplesOfThree += 3u;
+    }
+
+    return result;
+}
+
+long multiplesOf3And5_version3(long number)
+{
+    --number;
+
+    long countOfThreeMultiples = number / 3;
+    long lastMultipleOfThree = countOfThreeMultiples * 3;
+    long countOfFiveMultiples = number / 5;
+    long lastMultipleOfFive = countOfFiveMultiples * 5;
+    long countOfFifteenMultiples = number / 15;
+    long lastMultipleOfFifteen = countOfFifteenMultiples * 15;
+
+    // Summation formula = n(a1 + an) / 2
+    long result =
+            (
+                (countOfThreeMultiples * (3 + lastMultipleOfThree)) +
+                (countOfFiveMultiples * (5 + lastMultipleOfFive)) -
+                (countOfFifteenMultiples * (15 + lastMultipleOfFifteen))
+            ) / 2;
+
+    return result;
+}
+
+long multiplesOf3And5(long number)
+{
+    long result;
+
+    result = static_cast<long>(multiplesOf3And5_version1(number));
+    logger.print("multiplesOf3And5_version1: ", result);
+
+    result = static_cast<long>(multiplesOf3And5_version2(number));
+    logger.print("multiplesOf3And5_version2: ", result);
+
+    result = multiplesOf3And5_version3(number);
+    logger.print("multiplesOf3And5_version3: ", result);
 
     return result;
 }
@@ -48,7 +111,7 @@ std::string MultiplesOf3And5::name() const
 common::Result MultiplesOf3And5::run(std::istream& inputStream)
 {
     displayProblem();
-    auto input = common::getUserInputIntegralOrFloating<unsigned>(inputStream);
+    auto input = common::getUserInputIntegralOrFloating<long>(inputStream);
     auto result = multiplesOf3And5(input);
     logger.print(result);
 
