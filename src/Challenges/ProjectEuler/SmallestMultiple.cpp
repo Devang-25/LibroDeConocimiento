@@ -27,7 +27,7 @@ bool isPrime(long number)
     return true;
 }
 
-long largestPrimeFactor(long number)
+long getPrimeFactor(long number)
 {
     if (isPrime(number)) return number;
 
@@ -39,13 +39,13 @@ long largestPrimeFactor(long number)
         long multiplier = number / multiplicand;
         if (number % multiplicand == 0)
         {
-            if (isPrime(multiplier) && multiplier > multiplicand)
+            if (isPrime(multiplier))
             {
                 return multiplier;
             }
             else if (isPrime(multiplicand))
             {
-                largestPrime = multiplicand;
+                return multiplicand;
             }
         }
         limit = multiplier;
@@ -58,7 +58,7 @@ void getPrimeNumberFactorsAndCount(
     long number,
     std::map<long, long>& factorsAndCount)
 {
-    auto factor = largestPrimeFactor(number);
+    auto factor = getPrimeFactor(number);
     factorsAndCount[factor]++;
 
     number = number / factor;
