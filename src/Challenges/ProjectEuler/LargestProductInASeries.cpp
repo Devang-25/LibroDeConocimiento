@@ -90,6 +90,8 @@ long largestProductInASeries(const std::string& input)
             ctr++;
         }
 
+        if (currentNumbers.size() != adjacentCount) continue;
+
         currentProduct = (currentProduct == 0) ?
                             multiplyNumbers(currentNumbers) :
                             (currentProduct / previousFront) * currentNumbers.back();
