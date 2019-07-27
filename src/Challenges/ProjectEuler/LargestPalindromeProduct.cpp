@@ -23,7 +23,7 @@ unsigned getReverseOfNumber(unsigned number)
     return numberReverse;
 }
 
-unsigned largestPalindromeProduct(unsigned digitsCount)
+unsigned largestPalindromeProductWithoutLimit(unsigned digitsCount)
 {
     unsigned lowerLimit = digitsCount == 1 ?
                             0u :
@@ -34,9 +34,9 @@ unsigned largestPalindromeProduct(unsigned digitsCount)
     unsigned maxProductFactor1 = 0u;
     unsigned maxProductFactor2 = 0u;
 
-    for (unsigned multiplicand = upperLimit; multiplicand >= lowerLimit; multiplicand--)
+    for (unsigned multiplicand = upperLimit; multiplicand >= lowerLimit; --multiplicand)
     {
-        for (unsigned multiplier = multiplicand; multiplier >= lowerLimit; multiplier--)
+        for (unsigned multiplier = multiplicand; multiplier >= lowerLimit; --multiplier)
         {
             unsigned product = multiplicand * multiplier;
             unsigned productReverse = getReverseOfNumber(product);
@@ -51,8 +51,53 @@ unsigned largestPalindromeProduct(unsigned digitsCount)
             if (product <= maxProduct) break;
         }
     }
-    logger.print(maxProductFactor1, " * ", maxProductFactor2, " = ", maxProduct);
+    logger.print("largestPalindromeProductWithoutLimit: ", maxProductFactor1, " * ", maxProductFactor2, " = ", maxProduct);
     return maxProduct;
+}
+
+unsigned largestPalindromeProductWithLimit(unsigned digitsCount, unsigned limit)
+{
+    unsigned lowerLimit = digitsCount == 1 ?
+                            0u :
+                            pow(10, (digitsCount - 1));
+    unsigned upperLimit = pow(10, (digitsCount)) - 1;
+
+    unsigned maxProduct = 0u;
+    unsigned maxProductFactor1 = 0u;
+    unsigned maxProductFactor2 = 0u;
+
+    for (unsigned multiplicand = upperLimit; multiplicand >= lowerLimit; --multiplicand)
+    {
+        unsigned allowedMultiplier = std::min(multiplicand, (limit / multiplicand));
+        for (unsigned multiplier = allowedMultiplier; multiplier >= lowerLimit; --multiplier)
+        {
+            unsigned product = multiplicand * multiplier;
+            if (product >= limit) continue;
+
+            unsigned productReverse = getReverseOfNumber(product);
+
+            if (product == productReverse && product > maxProduct)
+            {
+                maxProductFactor1 = multiplicand;
+                maxProductFactor2 = multiplier;
+                maxProduct = product;
+            }
+
+            if (product <= maxProduct) break;
+        }
+    }
+    logger.print("largestPalindromeProductWithLimit: ", maxProductFactor1, " * ", maxProductFactor2, " = ", maxProduct);
+    return maxProduct;
+}
+
+unsigned largestPalindromeProduct(unsigned digitsCount)
+{
+    auto resultWithLimit = largestPalindromeProductWithLimit(digitsCount, std::numeric_limits<unsigned>::max());
+    auto resultWithoutLimit = largestPalindromeProductWithoutLimit(digitsCount);
+
+    return resultWithLimit == resultWithoutLimit ?
+            resultWithLimit :
+            0u;
 }
 
 } // namespace
