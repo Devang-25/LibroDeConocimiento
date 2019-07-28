@@ -14,42 +14,76 @@ namespace
 
 common::Logger logger("NonDivisibleSubset");
 
-unsigned maxCount = 0;
+// SOLUTION 1 : Non-optimized version
+// unsigned maxCount = 0;
 
-bool willNewNumberIntoVectorResultToDivisibleNumber(
-    const std::vector<int>& numbers,
-    const int newNumber,
-    const int divisibleNumber)
-{
-    return std::any_of(numbers.begin(), numbers.end(),
-        [&newNumber, &divisibleNumber](const int vectorNumber)
-        {
-            return (vectorNumber + newNumber) % divisibleNumber == 0;
-        });
-}
+// bool willNewNumberIntoVectorResultToDivisibleNumber(
+//     const std::vector<int>& numbers,
+//     const int newNumber,
+//     const int divisibleNumber)
+// {
+//     return std::any_of(numbers.begin(), numbers.end(),
+//         [&newNumber, &divisibleNumber](const int vectorNumber)
+//         {
+//             return (vectorNumber + newNumber) % divisibleNumber == 0;
+//         });
+// }
+
+// int nonDivisibleSubset(
+//     const int k,
+//     const std::vector<int>& s,
+//     std::vector<int> subset)
+// {
+//     for (unsigned ctr = 0u; ctr < s.size(); ++ctr)
+//     {
+//         if (subset.size() + s.size() <= maxCount) return maxCount;
+//         if (willNewNumberIntoVectorResultToDivisibleNumber(subset, s.at(ctr), k))
+//         {
+//             continue;
+//         }
+
+//         subset.push_back(s.at(ctr));
+//         if (subset.size() > maxCount)
+//         {
+//             maxCount = subset.size();
+//         }
+
+//         nonDivisibleSubset(k, {s.begin() + ctr + 1, s.end()}, subset);
+//         subset.pop_back();
+//     }
+
+//     return maxCount;
+// }
+
+// SOLUTION 2 : Optimized version
+using Digit = int;
+using Count = int;
 
 int nonDivisibleSubset(
-    int k,
-    const std::vector<int>& s,
-    std::vector<int> subset = {})
+    const int k,
+    const std::vector<int>& s)
 {
-    for (unsigned ctr = 0u; ctr < s.size(); ++ctr)
+    std::unordered_map<Digit, Count> digitCountMap;
+    for (const auto& digit : s)
     {
-        if (subset.size() + s.size() <= maxCount) return maxCount;
-        if (willNewNumberIntoVectorResultToDivisibleNumber(subset, s.at(ctr), k))
+        ++(digitCountMap[digit % k]);
+    }
+
+    int maxCount = digitCountMap.count(0);
+
+    int mid = k / 2;
+    if (mid + mid == k)
+    {
+        --mid;
+        if (digitCountMap.count(mid))
         {
-            continue;
+            ++maxCount;
         }
+    }
 
-        subset.push_back(s.at(ctr));
-        if (subset.size() > maxCount)
-        {
-            maxCount = subset.size();
-        }
-
-
-        nonDivisibleSubset(k, {s.begin() + ctr + 1, s.end()}, subset);
-        subset.pop_back();
+    for (int ctr = 1; ctr <= mid; ++ctr)
+    {
+        maxCount += std::max(digitCountMap[ctr], digitCountMap[k-ctr]);
     }
 
     return maxCount;
@@ -57,7 +91,7 @@ int nonDivisibleSubset(
 
 int nonDivisibleSubset(const std::string& input)
 {
-    maxCount = 0u;
+    // maxCount = 0u; // For SOLUTION 1
 
     std::vector<std::string> splittedInputs;
     boost::split(splittedInputs, input, boost::is_any_of(" "));
@@ -108,6 +142,8 @@ void NonDivisibleSubset::displayProblem() const
     logger.print("Output: 3");
     logger.print("Input: 7 278 576 496 727 410 124 338 149 209 702 282 718 771 575 436");
     logger.print("Output: 11");
+    logger.print("Input: 100 309267605 950194689 233722125 213126284 803693764 8935112 996038935 584313952 914835305 801525456 866383133 362172865 863648229 286776502 692327018 666753852 355282290 17871142 298513364 385271128 381614363 51907124 524655580 318461672 856056174 743148359 122540533 894882430 461004263 770611637 195891196 250883515 88820738 101970673 922112577 704068081 430304169 190207059 354357071 500100938 738432380 524997841 775875005 403466223 96414507 235932505 855760945 869180428 924648274 17349551 683594506 928312664 682231587 851074570 769192164 754107180 978356507 748489842 57037209 285121804");
+    logger.print("Output: 52");
 }
 
 } // namespace src::challenges::hacker
