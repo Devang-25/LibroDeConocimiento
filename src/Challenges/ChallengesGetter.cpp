@@ -12,6 +12,7 @@
 #include <Challenges/CoderByte/HardDifficulty/KaprekarsConstant.hpp>
 #include <Challenges/CoderByte/HardDifficulty/MaximalSquare.hpp>
 #include <Challenges/CoderByte/MediumDifficulty/EightQueens.hpp>
+#include <Challenges/HackerRank/ClimbingTheLeaderboard.hpp>
 #include <Challenges/HackerRank/MagicSquare.hpp>
 #include <Challenges/HackerRank/NonDivisibleSubset.hpp>
 #include <Challenges/ProjectEuler/EvenFibonacciNumbers.hpp>
@@ -52,6 +53,7 @@ std::vector<std::shared_ptr<IChallenge>> getAllChallenges()
             std::make_shared<euler::SmallestMultiple>(),
             std::make_shared<euler::LargestProductInASeries>(),
 
+            std::make_shared<hacker::ClimbingTheLeaderboard>(),
             std::make_shared<hacker::MagicSquare>(),
             std::make_shared<hacker::NonDivisibleSubset>(),
 
