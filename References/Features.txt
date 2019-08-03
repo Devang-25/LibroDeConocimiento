@@ -1,0 +1,17 @@
+LibroDeConocimiento
+1. Add parseInput to a common file and use across all files using it
+2. Rule of 5 on class Result (the class with void* member)
+   Apply to other projects as well
+3. In ChessboardTraveling challenge during traversal of paths from one square to another, apply dynamic programming
+   Add unordered_set[11,12,22,32,42,43] and just search all with subset of it if is present already
+   If it is present, store it for now as a terminated path since somebody is already traversing it
+   In the end, all that reached the goal should be searched of all that has been stored, add 1 for each
+   Goal is so that no need to redo searching the same path
+
+HuffmanCoding
+1. Add node solution
+
+MessageEncryption
+1. Add new encrypt version, for example [ a 2 14 17 ] [ g 3 ] | [ q 1 4 ]
+   But replace those letters (a, g, q in this example) based on index in keycode or in ASCII.
+   Put a separator to indicate between letters present in keycode and those that are not.
