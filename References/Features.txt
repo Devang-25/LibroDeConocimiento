@@ -7,6 +7,7 @@ LibroDeConocimiento
 2. Change Common/File into Common/UserInput and move there UserInputHandler.hpp but with new name BuiltinDataTypeInput.hpp
    Move matrix related logic from FileHandler.hpp (and cpp) to its own file
    Add parseInput to a common file and use across all files using it
+3. Design files that will make it easy to have input lets say for QueensAttack.cpp
 
 HuffmanCoding
 1. Add node solution
