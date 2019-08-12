@@ -1,6 +1,8 @@
 #ifndef SRC_COMMON_RESULTHANDLER_HPP
 #define SRC_COMMON_RESULTHANDLER_HPP
 
+#include <utility>
+
 #include <Common/DataTypeHandler.hpp>
 #include <Common/Logger.hpp>
 
@@ -13,6 +15,7 @@ Logger resultLogger("ResultHandler");
 
 } // namespace
 
+// Resource acquisition is initialization (RAII)
 class Result
 {
 public:
@@ -27,11 +30,22 @@ public:
         initializeBasedOnOtherResult(other);
     }
 
+    Result(Result&& other)
+    {
+        moveOtherResult(std::forward<Result>(other));
+    }
 
     Result& operator=(const Result& other)
     {
         cleanUpData();
         initializeBasedOnOtherResult(other);
+        return *this;
+    }
+
+    Result& operator=(Result&& other)
+    {
+        cleanUpData();
+        moveOtherResult(std::forward<Result>(other));
         return *this;
     }
 
@@ -41,11 +55,12 @@ public:
     }
 
     template <typename T>
-    void set(const T& data)
+    Result& set(const T& data)
     {
         cleanUpData();
         type_ = getDataType<T>();
         data_ = new T(data);
+        return *this;
     }
 
     template <typename T>
@@ -108,6 +123,17 @@ private:
     {
         delete static_cast<T*>(data);
     }
+
+    void moveOtherResult(Result&& other)
+    {
+        type_ = other.type_;
+        data_ = other.data_;
+
+        other.type_ = DataType::String;
+        other.data_ = nullptr;
+    }
+
+    void moveOtherResult(const Result& other) = delete;
 
     DataType type_;
     void* data_;
