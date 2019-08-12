@@ -74,6 +74,6 @@ add_executable(libro_src ${libro_src_cpp})
 
 # In case of linking errors, try rearranging addition of linking below
 target_link_libraries(libro_src libro_src_algorithms)
-target_link_libraries(libro_src libro_src_common)
 target_link_libraries(libro_src libro_src_challenges)
 target_link_libraries(libro_src libro_src_help)
+target_link_libraries(libro_src libro_src_common) # For some reason, this requires to be last for the library of challenges to see

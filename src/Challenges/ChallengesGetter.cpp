@@ -15,6 +15,7 @@
 #include <Challenges/HackerRank/ClimbingTheLeaderboard.hpp>
 #include <Challenges/HackerRank/MagicSquare.hpp>
 #include <Challenges/HackerRank/NonDivisibleSubset.hpp>
+#include <Challenges/HackerRank/OrganizingContainers.hpp>
 #include <Challenges/ProjectEuler/EvenFibonacciNumbers.hpp>
 #include <Challenges/ProjectEuler/LargestPalindromeProduct.hpp>
 #include <Challenges/ProjectEuler/LargestPrimeFactor.hpp>
@@ -56,6 +57,7 @@ std::vector<std::shared_ptr<IChallenge>> getAllChallenges()
             std::make_shared<hacker::ClimbingTheLeaderboard>(),
             std::make_shared<hacker::MagicSquare>(),
             std::make_shared<hacker::NonDivisibleSubset>(),
+            std::make_shared<hacker::OrganizingContainers>(),
 
             std::make_shared<self::WordPermutations>(),
         };
