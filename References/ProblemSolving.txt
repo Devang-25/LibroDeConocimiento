@@ -1,0 +1,691 @@
+#include <deque>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+struct Node
+{
+    int value;
+
+    std::string previousNodesPath;
+    char currentNodePath;
+    std::vector<Node*> connectedNodes;
+};
+
+// Count the visible nodes present in a tree
+// Visible nodes are nodes where value is not greater than sum of path leading to it
+int countVisibleNodes(
+    std::unordered_map<std::string, Node*> idAndNodeMap)
+{
+    int count = 0;
+    std::unordered_map<std::string, int> nodePathCount;
+
+    std::deque<Node*> nodes;
+    nodes.push_back(idAndNodeMap["0"]);
+
+    while (!nodes.empty())
+    {
+        auto currentNode = nodes.front();
+        nodes.pop_front();
+
+        nodePathCount[currentNode->previousNodesPath + currentNode->currentNodePath] =
+                nodePathCount[currentNode->previousNodesPath];
+
+
+        for (auto a :  nodePathCount)
+        {
+            std::cout << "\nnodePathCount" << a.first << " = " << a.second << " ... " << currentNode->value;
+        }
+        if (currentNode->previousNodesPath == "" || nodePathCount[currentNode->previousNodesPath] >= currentNode->value)
+        {
+            ++count;
+            nodePathCount[currentNode->previousNodesPath + currentNode->currentNodePath]
+                += currentNode->value;
+        }
+
+        if (currentNode->connectedNodes.size() != 2) continue;
+
+        currentNode->connectedNodes[0]->previousNodesPath = currentNode->previousNodesPath + currentNode->currentNodePath;
+        currentNode->connectedNodes[0]->currentNodePath = '0';
+        nodes.push_back(currentNode->connectedNodes[0]);
+
+        currentNode->connectedNodes[1]->previousNodesPath = currentNode->previousNodesPath + currentNode->currentNodePath;
+        currentNode->connectedNodes[1]->currentNodePath = '1';
+        nodes.push_back(currentNode->connectedNodes[1]);
+    }
+
+    return count;
+}
+
+int main(int , char** )
+{
+    std::string input;
+    std::getline(std::cin, input);
+
+    std::unordered_map<std::string, Node*> idAndNodeMap;
+
+    //
+
+    idAndNodeMap["0000"] = new Node();
+    idAndNodeMap["0000"]->value = 15;
+
+    idAndNodeMap["0001"] = new Node();
+    idAndNodeMap["0001"]->value = 9;
+
+    idAndNodeMap["0010"] = new Node();
+    idAndNodeMap["0010"]->value = 8;
+
+    idAndNodeMap["0011"] = new Node();
+    idAndNodeMap["0011"]->value = 12;
+
+    idAndNodeMap["0100"] = new Node();
+    idAndNodeMap["0100"]->value = 13;
+
+    idAndNodeMap["0101"] = new Node();
+    idAndNodeMap["0101"]->value = 8;
+
+    idAndNodeMap["0110"] = new Node();
+    idAndNodeMap["0110"]->value = 20;
+
+    idAndNodeMap["0111"] = new Node();
+    idAndNodeMap["0111"]->value = 2;
+
+    //
+
+    idAndNodeMap["000"] = new Node();
+    idAndNodeMap["000"]->value = 4;
+    idAndNodeMap["000"]->connectedNodes.push_back(idAndNodeMap["0000"]);
+    idAndNodeMap["000"]->connectedNodes.push_back(idAndNodeMap["0001"]);
+
+    idAndNodeMap["001"] = new Node();
+    idAndNodeMap["001"]->value = 11;
+    idAndNodeMap["001"]->connectedNodes.push_back(idAndNodeMap["0010"]);
+    idAndNodeMap["001"]->connectedNodes.push_back(idAndNodeMap["0011"]);
+
+    idAndNodeMap["010"] = new Node();
+    idAndNodeMap["010"]->value = 14;
+    idAndNodeMap["010"]->connectedNodes.push_back(idAndNodeMap["0100"]);
+    idAndNodeMap["010"]->connectedNodes.push_back(idAndNodeMap["0101"]);
+
+    idAndNodeMap["011"] = new Node();
+    idAndNodeMap["011"]->value = 10;
+    idAndNodeMap["011"]->connectedNodes.push_back(idAndNodeMap["0110"]);
+    idAndNodeMap["011"]->connectedNodes.push_back(idAndNodeMap["0111"]);
+
+    //
+
+    idAndNodeMap["00"] = new Node();
+    idAndNodeMap["00"]->value = 2;
+    idAndNodeMap["00"]->connectedNodes.push_back(idAndNodeMap["000"]);
+    idAndNodeMap["00"]->connectedNodes.push_back(idAndNodeMap["001"]);
+
+    idAndNodeMap["01"] = new Node();
+    idAndNodeMap["01"]->value = 3;
+    idAndNodeMap["01"]->connectedNodes.push_back(idAndNodeMap["010"]);
+    idAndNodeMap["01"]->connectedNodes.push_back(idAndNodeMap["011"]);
+
+    //
+
+    idAndNodeMap["0"] = new Node();
+    idAndNodeMap["0"]->value = 7;
+    idAndNodeMap["0"]->connectedNodes.push_back(idAndNodeMap["00"]);
+    idAndNodeMap["0"]->connectedNodes.push_back(idAndNodeMap["01"]);
+    idAndNodeMap["0"]->previousNodesPath = "";
+    idAndNodeMap["0"]->currentNodePath = '0';
+
+
+    std::cout << " eto " << countVisibleNodes(idAndNodeMap);
+
+    return 0;
+}
+
+-------------------------------------------------------
+
+//https://www.hackerrank.com/challenges/encryption/problem
+
+/*
+An English text needs to be encrypted using the following encryption scheme.
+First, the spaces are removed from the text. Let L be the length of this text.
+Then, characters are written into a grid, whose rows and columns have the following constraints:
+sqrt(L) <= row <= column <= sqrt(L) where x is floor function and x is ceil funtion
+
+For example, the sentence s = if man was meant to stay on the ground god would have given us roots,
+after removing spaces is 54 characters long. sqrt(54) is between 7 and 8, so it is written in the form of a grid with 7 rows and 8 columns.
+
+ifmanwas
+meanttos
+tayonthe
+groundgo
+dwouldha
+vegivenu
+sroots
+
+Ensure that rows x columns >= L
+If multiple grids satisfy the above conditions, choose the one with the minimum area, i.e. rows x columns
+
+The encoded message is obtained by displaying the characters in a column, inserting a space, and then displaying the next column and inserting a space, and so on. For example, the encoded message for the above rectangle is:
+
+imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn sseoau
+
+You will be given a message to encode and print.
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the encryption function below.
+unsigned removeSpacesAndGetNewSize(std::string& str)
+{
+    unsigned slow = 0;
+    unsigned fast = 0;
+    while (fast < str.size())
+    {
+        if (str[fast] != ' ')
+        {
+            str[slow++] = str[fast];
+        }
+        ++fast;
+    }
+    return slow;
+}
+
+std::pair<unsigned, unsigned> getRowsAndColumnsCount(const unsigned strSize)
+{
+    double sqrtResult = sqrt(strSize);
+    unsigned rowsCount = sqrtResult;
+    unsigned colsCount = ceil(sqrtResult);
+    if (rowsCount * colsCount < strSize) ++rowsCount;
+    return {rowsCount, colsCount};
+}
+
+string encryption(string s)
+{
+    unsigned sizeWithoutSpaces = removeSpacesAndGetNewSize(s);
+    if (sizeWithoutSpaces == 0) return {};
+
+    auto rowsAndCols = getRowsAndColumnsCount(sizeWithoutSpaces);
+    unsigned rowsCount = rowsAndCols.first;
+    unsigned colsCount = rowsAndCols.second;
+
+    std::string result;
+    for (unsigned col = 0; col < colsCount; ++col)
+    {
+        for (unsigned row = 0, currentCol = col;
+            row < rowsCount && currentCol < sizeWithoutSpaces;
+            ++row, currentCol += colsCount)
+        {
+            result += s[currentCol];
+        }
+        result += " ";
+    }
+
+    return result;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string s;
+    getline(cin, s);
+
+    string result = encryption(s);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+---------------------------------------------------------------
+
+// https://www.hackerrank.com/challenges/bigger-is-greater/problem
+
+/*
+Lexicographical order is often known as alphabetical order when dealing with strings. A string is greater than another string if it comes later in a lexicographically sorted list.
+
+Given a word, create a new word by swapping some or all of its characters. This new word must meet two criteria:
+1. It must be greater than the original word
+2. It must be the smallest word that meets the first condition
+
+For example, given the word w = abcd, the next largest word is abdc.
+
+Complete the function biggerIsGreater below to create and return the new string meeting the criteria. If it is not possible, return no answer.
+
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the biggerIsGreater function below.
+string biggerIsGreater(string w)
+{
+    int strSize = static_cast<int>(w.size());
+    for (int ctr = strSize - 1; ctr > 0; --ctr)
+    {
+        if (w[ctr] > w[ctr - 1])
+        {
+            std::sort(w.begin() + ctr, w.end());
+            for (int ctr2 = ctr; ctr2 < strSize; ++ctr2)
+            {
+                if (w[ctr2] > w[ctr - 1])
+                {
+                    std::swap(w[ctr - 1], w[ctr2]);
+                    return w;
+                }
+            }
+            return "no answer";
+        }
+    }
+    return "no answer";
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int T;
+    cin >> T;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (int T_itr = 0; T_itr < T; T_itr++) {
+        string w;
+        getline(cin, w);
+
+        string result = biggerIsGreater(w);
+
+        fout << result << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
+
+----------------------------------------------------------------------
+
+// https://www.hackerrank.com/challenges/kaprekar-numbers/problem
+
+/*
+A modified Kaprekar number is a positive whole number with a special property. If you square it, then split the number into two integers and sum those integers, you have the same value you started with.
+
+Consider a positive whole number n with d digits. We square n to arrive at a number that is either 2 x d digits long or (2 x d) - 1 digits long. Split the string representation of the square into two parts, l and r. The right hand part, r must be d digits long. The left is the remaining substring. Convert those two substrings back to integers, add them and see if you get n.
+
+For example, if n = 5, d = 1 then n^2 = 25. We split that into two strings and convert them back to integers 2 and 5. We test 2 + 5 = 7 != 5, so this is not a modified Kaprekar number. If n = 9, still d = 1, and n^2 = 81. This gives us 1 + 8 = 9, the original n.
+
+Note: r may have leading zeros.
+
+Here's an explanation from Wikipedia about the ORIGINAL Kaprekar Number (spot the difference!):
+
+In mathematics, a Kaprekar number for a given base is a non-negative integer, the representation of whose square in that base can be split into two parts that add up to the original number again. For instance, 45 is a Kaprekar number, because 45² = 2025 and 20+25 = 45.
+
+Given two positive integers p and q where p is lower than q, write a program to print the modified Kaprekar numbers in the range between p and q, inclusive.
+
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the kaprekarNumbers function below.
+int countDigits(int num)
+{
+    return static_cast<int>(std::to_string(num).size());
+}
+
+void kaprekarNumbers(int p, int q)
+{
+    bool found = false;
+    while (p <= q)
+    {
+        int digitsCount = countDigits(p);
+        long product = static_cast<long>(p) * static_cast<long>(p);
+
+        std::string productStr = std::to_string(product);
+        int productStrSize = static_cast<int>(productStr.size());
+        int dividerIndex = productStrSize - digitsCount;
+        std::string leftNum = productStr.substr(0, dividerIndex);
+        std::string rightNum = productStr.substr(dividerIndex, digitsCount);
+
+        if (leftNum.empty()) leftNum = "0";
+
+        if (std::stoi(leftNum) + std::stoi(rightNum) == p)
+        {
+            std::cout << p << " ";
+            found = true;
+        }
+        ++p;
+    }
+    if (!found) std::cout << "INVALID RANGE";
+}
+
+int main()
+{
+    int p;
+    cin >> p;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    int q;
+    cin >> q;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    kaprekarNumbers(p, q);
+
+    return 0;
+}
+
+-----------------------------------------------------
+// https://www.hackerrank.com/challenges/how-many-substrings/problem
+
+/*
+Consider a string of n characters, s, of where each character is indexed from 0 to n-1.
+
+You are given q queries in the form of two integer indices: left and right. For each query, count and print the number of different substrings of s in the inclusive range between left and right.
+
+Note: Two substrings are different if their sequence of characters differs by at least one. For example, given the string s = aab, substrings s[0,0] = a and s[1,1] = a are the same but substrings s[0,1] = aa and s[1,2] = ab are different.
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+/*
+ * Complete the countSubstrings function below.
+ */
+vector<int> countSubstrings(string s, vector<vector<int>> queries)
+{
+    /*
+     * Write your code here.
+     */
+    std::vector<int> result;
+    for (const auto& query : queries)
+    {
+        unsigned toSubtract = 0u;
+        std::unordered_set<unsigned> indexesWithRepeatedSubstrings;
+        std::string targetStr = s.substr(query[0], query[1] - query[0] + 1);
+        std::string currentStr = ""; // targetStr.substr(0, index);
+        for (unsigned index = 1u; index < targetStr.size(); ++index)
+        {
+            currentStr += targetStr[index - 1];
+            if (currentStr.find(targetStr[index]) != std::string::npos)
+            {
+                ++toSubtract;
+                indexesWithRepeatedSubstrings.insert(index);
+            }
+
+            for (auto it = indexesWithRepeatedSubstrings.begin(); it != indexesWithRepeatedSubstrings.end(); )
+            {
+                if (*it == index)
+                {
+                    ++it;
+                    continue;
+                }
+
+                std::string repeatedSubstr = targetStr.substr(*it, index - *it + 1);
+                if (currentStr.find(repeatedSubstr) != std::string::npos)
+                {
+                    ++toSubtract;
+                    ++it;
+                }
+                else
+                {
+                    indexesWithRepeatedSubstrings.erase(it++);
+                }
+            }
+        }
+        unsigned total = ((1 + targetStr.size()) * targetStr.size()) / 2;
+        result.push_back(total - toSubtract);
+    }
+    return result;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string nq_temp;
+    getline(cin, nq_temp);
+
+    vector<string> nq = split_string(nq_temp);
+
+    int n = stoi(nq[0]);
+
+    int q = stoi(nq[1]);
+
+    string s;
+    getline(cin, s);
+
+    vector<vector<int>> queries(q);
+    for (int queries_row_itr = 0; queries_row_itr < q; queries_row_itr++) {
+        queries[queries_row_itr].resize(2);
+
+        for (int queries_column_itr = 0; queries_column_itr < 2; queries_column_itr++) {
+            cin >> queries[queries_row_itr][queries_column_itr];
+        }
+
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+
+    vector<int> result = countSubstrings(s, queries);
+
+    for (int result_itr = 0; result_itr < result.size(); result_itr++) {
+        fout << result[result_itr];
+
+        if (result_itr != result.size() - 1) {
+            fout << "\n";
+        }
+    }
+
+    fout << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
+        return x == y and x == ' ';
+    });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string[input_string.length() - 1] == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
+
+    return splits;
+}
+
+----------------------------------------------------------------------------
+
+// https://www.hackerrank.com/challenges/larrys-array/problem
+
+/*
+Larry has been given a permutation of a sequence of natural numbers incrementing from 1 as an array. He must determine whether the array can be sorted using the following operation any number of times:
+
+Choose any 3 consecutive indices and rotate their elements in such a way that ABC -> BCA -> CAB -> ABC.
+For example, if A = {1, 6, 5, 2, 4, 3}:
+
+A       rotate
+[1,6,5,2,4,3]   [6,5,2]
+[1,5,2,6,4,3]   [5,2,6]
+[1,2,6,5,4,3]   [5,4,3]
+[1,2,6,3,5,4]   [6,3,5]
+[1,2,3,5,6,4]   [5,6,4]
+[1,2,3,4,5,6]
+
+YES
+On a new line for each test case, print YES if A can be fully sorted. Otherwise, print NO.
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+// Complete the larrysArray function below.
+void print(const std::vector<int>& vec)
+{
+    std::cout << "\nPrinting vector: ";
+    for (const auto& item : vec)
+    {
+        std::cout << " " << item;
+    }
+}
+
+void larrysSort(
+    const unsigned index,
+    std::vector<int>& vec)
+{
+    if (index + 2 >= vec.size()) return;
+    while (vec[index] > vec[index+1] || vec[index] > vec[index+2])
+    {
+        std::swap(vec[index], vec[index+2]);
+        std::swap(vec[index+1], vec[index+2]);
+    }
+}
+
+bool isTheCurrentIndexTheSmallest(
+    const unsigned index,
+    const std::vector<int>& vec)
+{
+    if (index + 2 >= vec.size()) return false;
+    return vec[index] < vec[index+1] && vec[index] < vec[index+2];
+}
+
+bool isSorted(const std::vector<int>& vec)
+{
+    for (unsigned index = 0u; index < vec.size() - 1; ++index)
+    {
+        if (vec[index] > vec[index+1]) return false;
+    }
+    return true;
+}
+std::string larrysArray(std::vector<int> A)
+{
+    int vecSize = static_cast<int>(A.size());
+
+    if (vecSize < 3) return "NO";
+    for (int index = 0u; index <= vecSize - 3; ++index)
+    {
+        print(A);
+
+        if (isTheCurrentIndexTheSmallest(index, A)) continue;
+        larrysSort(index, A);
+        print(A);
+
+        int forward = 0;
+        for (int reverse = index - 1; reverse >= 0; --reverse)
+        {
+            if (isTheCurrentIndexTheSmallest(reverse, A))
+            {
+                forward = reverse + 1;
+                break;
+            }
+            larrysSort(reverse, A);
+        }
+        print(A);
+
+        for (; forward <= index; ++forward)
+        {
+            if (isTheCurrentIndexTheSmallest(forward, A)) continue;
+            larrysSort(forward, A);
+        }
+        print(A);
+
+        if (isTheCurrentIndexTheSmallest(index, A)) continue;
+        larrysSort(index, A);
+    }
+
+    return isSorted(A) ?
+            "YES" :
+            "NO";
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int t;
+    cin >> t;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (int t_itr = 0; t_itr < t; t_itr++) {
+        int n;
+        cin >> n;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        string A_temp_temp;
+        getline(cin, A_temp_temp);
+
+        vector<string> A_temp = split_string(A_temp_temp);
+
+        vector<int> A(n);
+
+        for (int i = 0; i < n; i++) {
+            int A_item = stoi(A_temp[i]);
+
+            A[i] = A_item;
+        }
+
+        string result = larrysArray(A);
+
+        fout << result << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
+        return x == y and x == ' ';
+    });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string[input_string.length() - 1] == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
+
+    return splits;
+}
