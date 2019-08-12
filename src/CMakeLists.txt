@@ -57,23 +57,23 @@ project(libro_src)
 #         anything not starting with src be them included as library <> nor project-then-library ""
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-# First subdirectory to add are those that others has dependency with. This is not neccessary for
-# this project, just to make a point :)
-# add_subdirectory(Common) # Uncomment if cpp files are already in Common for linking
-
+# In case of linking errors, try rearranging addition of subdirectories below
 add_subdirectory(Algorithms)
+add_subdirectory(Common)
 add_subdirectory(Challenges)
 add_subdirectory(Help)
 
-# This can be transformed to regex: file(GLOB libro_src_cpp "*.cpp")
 # The command set is used here for reference as all other CMakeLists already uses the regex format
-set(libro_src_cpp
-    Dispatcher.cpp
-    main.cpp)
+# set(libro_src_cpp
+#     Dispatcher.cpp
+#     main.cpp)
+file(GLOB libro_src_cpp
+    "*.cpp")
 
 add_executable(libro_src ${libro_src_cpp})
 
-# target_link_libraries(libro_src libro_src_common) # Uncomment if cpp files are already in Common for linking
+# In case of linking errors, try rearranging addition of linking below
 target_link_libraries(libro_src libro_src_algorithms)
+target_link_libraries(libro_src libro_src_common)
 target_link_libraries(libro_src libro_src_challenges)
 target_link_libraries(libro_src libro_src_help)
