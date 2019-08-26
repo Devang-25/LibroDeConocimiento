@@ -16,3 +16,6 @@ MessageEncryption
 1. Add new encrypt version, for example [ a 2 14 17 ] [ g 3 ] | [ q 1 4 ]
    But replace those letters (a, g, q in this example) based on index in keycode or in ASCII.
    Put a separator to indicate between letters present in keycode and those that are not.
+
+Others
+1. Develop projects with SQL, Multithreading, different Algorithms, different Design Patterns
