@@ -379,6 +379,7 @@ int main()
 }
 
 -----------------------------------------------------
+
 // https://www.hackerrank.com/challenges/how-many-substrings/problem
 
 /*
@@ -689,3 +690,4369 @@ vector<string> split_string(string input_string) {
 
     return splits;
 }
+
+----------------------------------------
+
+/*
+A binary gap within a positive integer N is any maximal sequence of consecutive zeros that is surrounded by ones at both ends in the binary representation of N.
+
+For example, number 9 has binary representation 1001 and contains a binary gap of length 2. The number 529 has binary representation 1000010001 and contains two binary gaps: one of length 4 and one of length 3. The number 20 has binary representation 10100 and contains one binary gap of length 1. The number 15 has binary representation 1111 and has no binary gaps. The number 32 has binary representation 100000 and has no binary gaps.
+
+Write a function:
+
+int solution(int N);
+
+that, given a positive integer N, returns the length of its longest binary gap. The function should return 0 if N doesn't contain a binary gap.
+
+For example, given N = 1041 the function should return 5, because N has binary representation 10000010001 and so its longest binary gap is of length 5. Given N = 32 the function should return 0, because N has binary representation '100000' and thus no binary gaps.
+
+Write an efficient algorithm for the following assumptions:
+
+N is an integer within the range [1..2,147,483,647].
+*/
+
+int solution(int N)
+{
+    // write your code in C++14 (g++ 6.2.0)
+    while (N > 0 && N % 2 != 1)
+    {
+        N /= 2;
+    }
+    N /= 2;
+
+    int maxZeros = 0;
+    int currentZeroCount = 0;
+    while (N > 0)
+    {
+        int remainder = N % 2;
+        if (remainder == 0)
+        {
+            ++currentZeroCount;
+        }
+        else
+        {
+            maxZeros = std::max(maxZeros, currentZeroCount);
+            currentZeroCount = 0;
+        }
+        N /= 2;
+    }
+    return maxZeros;
+}
+
+----------------------------------------
+/*
+A non-empty array A consisting of N integers is given. The array contains an odd number of elements, and each element of the array can be paired with another element that has the same value, except for one element that is left unpaired.
+
+For example, in array A such that:
+
+  A[0] = 9  A[1] = 3  A[2] = 9
+  A[3] = 3  A[4] = 9  A[5] = 7
+  A[6] = 9
+the elements at indexes 0 and 2 have value 9,
+the elements at indexes 1 and 3 have value 3,
+the elements at indexes 4 and 6 have value 9,
+the element at index 5 has value 7 and is unpaired.
+Write a function:
+
+int solution(vector<int> &A);
+
+that, given an array A consisting of N integers fulfilling the above conditions, returns the value of the unpaired element.
+
+For example, given array A such that:
+
+  A[0] = 9  A[1] = 3  A[2] = 9
+  A[3] = 3  A[4] = 9  A[5] = 7
+  A[6] = 9
+the function should return 7, as explained in the example above.
+
+Write an efficient algorithm for the following assumptions:
+
+N is an odd integer within the range [1..1,000,000];
+each element of array A is an integer within the range [1..1,000,000,000];
+all but one of the values in A occur an even number of times.
+Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
+*/
+
+// you can use includes, for example:
+#include <algorithm>
+#include <unordered_set>
+
+// you can write to stdout for debugging purposes, e.g.
+// cout << "this is a debug message" << endl;
+
+int solution(vector<int> &A)
+{
+    // write your code in C++14 (g++ 6.2.0)
+
+    // // Solution 1
+    // // This has not been personally chosen due to the added time complexity of
+    // // sorting plus the additional time complexity of iterating again to the
+    // // whole vector inputs.
+    // std::sort(A.begin(), A.end());
+    // for (unsigned it = 0u; it < A.size(); it += 2)
+    // {
+    //     if (it + 1 >= A.size() || A[it] != A[it+1]) return A[it];
+    // }
+    // return 0; // something must be wrong if this is reached!
+
+    // Solution 2
+    // This has been chosen because time complexity is just linear O(n) along with
+    // number of input plus the fact that search and deletion in the unordered_Set
+    // is just O(1) due to hash functionality.
+    std::unordered_set<int> toBePaired;
+    for (const auto& item : A)
+    {
+        // auto [it, isInserted] = toBePaired.insert(item); // requires -std=c++17
+        // if (!isInserted) toBePaired.erase(it); // requires -std=c++17
+        auto ret = toBePaired.insert(item);
+        if (!ret.second) toBePaired.erase(ret.first);
+    }
+    return toBePaired.empty() ?
+            0 :
+            *(toBePaired.begin());
+}
+
+---------------------------------------------------------------------------
+/*
+Divide the number
+
+Given a positive integer N, count the number of possible ways to represent N as sum of four positive integers.
+
+Input
+The first line of input contains an integer T denoting the number of test cases. Then T test cases follow.
+The first line of each test case contains a positve integer N.
+
+Output
+Print out the number of ways to divide N in four parts.
+
+Constraints
+1 <= T <= 100
+0 <= N <=300
+
+Examples
+
+Input
+3
+5
+41
+500
+
+Output
+1
+511
+873264
+
+Explanation
+
+Output 1:  There is only one way to divide 5  (1, 1, 1, 2)
+
+** For More Input/Output Examples Use 'Expected Output' option **
+
+Examples :
+
+Input:  n =  5
+Output: 1
+There is only one way (1, 1, 1, 2)
+
+Input:  n =  6
+Output: 2
+There are two ways (1, 1, 1, 3) and
+(1, 1, 2, 2)
+
+Input:  n =  8
+Output: 5
+There are five ways (2, 2, 2, 2), (1, 1, 1, 5),
+(1, 1, 3, 3), (1, 1, 2, 4) and (1, 2, 2, 3)
+
+Analysis:
+target sum = 17
+answer = 39 combinations
+Combinations =
+1 1 1 14
+1 1 2 13
+1 1 3 12
+1 1 4 11
+1 1 5 10
+1 1 6 9
+1 1 7 8
+
+1 2 2 12
+1 2 3 11
+1 2 4 10
+1 2 5 9
+1 2 6 8
+1 2 7 7
+
+1 3 3 10
+1 3 4 9
+1 3 5 8
+1 3 6 7
+
+1 4 4 8
+1 4 5 7
+1 4 6 6
+
+1 5 5 6
+
+2 2 2 11
+2 2 3 10
+2 2 4 9
+2 2 5 8
+2 2 6 7
+
+2 3 3 9
+2 3 4 8
+2 3 5 7
+2 3 6 6
+
+2 4 4 7
+2 4 5 6
+
+2 5 5 5
+
+3 3 3 8
+3 3 4 7
+3 3 5 6
+
+3 4 4 6
+3 4 5 5
+
+4 4 4 5
+
+
+target sum = 12
+answer = 15 combinations
+Combinations =
+
+1 1 1 9
+1 1 2 8
+1 1 3 7
+1 1 4 6
+1 1 5 5
+
+1 2 2 7
+1 2 3 6
+1 2 4 5
+
+1 3 3 5
+1 3 4 4
+
+2 2 2 6
+2 2 3 5
+2 2 4 4
+
+2 3 3 4
+
+3 3 3 3
+
+*/
+
+#include <iostream>
+using namespace std;
+
+int countWaysOfFourPositiveIntegers(const int N)
+{
+    int result = 0;
+    for (int ctr = 1; ctr <= N - 3; ++ctr)
+    {
+        bool isAdditionToResultMade = true;
+        for (int ctr2 = ctr; isAdditionToResultMade; ++ctr2)
+        {
+            isAdditionToResultMade = false;
+            int remaining = N - (ctr + ctr2);
+            int numberOfAddCombinationsForRemaining = remaining / 2;
+            int currentTotalCount = numberOfAddCombinationsForRemaining - ctr2 + 1;
+
+            if (currentTotalCount > 0)
+            {
+                result += currentTotalCount;
+                isAdditionToResultMade = true;
+            }
+        }
+    }
+    return result;
+}
+
+int main() {
+    //code
+    unsigned inputCount;
+    std::cin >> inputCount;
+    for (unsigned ctr = 0u; ctr < inputCount; ++ctr)
+    {
+        int N;
+        std::cin >> N;
+        std::cout << countWaysOfFourPositiveIntegers(N) << "\n";
+    }
+    return 0;
+}
+
+----------------------------------------------
+/*
+Merge k Sorted Arrays
+
+Given K sorted arrays arranged in form of a matrix. The task is to merge them. You need to complete mergeKArrays() function which takes 2 arguments, an arr[k][k] 2D Matrix containing k sorted arrays and an integer k denoting the number of sorted arrays. The function should return a pointer to the merged sorted arrays.
+
+Input:
+The first line of input contains the number of test cases, then T test cases follows. Each test case will contain an integer N denoting the number of sorted arrays. Then in the next line contains all the elements of the array separated by space.
+
+Output:
+The output will be the sorted merged array.
+
+User Task:
+The task is to complete the function mergeKArrays() which takes two arguments, and returns pointer to the modified array.
+
+Constraints:
+1 <= T <= 50
+1 <= N <= 103
+1 <= K <= 10
+
+Example:
+Input:
+1
+3
+1 2 3 4 5 6 7 8 9
+
+Output:
+1 2 3 4 5 6 7 8 9
+
+Explanation:
+Testcase 1:
+Above test case has 3 sorted arrays of size 3, 3, 3
+arr[][] = [[1, 2, 3],
+
+             [4, 5, 6],
+
+             [7, 8, 9]]
+The merged list will be [1, 2, 3, 4, 5, 6, 7, 8, 9].
+*/
+/*This is a function problem.You only need to complete the function given below*/
+// your task is tocomplete this function
+// function should return an pointer to output array int*
+// of size k*k
+int *mergeKArrays(int arr[][N], int k)
+{
+//code here
+    std::vector<int> resultVec;
+    for (int ctr = 0; ctr < k; ++ctr)
+    {
+        for (int ctr2 = 0; ctr2 < k; ++ctr2)
+        {
+            resultVec.push_back(arr[ctr][ctr2]);
+        }
+    }
+    std::sort(resultVec.begin(), resultVec.end());
+    int ctr = 0;;
+    int* result = new int[k*k];
+    for (auto it = resultVec.begin(); it < resultVec.end(); ++it)
+    {
+        result[ctr++] = *it;
+    }
+    return result;
+}
+
+
+----------------------------------------------
+
+/*
+Merge Without Extra Space
+
+Given two sorted arrays arr1[] and arr2[] in non-decreasing order with size n and m. The task is to merge the two sorted arrays into one sorted array (in non-decreasing order).
+
+Note: Expected time complexity is O((n+m) log(n+m)). DO NOT use extra space.  We need to modify existing arrays as following.
+
+Input: arr1[] = {10};
+       arr2[] = {2, 3};
+Output: arr1[] = {2}
+        arr2[] = {3, 10}
+
+Input: arr1[] = {1, 5, 9, 10, 15, 20};
+       arr2[] = {2, 3, 8, 13};
+Output: arr1[] = {1, 2, 3, 5, 8, 9}
+        arr2[] = {10, 13, 15, 20}
+Input:
+First line contains an integer T, denoting the number of test cases. First line of each test case contains two space separated integers X and Y, denoting the size of the two sorted arrays. Second line of each test case contains X space separated integers, denoting the first sorted array P. Third line of each test case contains Y space separated integers, denoting the second array Q.
+
+Output:
+For each test case, print (X + Y) space separated integer representing the merged array.
+
+Constraints:
+1 <= T <= 100
+1 <= X, Y <= 5*104
+0 <= arr1i, arr2i <= 109
+
+Example:
+Input:
+2
+4 5
+1 3 5 7
+0 2 6 8 9
+2 3
+10 12
+5 18 20
+
+Output:
+0 1 2 3 5 6 7 8 9
+5 10 12 18 20
+*/
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void merge(
+    std::vector<int> arr1,
+    std::vector<int> arr2)
+{
+    unsigned totalCount = arr1.size() + arr2.size();
+    unsigned arr1Index = 0u;
+    unsigned arr2Index = 0u;
+    while (arr1Index < arr1.size() && arr2Index < arr2.size())
+    {
+        if (arr1[arr1Index] < arr2[arr2Index])
+        {
+            std::cout << arr1[arr1Index++] << " ";
+        }
+        else
+        {
+            std::cout << arr2[arr2Index++] << " ";
+        }
+    }
+    while (arr1Index < arr1.size())
+    {
+        std::cout << arr1[arr1Index++] << " ";
+    }
+    while (arr2Index < arr2.size())
+    {
+        std::cout << arr2[arr2Index++] << " ";
+    }
+    std::cout << "\n";
+}
+
+int main() {
+    //code
+    unsigned T;
+    std::cin >> T;
+    for (unsigned ctr = 0u; ctr < T; ++ctr)
+    {
+        unsigned X;
+        unsigned Y;
+        std::cin >> X >> Y;
+
+        std::vector<int> arr1;
+        std::vector<int> arr2;
+        arr1.reserve(X);
+        arr2.reserve(Y);
+
+        for (unsigned ctr2 = 0u; ctr2 < X + Y; ++ctr2)
+        {
+            int temp;
+            std::cin >> temp;
+            if (ctr2 < X) arr1.push_back(temp);
+            else          arr2.push_back(temp);
+        }
+        merge(arr1, arr2);
+    }
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Rearrange Array Alternately
+
+Given a sorted array of positive integers. Your task is to rearrange  the array elements alternatively i.e first element should be max value, second should be min value, third should be second max, fourth should be second min and so on...
+
+Note: O(1) extra space is allowed. Also, try to modify the input array as required.
+
+Input:
+First line of input conatins number of test cases T. First line of test case contain an integer denoting the array size N and second line of test case contain N space separated integers denoting the array elements.
+
+Output:
+Output the modified array with alternated elements.
+
+Constraints:
+1 <=T<= 100
+1 <=N<= 107
+1 <=arr[i]<= 107
+
+Example:
+Input:
+2
+6
+1 2 3 4 5 6
+11
+10 20 30 40 50 60 70 80 90 100 110
+
+Output:
+6 1 5 2 4 3
+110 10 100 20 90 30 80 40 70 50 60
+
+Explanation:
+Testcase 1: Max element = 6, min = 1, second max = 5, second min = 2, and so on... Modified array is : 6 1 5 2 4 3.
+*/
+
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/* Unoptimized solution
+void rearrangeInPlace(std::vector<int>& arr)
+{
+    int leftIndex = 0u;
+    int rightIndex = arr.size() - 1;
+    int lastIndex = arr.size() - 1;
+
+    while (leftIndex < rightIndex)
+    {
+        std::swap(arr[rightIndex--], arr[leftIndex++]);
+        std::swap(arr[lastIndex], arr[leftIndex++]);
+
+        int newlyInsertedLastIndex = lastIndex;
+        while (rightIndex < newlyInsertedLastIndex - 1 && leftIndex < newlyInsertedLastIndex)
+        {
+            std::swap(arr[newlyInsertedLastIndex], arr[newlyInsertedLastIndex-1]);
+            --newlyInsertedLastIndex;
+        }
+    }
+    while (leftIndex <= lastIndex)
+    {
+        int queuedLastIndex = lastIndex;
+        while (queuedLastIndex > leftIndex + 1)
+        {
+            std::swap(arr[queuedLastIndex], arr[queuedLastIndex-1]);
+            --queuedLastIndex;
+        }
+        leftIndex += 2;
+    }
+}
+*/
+
+// Use long if necessary
+void rearrangeInPlace(std::vector<int>& arr)
+{
+    int traverseToRight = 0u;
+    int traverseToLeft = arr.size() - 1u;
+    const int BASE_NUMBER = arr.back() + 1;
+
+    for (unsigned ctr = 0u; ctr < arr.size(); ++ctr)
+    {
+        if (ctr % 2 == 0)
+        {
+            int originalNumber = arr[traverseToLeft] % BASE_NUMBER;
+            int numberToStoreInCurrentIndex = originalNumber * BASE_NUMBER;
+            arr[ctr] += numberToStoreInCurrentIndex;
+            --traverseToLeft;
+        }
+        else
+        {
+            int originalNumber = arr[traverseToRight] % BASE_NUMBER;
+            int numberToStoreInCurrentIndex = originalNumber * BASE_NUMBER;
+            arr[ctr] += numberToStoreInCurrentIndex;
+            ++traverseToRight;
+        }
+    }
+
+    for (unsigned ctr = 0u; ctr < arr.size(); ++ctr)
+    {
+        arr[ctr] /= BASE_NUMBER;
+    }
+}
+
+int main() {
+    //code
+    unsigned T;
+    std::cin >> T;
+    for (unsigned ctr = 0u; ctr < T; ++ctr)
+    {
+        unsigned N;
+        std::cin >> N;
+
+        std::vector<int> arr;
+        arr.reserve(N);
+
+        for (unsigned ctr2 = 0u; ctr2 < N; ++ctr2)
+        {
+            int temp;
+            std::cin >> temp;
+            arr.push_back(temp);
+        }
+        rearrangeInPlace(arr);
+        for (const auto& elem : arr)
+        {
+            std::cout << elem << " ";
+        }
+        std::cout << "\n";
+    }
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Subarray with given sum
+
+Given an unsorted array A of size N of non-negative integers, find a continuous sub-array which adds to a given number S.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. Each test case consists of two lines. The first line of each test case is N and S, where N is the size of array and S is the sum. The second line of each test case contains N space separated integers denoting the array elements.
+
+Output:
+For each testcase, in a new line, print the starting and ending positions(1 indexing) of first such occuring subarray from the left if sum equals to subarray, else print -1.
+
+Constraints:
+1 <= T <= 100
+1 <= N <= 107
+1 <= Ai <= 1010
+
+Example:
+Input:
+2
+5 12
+1 2 3 7 5
+10 15
+1 2 3 4 5 6 7 8 9 10
+Output:
+2 4
+1 5
+
+Explanation :
+Testcase1: sum of elements from 2nd position to 4th position is 12
+Testcase2: sum of elements from 1st position to 5th position is 15
+
+** For More Input/Output Examples Use 'Expected Output' option **
+*/
+
+#include <iostream>
+#include <vector>
+
+void findSubarray(
+    const std::vector<int>& arr,
+    const int targetSum)
+{
+    int lowerBound = 0;
+    int sum = 0;
+
+    for (unsigned ctr = 0u; ctr < arr.size(); ++ctr)
+    {
+        sum += arr[ctr];
+        if (sum == targetSum)
+        {
+            std::cout << lowerBound + 1 << " " << ctr + 1 << "\n";
+            return;
+        }
+        else if (sum > targetSum)
+        {
+            sum = sum - arr[lowerBound++] - arr[ctr--];
+        }
+    }
+    std::cout << "-1\n";
+}
+
+int main() {
+    //code
+    unsigned T;
+    std::cin >> T;
+    for (unsigned ctr = 0u; ctr < T; ++ctr)
+    {
+        unsigned N;
+        int S;
+        std::cin >> N >> S;
+
+        std::vector<int> arr;
+        for (unsigned ctr2 = 0u; ctr2 < N; ++ctr2)
+        {
+            int temp;
+            std::cin >> temp;
+            arr.push_back(temp);
+        }
+        findSubarray(arr, S);
+    }
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Count the triplets
+
+Given an array of distinct integers. The task is to count all the triplets such that sum of two elements equals the third element.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. Each test case consists of two lines. First line of each test case contains an Integer N denoting size of array and the second line contains N space separated elements.
+
+Output:
+For each test case, print the count of all triplets, in new line. If no such triplets can form, print "-1".
+
+Constraints:
+1 <= T <= 100
+3 <= N <= 105
+1 <= A[i] <= 106
+
+Example:
+Input:
+2
+4
+1 5 3 2
+3
+3 2 7
+Output:
+2
+-1
+
+Explanation:
+Testcase 1: There are 2 triplets: 1 + 2 = 3 and 3 +2 = 5
+*/
+
+#include <algorithm>
+#include <iostream>
+#include <unordered_set>
+#include <vector>
+using namespace std;
+
+// int countTriplets(const std::vector<int>& arr)
+// {
+//     int totalCount = 0u;
+//     for (unsigned ctr = 0u; ctr < arr.size(); ++ctr)
+//     {
+//         int targetSum = arr[ctr];
+//         std::unordered_set<int> arrNumbers;
+//         for (unsigned ctr2 = 0u; ctr2 < arr.size(); ++ctr2)
+//         {
+//             if (ctr2 == ctr) continue;
+
+//             int requiredNumber = targetSum - arr[ctr2];
+//             if (arrNumbers.count(requiredNumber)) ++totalCount;
+
+//             arrNumbers.insert(arr[ctr2]);
+//         }
+//     }
+//     return totalCount > 0 ?
+//             totalCount :
+//             -1;
+// }
+
+int countTriplets(std::vector<int> arr)
+{
+    std::sort(arr.begin(), arr.end());
+
+    int totalCount = 0u;
+    for (int ctr = arr.size() - 1; ctr >= 0; --ctr)
+    {
+        int targetSum = arr[ctr];
+
+        int traverseToRight = 0;
+        int traverseToLeft = ctr - 1;
+        while (traverseToRight < traverseToLeft)
+        {
+            int currentSum = arr[traverseToRight] + arr[traverseToLeft];
+            if (currentSum == targetSum)
+            {
+                ++totalCount;
+                ++traverseToRight;
+                --traverseToLeft;
+            }
+            else if (currentSum < targetSum)
+            {
+                ++traverseToRight;
+            }
+            else // if (currentSum > targetSum)
+            {
+                --traverseToLeft;
+            }
+        }
+    }
+    return totalCount > 0 ?
+            totalCount :
+            -1;
+}
+
+int main() {
+    //code
+    unsigned T;
+    std::cin >> T;
+    for (unsigned ctr = 0u; ctr < T; ++ctr)
+    {
+        unsigned N;
+        std::cin >> N;
+
+        std::vector<int> arr;
+        arr.reserve(N);
+        for (unsigned ctr2 = 0u; ctr2 < N; ++ctr2)
+        {
+            int temp;
+            std::cin >> temp;
+            arr.push_back(temp);
+        }
+        std::cout << countTriplets(arr) << "\n";
+    }
+    return 0;
+}
+---------------------------------------------------------------------------
+
+/*
+Kadane's Algorithm
+
+Given an array arr of N integers. Find the contiguous sub-array with maximum sum.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. The description of T test cases follows. The first line of each test case contains a single integer N denoting the size of array. The second line contains N space-separated integers A1, A2, ..., AN denoting the elements of the array.
+
+Output:
+Print the maximum sum of the contiguous sub-array in a separate line for each test case.
+
+Constraints:
+1 ≤ T ≤ 110
+1 ≤ N ≤ 106
+-107 ≤ A[i] <= 107
+
+Example:
+Input
+2
+5
+1 2 3 -2 5
+4
+-1 -2 -3 -4
+Output
+9
+-1
+
+Explanation:
+Testcase 1: Max subarray sum is 9 of elements (1, 2, 3, -2, 5) which is a contiguous subarray.
+*/
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int kadaneAlgorithm(const std::vector<int>& arr)
+{
+    if (arr.empty()) return 0;
+
+    int maxSum = arr.front();
+    int currentSum = arr.front();
+    for (unsigned ctr = 1u; ctr < arr.size(); ++ctr)
+    {
+        int newCurrentSum = arr[ctr] + currentSum;
+        if (arr[ctr] > newCurrentSum)
+        {
+            currentSum = arr[ctr];
+            if (currentSum > maxSum)
+            {
+                maxSum = currentSum;
+            }
+        }
+        else if (newCurrentSum >= 0)
+        {
+            currentSum = newCurrentSum;
+            if (currentSum > maxSum)
+            {
+                maxSum = currentSum;
+            }
+        }
+        else
+        {
+            currentSum = 0;
+        }
+    }
+    return maxSum;
+}
+
+int main() {
+    //code
+    unsigned T;
+    std::cin >> T;
+    for (unsigned ctr = 0u; ctr < T; ++ctr)
+    {
+        unsigned N;
+        std::cin >> N;
+
+        std::vector<int> arr;
+        arr.reserve(N);
+        for (unsigned ctr2 = 0u; ctr2 < N; ++ctr2)
+        {
+            int temp;
+            std::cin >> temp;
+            arr.push_back(temp);
+        }
+        std::cout << kadaneAlgorithm(arr) << "\n";
+    }
+    return 0;
+}
+---------------------------------------------------------------------------
+
+/*
+Missing number in array
+
+Given an array C of size N-1 and given that there are numbers from 1 to N with one element missing, the missing number is to be found.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. For each test case first line contains N(size of array). The subsequent line contains N-1 array elements.
+
+Output:
+Print the missing number in array.
+
+Constraints:
+1 ≤ T ≤ 200
+1 ≤ N ≤ 107
+1 ≤ C[i] ≤ 107
+
+Example:
+Input:
+2
+5
+1 2 3 5
+10
+1 2 3 4 5 6 7 8 10
+
+Output:
+4
+9
+
+Explanation:
+Testcase 1: Given array : 1 2 3 5. Missing element is 4.
+*/
+
+#include <algorithm>
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int missingNumber(std::vector<int> arr)
+{
+    std::sort(arr.begin(), arr.end());
+
+    int expectedValue = 1;
+    for (const auto& elem : arr)
+    {
+        if (elem != expectedValue) return expectedValue;
+        ++expectedValue;
+    }
+    return expectedValue;
+}
+
+int main() {
+    //code
+    unsigned T;
+    std::cin >> T;
+    for (unsigned ctr = 0u; ctr < T; ++ctr)
+    {
+        unsigned N;
+        std::cin >> N;
+
+        std::vector<int> arr;
+        arr.reserve(N);
+        for (unsigned ctr2 = 0u; ctr2 < N - 1; ++ctr2)
+        {
+            int temp;
+            std::cin >> temp;
+            arr.push_back(temp);
+        }
+        std::cout << missingNumber(arr) << "\n";
+    }
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+The Time in Words
+
+Given the time in numerals we may convert it into words, as shown below:
+5:00 -> five o' clock
+5:01 -> one minute past five
+5:10 -> ten minutes past five
+5:15 -> quarter past five
+5:30 -> half past five
+5:40 -> twenty minutes to six
+5:40 -> quarter to six
+5:40 -> thirteen minutes to six
+5:28 -> twenty eight minutes past five
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the timeInWords function below.
+
+const std::unordered_map<int, std::string> TIME_AND_WORD_MAP
+    {
+        {1, "one"},
+        {2, "two"},
+        {3, "three"},
+        {4, "four"},
+        {5, "five"},
+        {6, "six"},
+        {7, "seven"},
+        {8, "eight"},
+        {9, "nine"},
+        {10, "ten"},
+        {11, "eleven"},
+        {12, "twelve"},
+        {13, "thirteen"},
+        {14, "fourteen"},
+        // {15, "fifteen"},
+        {16, "sixteen"},
+        {17, "seventeen"},
+        {18, "eighteen"},
+        {19, "nineteen"},
+        {20, "twenty"},
+    };
+
+const std::string O_CLOCK = "o' clock";
+const std::string MINUTE = "minute";
+const std::string MINUTES = "minutes";
+const std::string PAST = "past";
+const std::string QUARTER = "quarter";
+const std::string HALF = "half";
+const std::string TO = "to";
+const std::string SPACE = " ";
+
+std::string getMinutesTime(const int minutes)
+{
+    int minutesWithRespectTo30 = minutes < 30 ?
+                                    minutes :
+                                    60 - minutes;
+    int remainingFrom20 = minutesWithRespectTo30 < 20 ?
+                            0 :
+                            minutesWithRespectTo30 - 20;
+    return remainingFrom20 == 0 ?
+            TIME_AND_WORD_MAP.at(minutesWithRespectTo30) :
+            TIME_AND_WORD_MAP.at(20) + SPACE + TIME_AND_WORD_MAP.at(remainingFrom20);
+}
+
+std::string getHourTime(
+    const int h,
+    const int m)
+{
+    if (m < 30) return TIME_AND_WORD_MAP.at(h);
+    return h == 12 ?
+            TIME_AND_WORD_MAP.at(1) :
+            TIME_AND_WORD_MAP.at(h + 1);
+}
+
+string timeInWords(int h, int m)
+{
+    if (m % 15 == 0)
+    {
+        switch (m)
+        {
+            case 0 : return TIME_AND_WORD_MAP.at(h) + SPACE + O_CLOCK;
+            case 15 : return QUARTER + SPACE + PAST + SPACE + TIME_AND_WORD_MAP.at(h);
+            case 30 : return HALF + SPACE + PAST + SPACE + TIME_AND_WORD_MAP.at(h);
+            case 45 : return QUARTER + SPACE + TO + SPACE + getHourTime(h, m);
+        };
+        throw "Unsupported minutes";
+    }
+
+    std::string minuteWord = (m == 1 || m == 59) ? MINUTE : MINUTES;
+    std::string pastOrTo = (m < 30) ? PAST : TO;
+    std::string minutesTime = getMinutesTime(m);
+    std::string hourTime = getHourTime(h, m);
+
+    return minutesTime + SPACE + minuteWord + SPACE + pastOrTo + SPACE + hourTime;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int h;
+    cin >> h;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    int m;
+    cin >> m;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    string result = timeInWords(h, m);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Shortest path from 1 to n Submissions: 12972   Accuracy: 43.46%   Difficulty: Basic   Marks: 1
+
+Problems
+Consider a directed graph whose vertices are numbered from 1 to n. There is an edge from a vertex i to a vertex j iff either j = i + 1 or j = 3i. The task is to find the minimum number of edges in a path in G from vertex 1 to vertex n.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. The description of T test cases follows.
+
+Each test case contains a value of n.
+
+Output:
+Print the number of edges in the shortest path from 1 to n.
+
+Constraints:
+1<=T<=30
+1<=n <=1000
+
+Example:
+Input:
+2
+9
+4
+
+Output:
+2
+2
+
+
+Can someone explain why is it that for input 887, the answer should be 14?
+
+My code's output is 12, which is obviously shorter. I looked into the path generated and it seems legitimate.
+
+For Input:
+1
+887
+Your Output is:
+Path: -1-3-4-12-11-33-99-98-294-295-885-886-887 = 12
+
+-> answer: The problem requires directed graph, so 1 is connected to 2 but not the other way around
+*/
+
+
+#include <algorithm>
+#include <iostream>
+#include <queue>
+#include <unordered_map>
+#include <vector>
+using namespace std;
+
+struct Node
+{
+    int value;
+    int pathValue;
+    std::vector<Node*> connectedNodes;
+    std::string pathStr;
+};
+
+std::unordered_map<int, Node*> valueAndNodeMap;
+
+int shortestPath(const int n)
+{
+    valueAndNodeMap[1] = new Node{1, 0, {}};
+
+    for (int ctr = 2; ctr <= n; ++ctr)
+    {
+        valueAndNodeMap[ctr] = new Node{ctr, 0, {}};
+
+        int neighbor1 = ctr - 1;
+        // valueAndNodeMap[ctr]->connectedNodes.push_back(valueAndNodeMap[neighbor1]); // Commented because problem requires directed graph
+        valueAndNodeMap[neighbor1]->connectedNodes.push_back(valueAndNodeMap[ctr]);
+
+        if (ctr < 3 || ctr % 3 != 0) continue;
+
+        int neighbor2 = ctr / 3;
+        // valueAndNodeMap[ctr]->connectedNodes.push_back(valueAndNodeMap[neighbor2]); // Commented because problem requires directed graph
+        valueAndNodeMap[neighbor2]->connectedNodes.push_back(valueAndNodeMap[ctr]);
+    }
+
+    std::queue<Node*> nodeQueue;
+    nodeQueue.push(valueAndNodeMap[1]);
+
+    while (!nodeQueue.empty())
+    {
+        auto currentNode = nodeQueue.front();
+        nodeQueue.pop();
+
+        int edgeValue = 1; // Fixed for this problem
+        int currentToNextPathValue = currentNode->pathValue + edgeValue;
+        for (auto& elem : currentNode->connectedNodes)
+        {
+            if (elem->value == 1) continue;
+            if (elem->pathValue != 0 && elem->pathValue <= currentToNextPathValue) continue;
+            if (elem->value == n)
+            {
+                // std::cout << "Path: " << currentNode->pathStr + "-" + std::to_string(currentNode->value) + "-" + std::to_string(elem->value) << " = ";
+                return currentToNextPathValue;
+            }
+
+            elem->pathValue = currentToNextPathValue;
+            elem->pathStr = currentNode->pathStr + "-" + std::to_string(currentNode->value);
+            nodeQueue.push(elem);
+        }
+    }
+    return 0;
+}
+
+int main() {
+    //code
+    unsigned T;
+    std::cin >> T;
+    for (unsigned ctr = 0u; ctr < T; ++ctr)
+    {
+        int n;
+        std::cin >> n;
+        std::cout << shortestPath(n) << "\n";
+
+        for (auto& elem : valueAndNodeMap)
+        {
+            delete elem.second;
+        }
+        valueAndNodeMap.clear();
+    }
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+CyclicRotation
+
+An array A consisting of N integers is given. Rotation of the array means that each element is shifted right by one index, and the last element of the array is moved to the first place. For example, the rotation of array A = [3, 8, 9, 7, 6] is [6, 3, 8, 9, 7] (elements are shifted right by one index and 6 is moved to the first place).
+
+The goal is to rotate array A K times; that is, each element of A will be shifted to the right K times.
+
+Write a function:
+
+class Solution { public int[] solution(int[] A, int K); }
+
+that, given an array A consisting of N integers and an integer K, returns the array A rotated K times.
+
+For example, given
+
+    A = [3, 8, 9, 7, 6]
+    K = 3
+the function should return [9, 7, 6, 3, 8]. Three rotations were made:
+
+    [3, 8, 9, 7, 6] -> [6, 3, 8, 9, 7]
+    [6, 3, 8, 9, 7] -> [7, 6, 3, 8, 9]
+    [7, 6, 3, 8, 9] -> [9, 7, 6, 3, 8]
+For another example, given
+
+    A = [0, 0, 0]
+    K = 1
+the function should return [0, 0, 0]
+
+Given
+
+    A = [1, 2, 3, 4]
+    K = 4
+the function should return [1, 2, 3, 4]
+
+Assume that:
+
+N and K are integers within the range [0..100];
+each element of array A is an integer within the range [−1,000..1,000].
+In your solution, focus on correctness. The performance of your solution will not be the focus of the assessment.
+
+Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
+
+
+Your test case:  [[1, 2, 3, 4, 5], 1]
+Returned value: [5, 1, 2, 3, 4]
+
+Your test case:  [[1, -2, 3, 4, -5], 1]
+Returned value: [-5, 1, -2, 3, 4]
+
+*/
+
+// you can use includes, for example:
+// #include <algorithm>
+#include <queue>
+
+// you can write to stdout for debugging purposes, e.g.
+// cout << "this is a debug message" << endl;
+
+// Unoptimized solution
+// vector<int> solution(vector<int> &A, int K)
+// {
+//     // write your code in C++14 (g++ 6.2.0)
+//     if (A.empty()) return A;
+
+//     K = K % A.size();
+
+//     const int MAX_NUM = 1001;
+
+//     std::vector<bool> negativeVec;
+//     negativeVec.resize(A.size());
+
+//     for (int ctr = A.size() - 1; ctr >= 0; --ctr)
+//     {
+//         int targetIndex = ctr - K;
+//         if (targetIndex < 0)
+//         {
+//             targetIndex = A.size() + targetIndex;
+//         }
+
+//         negativeVec[ctr] = false;
+//         if (A[targetIndex] < 0)
+//         {
+//             negativeVec[ctr] = true;
+//             A[targetIndex] = A[targetIndex] * -1;
+//         }
+
+//         int originalNumberInTarget = A[targetIndex] % MAX_NUM;
+//         // std::cout << "\n ctr " << ctr << " targetIndex " << targetIndex
+//         //     << " originalNumberInTarget " << originalNumberInTarget;
+//         // std::cout << "\n from A[ctr] " << A[ctr];
+//         bool isCurrentNegative = A[ctr] < 0;
+//         int numToAdd = isCurrentNegative ?
+//                         A[ctr] * -1 :
+//                         A[ctr];
+
+//         A[ctr] = numToAdd + (originalNumberInTarget * MAX_NUM);
+//         if (isCurrentNegative)
+//         {
+//             A[ctr] *= -1;
+//         }
+//         // std::cout << " to A[ctr] " << A[ctr];
+//     }
+
+//     // std::cout << "\neto1 ";
+//     for (unsigned ctr = 0u; ctr < A.size(); ++ctr)
+//     {
+//         // std::cout << A[ctr] << " ";
+//         A[ctr] = A[ctr] / MAX_NUM;
+//         if (negativeVec[ctr])
+//         {
+//             A[ctr] *= -1;
+//         }
+//     }
+//     // std::cout << "\neto2 ";
+//     // for (unsigned ctr = 0u; ctr < A.size(); ++ctr)
+//     // {
+//     //     std::cout << A[ctr] << " ";
+//     // }
+//     return A;
+// }
+
+vector<int> solution(vector<int> &A, int K)
+{
+    // write your code in C++14 (g++ 6.2.0)
+    if (A.empty()) return A;
+    K = K % A.size();
+    if (K == 0) return A;
+
+    std::queue<int> buffer;
+
+    int ctr = A.size() - 1;
+    int targetIndex = ctr - K;
+    while (targetIndex >= 0)
+    {
+        buffer.push(A[ctr]);
+        A[ctr] = A[targetIndex];
+
+        --ctr;
+        targetIndex = ctr - K;
+    }
+    while (ctr >= 0)
+    {
+        buffer.push(A[ctr]);
+        A[ctr] = buffer.front();
+        buffer.pop();
+
+        --ctr;
+    }
+    return A;
+}
+
+
+---------------------------------------------------------------------------
+
+/*
+FrogJmp
+
+A small frog wants to get to the other side of the road. The frog is currently located at position X and wants to get to a position greater than or equal to Y. The small frog always jumps a fixed distance, D.
+
+Count the minimal number of jumps that the small frog must perform to reach its target.
+
+Write a function:
+
+int solution(int X, int Y, int D);
+
+that, given three integers X, Y and D, returns the minimal number of jumps from position X to a position equal to or greater than Y.
+
+For example, given:
+
+  X = 10
+  Y = 85
+  D = 30
+the function should return 3, because the frog will be positioned as follows:
+
+after the first jump, at position 10 + 30 = 40
+after the second jump, at position 10 + 30 + 30 = 70
+after the third jump, at position 10 + 30 + 30 + 30 = 100
+Write an efficient algorithm for the following assumptions:
+
+X, Y and D are integers within the range [1..1,000,000,000];
+X ≤ Y.
+Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
+*/
+
+// you can use includes, for example:
+// #include <algorithm>
+
+// you can write to stdout for debugging purposes, e.g.
+// cout << "this is a debug message" << endl;
+
+int solution(int X, int Y, int D)
+{
+    // write your code in C++14 (g++ 6.2.0)
+    if (X >= Y) return 0;
+
+    int difference = Y - X;
+    int jumpCount = difference / D;
+    if (difference % D != 0) ++jumpCount;
+    return jumpCount;
+}
+
+---------------------------------------------------------------------------
+
+/*
+
+The Grid Search
+
+Given a 2D array of digits or grid, try to find the occurrence of a given 2D pattern of digits. For example, consider the following grid:
+
+1234567890
+0987654321
+1111111111
+1111111111
+2222222222
+Assume we need to look for the following 2D pattern array:
+
+876543
+111111
+111111
+The 2D pattern begins at the second row and the third column of the grid. The pattern is said to be present in the grid.
+
+Function Description
+Complete the gridSearch function in the editor below. It should return YES if the pattern exists in the grid, or NO otherwise.
+gridSearch has the following parameter(s):
+G: the grid to search, an array of strings
+P: the pattern to search for, an array of strings
+
+Input Format
+The first line contains an integer t, the number of test cases.
+Each of the t test cases is represented as follows:
+The first line contains two space-separated integers R and C, indicating the number of rows and columns in the grid G.
+This is followed by R lines, each with a string of C digits representing the grid .G
+The following line contains two space-separated integers, r and c, indicating the number of rows and columns in the pattern grid P.
+This is followed by r lines, each with a string of c digits representing the pattern P.
+
+Output Format
+
+Display YES or NO, depending on whether P is present in G.
+
+Sample Input
+
+2
+10 10
+7283455864
+6731158619
+8988242643
+3830589324
+2229505813
+5633845374
+6473530293
+7053106601
+0834282956
+4607924137
+3 4
+9505
+3845
+3530
+15 15
+400453592126560
+114213133098692
+474386082879648
+522356951189169
+887109450487496
+252802633388782
+502771484966748
+075975207693780
+511799789562806
+404007454272504
+549043809916080
+962410809534811
+445893523733475
+768705303214174
+650629270887160
+2 2
+99
+99
+Sample Output
+
+YES
+NO
+Explanation
+
+The first test in the input file is:
+
+10 10
+7283455864
+6731158619
+8988242643
+3830589324
+2229505813
+5633845374
+6473530293
+7053106601
+0834282956
+4607924137
+3 4
+9505
+3845
+3530
+As one may see, the given pattern is present in the larger grid, as marked in bold below.
+
+7283455864
+6731158619
+8988242643
+3830589324
+2229505813
+5633845374
+6473530293
+7053106601
+0834282956
+4607924137
+The second test in the input file is:
+
+15 15
+400453592126560
+114213133098692
+474386082879648
+522356951189169
+887109450487496
+252802633388782
+502771484966748
+075975207693780
+511799789562806
+404007454272504
+549043809916080
+962410809534811
+445893523733475
+768705303214174
+650629270887160
+2 2
+99
+99
+The search pattern is:
+
+99
+99
+This cannot be found in the larger grid.
+
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+// Complete the gridSearch function below.
+string gridSearch(vector<string> G, vector<string> P)
+{
+    if (G.empty() || P.empty()) return "NO";
+    char firstCh = P.front().front();
+    unsigned rowSize = P.size();
+    unsigned colSize = P.front().size();
+    for (unsigned row = 0u; row + rowSize <= G.size(); ++row)
+    {
+        for (unsigned col = 0u; col + colSize <= G.front().size(); ++col)
+        {
+            if (G[row][col] != firstCh) continue;
+            bool found = true;
+            for (unsigned rowToCheck = row, ctr = 0; ctr < rowSize; ++rowToCheck, ++ctr)
+            {
+                std::string rowToCheckStr = G[rowToCheck].substr(col, colSize);
+                if (rowToCheckStr != P[ctr])
+                {
+                    found = false;
+                    break;
+                }
+            }
+            if (found) return "YES";
+        }
+    }
+    return "NO";
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int t;
+    cin >> t;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (int t_itr = 0; t_itr < t; t_itr++) {
+        string RC_temp;
+        getline(cin, RC_temp);
+
+        vector<string> RC = split_string(RC_temp);
+
+        int R = stoi(RC[0]);
+
+        int C = stoi(RC[1]);
+
+        vector<string> G(R);
+
+        for (int i = 0; i < R; i++) {
+            string G_item;
+            getline(cin, G_item);
+
+            G[i] = G_item;
+        }
+
+        string rc_temp;
+        getline(cin, rc_temp);
+
+        vector<string> rc = split_string(rc_temp);
+
+        int r = stoi(rc[0]);
+
+        int c = stoi(rc[1]);
+
+        vector<string> P(r);
+
+        for (int i = 0; i < r; i++) {
+            string P_item;
+            getline(cin, P_item);
+
+            P[i] = P_item;
+        }
+
+        string result = gridSearch(G, P);
+
+        fout << result << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
+        return x == y and x == ' ';
+    });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string[input_string.length() - 1] == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
+
+    return splits;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Pentagonal Number
+
+Have the function PentagonalNumber(num) read num which will be a positive integer and determine how many dots exist in a pentagonal shape around a center dot on the Nth iteration. For example, in the image below you can see that on the first iteration there is only a single dot, on the second iteration there are 6 dots, on the third there are 16 dots, and on the fourth there are 31 dots.
+Your program should return the number of dots that exist in the whole pentagon on the Nth iteration.
+*/
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int PentagonalNumber(int num)
+{
+  // code goes here
+    int sum = 0;
+    while (true)
+    {
+        if (num == 1)
+        {
+            ++sum;
+            break;
+        }
+
+        int totalForCurrentPentagon = (num * 5) - 5;
+        sum += totalForCurrentPentagon;
+        --num;
+    }
+  return sum;
+}
+
+int main() {
+
+  // keep this function call here
+  cout << PentagonalNumber(gets(stdin));
+  return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Absolute Permutation
+
+We define P to be a permutation of the first n natural numbers in the range [1,n]. Let pos[i] denote the value at position i in permutation P using 1-based indexing.
+
+P is considered to be an absolute permutation if |pos[i] - i| = k holds true for every i in [1,n].
+
+Given n and k, print the lexicographically smallest absolute permutation P. If no absolute permutation exists, print -1.
+
+For example, let n=4 giving us an array pos=[1,2,3,4]. If we use 1 based indexing, create a permutation where every |pos[i] - i| = k. If k=2, we could rearrange them to [3,4,1,2]:
+
+pos[i]  i   |Difference|
+3       1   2
+4       2   2
+1       3   2
+2       4   2
+
+Input (stdin)
+2
+6 1
+6 3
+Your Output (stdout)
+2 1 4 3 6 5
+4 5 6 1 2 3
+*/
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+// Complete the absolutePermutation function below.
+// vector<int> absolutePermutation(int n, int k)
+// {
+//     std::vector<int> pos(n);
+//     std::iota(pos.begin(), pos.end(), 1);
+//     do
+//     {
+//         bool found = true;
+//         for (int ctr = 0u; ctr < n; ++ctr)
+//         {
+//             int ctrBaseOne = ctr + 1;
+//             int diff = pos[ctr] - ctrBaseOne;
+//             if (diff < 1)
+//             {
+//                 diff *= -1;
+//             }
+//             if (diff != k) found = false;
+//         }
+//         if (found) return pos;
+//     }
+//     while (std::next_permutation(pos.begin(), pos.end()));
+
+//     return {-1};
+// }
+
+vector<int> absolutePermutation(int n, int k)
+{
+    const int MIN_VALUE = 1;
+    const int MAX_VALUE = n;
+
+    const std::vector<int> INVALID_RESULT{-1};
+
+    std::vector<int> result;
+    result.reserve(n);
+    std::unordered_set<int> pushedBackItems;
+
+    for (int ctr = 1; ctr <= n; ++ctr)
+    {
+        int diff = ctr - k;
+        int sum = ctr + k;
+        if (diff >= MIN_VALUE && !pushedBackItems.count(diff))
+        {
+            result.push_back(diff);
+            pushedBackItems.insert(diff);
+        }
+        else if (sum <= MAX_VALUE && !pushedBackItems.count(sum))
+        {
+            result.push_back(sum);
+            pushedBackItems.insert(sum);
+        }
+        else
+        {
+            return INVALID_RESULT;
+        }
+    }
+    return result.empty() ?
+            INVALID_RESULT :
+            result;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int t;
+    cin >> t;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (int t_itr = 0; t_itr < t; t_itr++) {
+        string nk_temp;
+        getline(cin, nk_temp);
+
+        vector<string> nk = split_string(nk_temp);
+
+        int n = stoi(nk[0]);
+
+        int k = stoi(nk[1]);
+
+        vector<int> result = absolutePermutation(n, k);
+
+        for (int i = 0; i < result.size(); i++) {
+            fout << result[i];
+
+            if (i != result.size() - 1) {
+                fout << " ";
+            }
+        }
+
+        fout << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
+        return x == y and x == ' ';
+    });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string[input_string.length() - 1] == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
+
+    return splits;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Almost Sorted
+
+Given an array of integers, determine whether the array can be sorted in ascending order using only one of the following operations one time.
+
+Swap two elements.
+Reverse one sub-segment.
+Determine whether one, both or neither of the operations will complete the task. If both work, choose swap. For instance, given an array [2,3,5,4] either swap the 4 and 5, or reverse them to sort the array. Choose swap. The Output Format section below details requirements.
+
+Output Format
+1. If the array is already sorted, output yes on the first line. You do not need to output anything else.
+
+2. If you can sort this array using one single operation (from the two permitted operations) then output yes on the first line and then:
+
+a. If elements can be swapped, d[l] and d[r], output swap l r in the second line. l and r are the indices of the elements to be swapped, assuming that the array is indexed from 1 to n.
+b. Otherwise, when reversing the segment d[l...r], output reverse l r in the second line. l and r are the indices of the first and last elements of the subsequence to be reversed, assuming that the array is indexed from 1 to n.
+
+d[l...r] represents the sub-sequence of the array, beginning at index l and ending at index r, both inclusive.
+
+If an array can be sorted by either swapping or reversing, choose swap.
+
+3. If you cannot sort the array either way, output no on the first line.
+
+Sample Input 1
+2
+4 2
+Sample Output 1
+yes
+swap 1 2
+Explanation 1
+You can either swap(1, 2) or reverse(1, 2). You prefer swap
+
+Sample Input 2
+3
+3 1 2
+Sample Output 2
+no
+Explanation 2
+It is impossible to sort by one single operation.
+
+Sample Input 3
+6
+1 5 4 3 2 6
+Sample Output 3
+yes
+reverse 2 5
+Explanation 3
+You can reverse the sub-array d[2...5] = "5 4 3 2", then the array becomes sorted.
+*/
+
+/*
+iterate forward to n-1
+find i_f > i_f+1
+if none
+    return already sorted
+left = i
+iterate backward to i_f+1
+find i_b <= i_f+1
+    on the side: if i_b != i_f+1 and i_b-1 > i_b
+        return no
+if none
+    return no
+right = i_b
+if
+    i_f != 0 and i_f-1 > i_b
+    or
+    i_b != n-1 and i_f > i_b+1
+        return no
+check if range i_f+1 to if i_b-1 is sorted or reversely sorted
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+// Complete the almostSorted function below.
+void almostSorted(const vector<int>& arr)
+{
+    const int INVALID_INDEX = -1;
+    int lhsIndex = INVALID_INDEX;
+    int rhsIndex = INVALID_INDEX;
+
+    for (unsigned forwardIt = 0u; forwardIt + 1 < arr.size(); ++forwardIt)
+    {
+        if (arr[forwardIt] > arr[forwardIt+1])
+        {
+            lhsIndex = forwardIt;
+            break;
+        }
+    }
+    if (lhsIndex == INVALID_INDEX)
+    {
+        std::cout << "yes\n";
+        return;
+    }
+
+    for (unsigned backwardIt = arr.size() - 1u; backwardIt > lhsIndex; --backwardIt)
+    {
+        if (arr[backwardIt] <= arr[lhsIndex+1])
+        {
+            rhsIndex = backwardIt;
+            break;
+        }
+        if (backwardIt != lhsIndex + 1 && arr[backwardIt] < arr[backwardIt-1])
+        {
+            std::cout << "no\n";
+            return;
+        }
+    }
+    if (rhsIndex == INVALID_INDEX ||
+        (lhsIndex > 0 && arr[lhsIndex-1] > arr[rhsIndex]) ||
+        (rhsIndex < arr.size() - 1u  && arr[rhsIndex+1] < arr[lhsIndex]))
+    {
+        std::cout << "no\n";
+        return;
+    }
+
+    bool tryReverse = false;
+    int previousNum = arr[rhsIndex];
+    for (unsigned ctr = lhsIndex + 1u; ctr < rhsIndex; ++ctr)
+    {
+        if (arr[ctr] > arr[lhsIndex])
+        {
+            std::cout << "no\n";
+            return;
+        }
+        if (arr[ctr] < previousNum)
+        {
+            tryReverse = true;
+            break;
+        }
+        previousNum = arr[ctr];
+    }
+
+    if (!tryReverse)
+    {
+        std::cout << "yes\nswap " << lhsIndex+1 << " " << rhsIndex+1 << "\n";
+        return;
+    }
+
+    previousNum = arr[rhsIndex];
+    for (unsigned ctr = rhsIndex - 1u; ctr > lhsIndex; --ctr)
+    {
+        if (arr[ctr] > arr[lhsIndex] ||
+            arr[ctr] < previousNum)
+        {
+            std::cout << "no\n";
+            return;
+        }
+        previousNum = arr[ctr];
+    }
+    std::cout << "yes\nreverse " << lhsIndex+1 << " " << rhsIndex+1 << "\n";
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    string arr_temp_temp;
+    getline(cin, arr_temp_temp);
+
+    vector<string> arr_temp = split_string(arr_temp_temp);
+
+    vector<int> arr(n);
+
+    for (int i = 0; i < n; i++) {
+        int arr_item = stoi(arr_temp[i]);
+
+        arr[i] = arr_item;
+    }
+
+    almostSorted(arr);
+
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
+        return x == y and x == ' ';
+    });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string[input_string.length() - 1] == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
+
+    return splits;
+}
+
+
+---------------------------------------------------------------------------
+
+/*
+Lily's Homework (minodify ko ng konti ung rules)
+
+Counts minimum number of swaps to make the input array sorted
+
+ex.
+3 4 2 5 1
+
+1.
+1 4 2 5 3
+
+2.
+1 2 4 5 3
+
+3.
+1 2 3 5 4
+
+4.
+1 2 3 4 5
+
+Answer: 4
+
+ex.
+2 5 3 1
+
+1.
+1 5 3 2
+
+2.
+1 2 3 5
+
+Answer: 2
+
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+// Complete the lilysHomework function below.
+int lilysHomework(vector<int> arr)
+{
+    std::set<int> arrOrdered{arr.begin(), arr.end()};
+
+    // To sort original array, make this reference_wrappers instead
+    std::vector<int> elementsToReorder;
+    elementsToReorder.reserve(arr.size());
+
+    using Element = int;
+    using Index = int;
+    std::map<Element, Index> orderedElementsAndIndexMap;
+
+    int ctr = 0u;
+    for (auto it = arrOrdered.begin(); it != arrOrdered.end(); ++it, ++ctr)
+    {
+        if (arr[ctr] == *it) continue;
+        // As above, to sort original array, make this std::ref(arr[ctr]) instead
+        elementsToReorder.push_back(arr[ctr]);
+        orderedElementsAndIndexMap[*it] = orderedElementsAndIndexMap.size();
+    }
+
+    ctr = 0u;
+    unsigned swaps = 0u;
+            // std::cout << "\nelementsToReorder before = ";
+            // for (auto elem : elementsToReorder)
+            // {
+            //     std::cout << elem << " ";
+            // }
+            // std::cout << "\norderedElementsAndIndexMap before = ";
+            // for (auto elem : orderedElementsAndIndexMap)
+            // {
+            //     std::cout << elem.first << ":" << elem.second << " ";
+            // }
+    for (auto it = orderedElementsAndIndexMap.begin(); ctr < elementsToReorder.size();)
+    {
+        if (elementsToReorder[ctr] == it->first)
+        {
+            ++ctr;
+            ++it;
+            continue;
+        }
+        int targetIndex = orderedElementsAndIndexMap[elementsToReorder[ctr]];
+        std::swap(elementsToReorder[ctr], elementsToReorder[targetIndex]);
+        ++swaps;
+    }
+    return swaps;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int n;
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    string arr_temp_temp;
+    getline(cin, arr_temp_temp);
+
+    vector<string> arr_temp = split_string(arr_temp_temp);
+
+    vector<int> arr(n);
+
+    for (int i = 0; i < n; i++) {
+        int arr_item = stoi(arr_temp[i]);
+
+        arr[i] = arr_item;
+    }
+
+    int result = lilysHomework(arr);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
+        return x == y and x == ' ';
+    });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string[input_string.length() - 1] == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
+
+    return splits;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Left Rotation
+
+A left rotation operation on an array of size  shifts each of the array's elements 1 unit to the left. For example, if 2 left rotations are performed on array [1,2,3,4,5], then the array would become [3,4,5,1,2].
+
+Given an array of n integers and a number, d, perform d left rotations on the array. Then print the updated array as a single line of space-separated integers.
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+void shift(
+    int d,
+    std::vector<int>& vec)
+{
+    d = d % vec.size();
+
+    unsigned ctr = 0u;
+    std::queue<int> shifted;
+    while (ctr + d < vec.size())
+    {
+        shifted.push(vec[ctr]);
+        vec[ctr] = vec[ctr+d];
+        ++ctr;
+    }
+    while (ctr < vec.size())
+    {
+        shifted.push(vec[ctr]);
+        vec[ctr] = shifted.front();
+        ++ctr;
+        shifted.pop();
+    }
+    for (const auto& elem : vec)
+    {
+        std::cout << elem << " ";
+    }
+}
+
+int main()
+{
+    string nd_temp;
+    getline(cin, nd_temp);
+
+    vector<string> nd = split_string(nd_temp);
+
+    int n = stoi(nd[0]);
+
+    int d = stoi(nd[1]);
+
+    string a_temp_temp;
+    getline(cin, a_temp_temp);
+
+    vector<string> a_temp = split_string(a_temp_temp);
+
+    vector<int> a(n);
+
+    for (int i = 0; i < n; i++) {
+        int a_item = stoi(a_temp[i]);
+
+        a[i] = a_item;
+    }
+    shift(d, a);
+
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
+        return x == y and x == ' ';
+    });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string[input_string.length() - 1] == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
+
+    return splits;
+}
+
+---------------------------------------------------------------------------
+
+#include <iostream>
+#include <stack>
+#include <unordered_map>
+#include <unordered_set>
+
+bool checkValidity(const std::string& str)
+{
+    static const std::unordered_map<char, char> OPEN_BRACKETS_MAP
+        {
+            {'(', ')'},
+            {'{', '}'},
+            {'[', ']'},
+        };
+    static const std::unordered_set<char> CLOSE_BRACKETS_SET
+        {
+            ')',
+            '}',
+            ']',
+        };
+
+    std::stack<char> bracketsInString;
+    for (const auto& ch : str)
+    {
+        if (OPEN_BRACKETS_MAP.count(ch))
+        {
+            bracketsInString.push(ch);
+        }
+        else if (CLOSE_BRACKETS_SET.count(ch))
+        {
+            if (bracketsInString.empty()) return false;
+
+            char lastBracket = bracketsInString.top();
+            if (ch != OPEN_BRACKETS_MAP.at(lastBracket)) return false;
+
+            bracketsInString.pop();
+        }
+    }
+    return true;
+    // should have been // return bracketsInString.empty() ? true : false;
+}
+
+int main() {
+    // Click HELP above to see examples of handling input/debug/output
+    // INPUT: std::cin >> n;
+    // DEBUG: std::cout << n << std::endl;
+    // OUTPUT: std::cout << output << std::endl;
+    std::string input;
+    std::getline(std::cin, input);
+
+    if (checkValidity(input)) std::cout << "True";
+    else                      std::cout << "False";
+    // Write the code to solve the problem below,
+    // format the “result” as specified in the problem statement
+    // and finally, write the result to stdout
+    // IMPORTANT: Remove all debug statements for final submission
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+#include <algorithm>
+#include <iostream>
+#include <list>
+#include <string>
+
+int main() {
+    // Click HELP above to see examples of handling input/debug/output
+    // INPUT: std::cin >> n;
+    // DEBUG: std::cout << n << std::endl;
+    // OUTPUT: std::cout << output << std::endl;
+    std::string input;
+        // std::getline(std::cin, input);
+        // input = "1-2-3-4-5-6-7-8";
+        // input = "1-2-3-4-5-6-7";
+        // input = "1-2-3-4-5-6";
+        // input = "1-2-3-4-5";
+        // input = "1-2-3-4";
+        // input = "1-2-3";
+        // input = "1-2";
+        // input = "1";
+    std::getline(std::cin, input);
+
+    // std::cout << input; // Nasama to sa naipasa ko, ndi ko nadelete
+
+    std::list<std::string> listOfItems;
+    std::string buffer = "";
+    for (const auto& ch : input)
+    {
+        if (ch == '-')
+        {
+            listOfItems.push_back(buffer);
+            buffer.clear();
+        }
+        else
+        {
+            buffer += ch;
+        }
+    }
+
+    if (!buffer.empty()) listOfItems.push_back(buffer);
+
+    // Solution 1 // Eto ung naipasa ko, kulang to and may mga mali
+        // unsigned halfOfSizeOfList = listOfItems.size() / 2;
+        // unsigned ctr = 0u;
+        // auto forwardIt = listOfItems.begin();
+        // auto backwardIt = listOfItems.rbegin();
+        // ++forwardIt;
+        // while (ctr <= halfOfSizeOfList)
+        // {
+        //     // std::cout << "\nforwardIt:" << *forwardIt;
+        //     // std::cout << "\nbackwardIt:" << *backwardIt;
+        //     listOfItems.insert(forwardIt++, *(backwardIt++));
+        //     ++ctr;
+        //     // ++backwardIt;
+        //     // listOfItems.erase(backwardIt--);
+        // }
+
+    // Solution 2 // Eto ung ginawa ko after ipasa
+        auto forwardIt = listOfItems.begin();
+        auto backwardIt = listOfItems.rbegin();
+        ++forwardIt;
+        unsigned forwardItIndex = 1u;
+        unsigned backwardItIndex = listOfItems.size() - 1;
+        while (forwardItIndex < backwardItIndex)
+        {
+            listOfItems.insert(forwardIt++, *(backwardIt++));
+            ++forwardItIndex;
+            --backwardItIndex;
+        }
+        if (forwardItIndex == backwardItIndex) ++forwardIt;
+        while (forwardIt != listOfItems.end())
+        {
+            listOfItems.erase(forwardIt++);
+        }
+
+    // std::cout << "\n\nend\n\n";
+    auto it = listOfItems.begin();
+    while (true)
+    {
+        std::cout << *it;
+        ++it;
+        if (it != listOfItems.end()) std::cout << "-";
+        else                         break;
+    }
+    // Write the code to solve the problem below,
+    // format the “result” as specified in the problem statement
+    // and finally, write the result to stdout
+    // IMPORTANT: Remove all debug statements for final submission
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Trapping Rain Water
+
+Given an array A of N non-negative integers representing height of blocks at index i as Aiwhere the width of each block is 1. Compute how much water can be trapped in between blocks after raining.
+Structure is like below:
+| |
+|_|
+We can trap 2 units of water in the middle gap.
+
+Input
+Each test case contains an integer N followed by N numbers to be stored in array.
+Output
+Output the total unit of water trapped in between the blocks.
+
+Constraints
+3 <= N <= 107
+0 <= Ai <= 107
+
+Example#1
+Input
+4
+7 4 0 9
+Output
+10
+
+Example#2
+Input
+3
+6 9 9
+Output
+0
+*/
+
+#include <iostream>
+#include <vector>
+
+int main() {
+    // Click HELP above to see examples of handling input/debug/output
+    // INPUT: std::cin >> n;
+    // DEBUG: std::cout << n << std::endl;
+    // OUTPUT: std::cout << output << std::endl;
+    unsigned arrSize;
+    std::cin >> arrSize;
+    if (arrSize == 0) return 0;
+
+    std::vector<int> arr;
+    arr.resize(arrSize);
+    for (unsigned ctr = 0u; ctr < arrSize; ++ctr)
+    {
+        std::cin >> arr[ctr];
+    }
+
+    unsigned tallestInLeft = arr.front();
+    unsigned tallestInRight = arr.back();
+    unsigned lhsIndex = 0;
+    unsigned rhsIndex = arrSize - 1u;
+    unsigned sum = 0u;
+    while (lhsIndex < rhsIndex)
+    {
+        if (arr[lhsIndex] > tallestInLeft)
+        {
+            tallestInLeft = arr[lhsIndex];
+        }
+        else if (arr[rhsIndex] > tallestInRight)
+        {
+            tallestInRight = arr[rhsIndex];
+        }
+        sum += tallestInLeft - arr[lhsIndex];
+        sum += tallestInRight - arr[rhsIndex];
+
+        if (tallestInLeft > tallestInRight) --rhsIndex;
+        else                                ++lhsIndex;
+    }
+
+    std::cout << sum;
+    // Write the code to solve the problem below,
+    // format the “result” as specified in the problem statement
+    // and finally, write the result to stdout
+    // IMPORTANT: Remove all debug statements for final submission
+
+    // Do not edit below this
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Tom and numbers (maximum sum of numbers)
+
+Tom has an integer n.  He is interested in knowing what positive integer k, which does not exceed n, has the maximum sum of digits. Help him write a program which can find k. If there are several such integers, determine the biggest of them.
+
+Input
+The only line contains the positive integer n.
+
+Output
+Print the positive integer which does not exceed n and has the maximum sum of digits.
+
+Constraints
+1 ≤ n ≤ 1018
+
+Example#1
+Input
+100
+Output
+99
+9 + 9 = 18.
+
+Example#2
+Input
+48
+Output
+48
+4 + 8 = 12.
+
+1 7 5 9 3 - 25
+1 7 5 8 9 - 30
+1 7 4 9 9 - 30
+1 6 9 9 9 - 34
+0 9 9 9 9 - 36
+
+
+3 7 5 9 3 - 27
+3 7 5 8 9 - 32
+3 7 4 9 9 - 32
+3 6 9 9 9 - 36
+2 9 9 9 9 - 38
+
+*/
+
+/*
+I got my 2 failing test cases to work.
+
+While I was debugging it, I have tried all possible corner cases and all worked. This then lead me to the conclusion that nothing is wrong with my logic and that some bug is just hiding around the data types or overflows / underflows.
+
+Some of my tips:
+
+<b>1. Depending on your implementation, beware of used methods from external libraries such as pow from math.h which is accepting double. I solved my 2 failing test cases by creating my own version of pow accepting long long and returning long long.</b>
+
+So instead of:
+<code>
+long long powerOfTen = pow(10, raise);
+</code>
+
+I used this:
+<code>
+long long powerOfTen = 1;
+for (unsigned ctr = 0u; ctr < raise; ++ctr)
+{
+    powerOfTen *= 10;
+}
+</code>
+
+<b>2. Check for possible overflows and underflows on the data types you have used</b>
+
+ex.
+<code>
+std::vector<long long> numbers;
+// some code
+--numbers[ctr];
+</code>
+
+This might lead to underflow if the value of numbers[ctr] is minimum for long long data type, thus a check might help:
+<code>
+std::vector<long long> numbers;
+// some code
+if (numbers[ctr] > std::numeric_limits<long long>::min())
+{
+    --numbers[ctr];
+}
+</code>
+
+<b>3. Check your operations involving multiple data types from where datatype promotions will happen</b>
+
+ex.
+<code>
+unsigned a = 1u;
+int b = 3;
+std::cout << a - b;
+</code>
+
+output:
+4294967294
+
+Why not -2? Since operation involved operation between unsigned minus int, the int would be promoted to an unsigned, which means:
+<code>
+unsigned_minValue = 0u
+unsigned_maxValue = 4294967295u
+1u - 3 = -2
+</code>
+
+is invalid value for unsigned and thus would result to handling carry over of underflow from unsigned_maxValue:
+
+<code>
+1u - 3 = 1u -> 0u -> 4294967295u -> 4294967294u
+</code>
+
+*/
+
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <math.h>
+
+using namespace std;
+
+long long tomsNum(long long n)
+{
+    //Write your code here
+    if (n <= 0) return n;
+
+    std::vector<long long> numbers;
+    while (n > 0)
+    {
+        long long currentNum = n % 10;
+        numbers.push_back(currentNum);
+        n /= 10;
+    }
+
+    std::vector<long long> numbersResult(numbers);
+    long long largestSum = std::accumulate(numbers.begin(), numbers.end(), 0LL);
+
+    const long long MAX_DECIMAL_NUMBER = 9;
+    unsigned ctr = 0u;
+    while (ctr + 1 < numbers.size()) // check if it is not the last number
+    {
+        do
+        {
+            numbers[ctr++] = MAX_DECIMAL_NUMBER;
+        }
+        while (ctr < numbers.size() && numbers[ctr] == 0);
+
+        if (ctr >= numbers.size() || numbers[ctr] == std::numeric_limits<long long>::min()) break; // This will only happen if numbers became "0123" or "0001" or etc. which will not happen since those trailing 0s at start are not included in int variables
+        --numbers[ctr];
+
+        long long currentSum = std::accumulate(numbers.begin(), numbers.end(), 0LL);
+        if (currentSum > largestSum)
+        {
+            largestSum = currentSum;
+            numbersResult = numbers;
+        }
+    }
+
+    long long result = 0LL;
+    for (unsigned ctr = 0u; ctr < numbersResult.size(); ++ctr)
+    {
+        long long powerOfTen = 1;
+        long long ctr2 = 0;
+        while (ctr2 < ctr)
+        {
+            powerOfTen *= 10;
+            ++ctr2;
+        }
+        result += (numbersResult[ctr] * powerOfTen);
+    }
+    //Return the result
+    return result;
+}
+
+int main() {
+    long long n;
+    cin >> n;
+    cout << tomsNum(n) << endl;
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Sparse Arrays
+
+There is a collection of input strings and a collection of query strings. For each query string, determine how many times it occurs in the list of input strings.
+
+For example, given input strings = [ab, ab, abc] and queries = [ab, abc, bc], we find 2 instances of ab, 1 of abc and 0 of bc. For each query, we add an element to our return array, results = [2 1 0].
+
+*/
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the matchingStrings function below.
+vector<int> matchingStrings(
+    std::vector<std::string> strings,
+    const std::vector<std::string>& queries)
+{
+    std::sort(strings.begin(), strings.end());
+
+    // std::unordered_map<std::string, int> stringAndCountMap; // Use this to have a bit of Dynamic Programming for faster execution, only at the expense of little more space. On top of this, you could also delete all found within range of lower and upper bound since they wouldn't be needed anymore to have faster searching for next items
+
+    std::vector<int> result;
+    result.reserve(queries.size());
+
+    for (const auto& query : queries)
+    {
+        auto lower = std::lower_bound(strings.begin(), strings.end(), query);
+        auto upper = std::upper_bound(strings.begin(), strings.end(), query);
+
+        int diff = (lower == strings.end()) ?
+                    0 :
+                    std::distance(lower, upper); // can simply be a subtraction since it is a random access iterator
+
+        result.push_back(diff);
+    }
+    return result;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int strings_count;
+    cin >> strings_count;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    vector<string> strings(strings_count);
+
+    for (int i = 0; i < strings_count; i++) {
+        string strings_item;
+        getline(cin, strings_item);
+
+        strings[i] = strings_item;
+    }
+
+    int queries_count;
+    cin >> queries_count;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    vector<string> queries(queries_count);
+
+    for (int i = 0; i < queries_count; i++) {
+        string queries_item;
+        getline(cin, queries_item);
+
+        queries[i] = queries_item;
+    }
+
+    vector<int> res = matchingStrings(strings, queries);
+
+    for (int i = 0; i < res.size(); i++) {
+        fout << res[i];
+
+        if (i != res.size() - 1) {
+            fout << "\n";
+        }
+    }
+
+    fout << "\n";
+
+    fout.close();
+
+    return 0;
+}
+---------------------------------------------------------------------------
+
+/*
+Cycle Detection
+
+A linked list is said to contain a cycle if any node is visited more than once while traversing the list.
+
+Complete the function provided for you in your editor. It has one parameter: a pointer to a Node object named head that points to the head of a linked list. Your function must return a boolean denoting whether or not there is a cycle in the list. If there is a cycle, return true; otherwise, return false.
+
+Note: If the list is empty, head will be null.
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class SinglyLinkedListNode {
+    public:
+        int data;
+        SinglyLinkedListNode *next;
+
+        SinglyLinkedListNode(int node_data) {
+            this->data = node_data;
+            this->next = nullptr;
+        }
+};
+
+class SinglyLinkedList {
+    public:
+        SinglyLinkedListNode *head;
+        SinglyLinkedListNode *tail;
+
+        SinglyLinkedList() {
+            this->head = nullptr;
+            this->tail = nullptr;
+        }
+
+        void insert_node(int node_data) {
+            SinglyLinkedListNode* node = new SinglyLinkedListNode(node_data);
+
+            if (!this->head) {
+                this->head = node;
+            } else {
+                this->tail->next = node;
+            }
+
+            this->tail = node;
+        }
+};
+
+void print_singly_linked_list(SinglyLinkedListNode* node, string sep, ofstream& fout) {
+    while (node) {
+        fout << node->data;
+
+        node = node->next;
+
+        if (node) {
+            fout << sep;
+        }
+    }
+}
+
+void free_singly_linked_list(SinglyLinkedListNode* node) {
+    while (node) {
+        SinglyLinkedListNode* temp = node;
+        node = node->next;
+
+        free(temp);
+    }
+}
+
+// Complete the has_cycle function below.
+
+/*
+ * For your reference:
+ *
+ * SinglyLinkedListNode {
+ *     int data;
+ *     SinglyLinkedListNode* next;
+ * };
+ *
+ */
+
+std::unordered_set<SinglyLinkedListNode*> listOfNodesPtrSet;
+bool has_cycle(SinglyLinkedListNode* head) {
+
+    while (head != nullptr)
+    {
+        auto resultOfInsertion = listOfNodesPtrSet.insert(head);
+        if (!resultOfInsertion.second) return true;
+        head = head->next;
+    }
+    return false;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int tests;
+    cin >> tests;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (int tests_itr = 0; tests_itr < tests; tests_itr++) {
+        int index;
+        cin >> index;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        SinglyLinkedList* llist = new SinglyLinkedList();
+
+        int llist_count;
+        cin >> llist_count;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        for (int i = 0; i < llist_count; i++) {
+            int llist_item;
+            cin >> llist_item;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            llist->insert_node(llist_item);
+        }
+
+        SinglyLinkedListNode* extra = new SinglyLinkedListNode(-1);
+        SinglyLinkedListNode* temp = llist->head;
+
+        for (int i = 0; i < llist_count; i++) {
+            if (i == index) {
+                extra = temp;
+            }
+
+            if (i != llist_count-1) {
+                temp = temp->next;
+            }
+        }
+
+        temp->next = extra;
+
+        bool result = has_cycle(llist->head);
+
+        fout << result << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
+
+---------------------------------------------------------------------------
+/*
+The Full Counting Sort
+
+In this challenge you need to print the string that accompanies each integer in a list sorted by the integers. If two strings are associated with the same integer, they must be printed in their original order so your sorting algorithm should be stable. There is one other twist. The first half of the strings encountered in the inputs are to be replaced with the character "-" (dash).
+
+Insertion Sort and the simple version of Quicksort are stable, but the faster in-place version of Quicksort is not since it scrambles around elements while sorting.
+
+In this challenge, you will use counting sort to sort a list while keeping the order of the strings preserved.
+
+For example, if your inputs are [[0 a] [1 b] [0 c] [1 d]] you could set up a helper array with three empty arrays as elements. The result is then printed: - c - d .
+
+Sample Input
+20
+0 ab
+6 cd
+0 ef
+6 gh
+4 ij
+0 ab
+6 cd
+0 ef
+6 gh
+0 ij
+4 that
+3 be
+0 to
+1 be
+5 question
+1 or
+2 not
+4 is
+2 to
+4 the
+
+Sample Output
+- - - - - to be or not to be - that is the question - - - -
+
+Explanation
+Below is the list in the correct order. In the array at the bottom, strings from the first half of the original array were replaced with dashes.
+0 ab
+0 ef
+0 ab
+0 ef
+0 ij
+0 to
+1 be
+1 or
+2 not
+2 to
+3 be
+4 ij
+4 that
+4 is
+4 the
+5 question
+6 cd
+6 gh
+6 cd
+6 gh
+
+sorted = [['-', '-', '-', '-', '-', 'to'], ['be', 'or'], ['not', 'to'], ['be'], ['-', 'that', 'is', 'the'], ['question'], ['-', '-', '-', '-'], [], [], [], []]
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+string ltrim(const string &);
+string rtrim(const string &);
+vector<string> split(const string &);
+
+// Complete the countSort function below.
+void countSort(vector<vector<string>> arr)
+{
+    unsigned half = arr.size() / 2;
+
+    std::map<int, std::vector<std::string>> idAndStrMap;
+
+    unsigned ctr = 0u;
+    while (ctr < half)
+    {
+        const int id = std::stoi(arr[ctr++][0]);
+        idAndStrMap[id].push_back("-");
+    }
+    while (ctr < arr.size())
+    {
+        const int id = std::stoi(arr[ctr][0]);
+        const std::string& value = arr[ctr++][1];
+        idAndStrMap[id].push_back(value);
+    }
+
+    for (const auto& idAndStr : idAndStrMap)
+    {
+        // std::cout << "\n" << idAndStr.first << "\n";
+        for (const auto& elem : idAndStr.second)
+        {
+            std::cout << elem << " ";
+        }
+    }
+}
+
+int main()
+{
+    string n_temp;
+    getline(cin, n_temp);
+
+    int n = stoi(ltrim(rtrim(n_temp)));
+
+    vector<vector<string>> arr(n);
+
+    for (int i = 0; i < n; i++) {
+        arr[i].resize(2);
+
+        string arr_row_temp_temp;
+        getline(cin, arr_row_temp_temp);
+
+        vector<string> arr_row_temp = split(rtrim(arr_row_temp_temp));
+
+        for (int j = 0; j < 2; j++) {
+            string arr_row_item = arr_row_temp[j];
+
+            arr[i][j] = arr_row_item;
+        }
+    }
+
+    countSort(arr);
+
+    return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
+
+vector<string> split(const string &str) {
+    vector<string> tokens;
+
+    string::size_type start = 0;
+    string::size_type end = 0;
+
+    while ((end = str.find(" ", start)) != string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+
+        start = end + 1;
+    }
+
+    tokens.push_back(str.substr(start));
+
+    return tokens;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Staircase
+
+Consider a staircase of size n=4:
+   #
+  ##
+ ###
+####
+Observe that its base and height are both equal to n, and the image is drawn using # symbols and spaces. The last line is not preceded by any spaces.
+
+Write a program that prints a staircase of size n.
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the staircase function below.
+void staircase(int n)
+{
+    for (int ctr = 1; ctr <= n; ++ctr)
+    {
+        int printCtr = 1;
+        while (printCtr <= n - ctr)
+        {
+            std::cout << " ";
+            ++printCtr;
+        }
+        printCtr = 1;
+        while (printCtr <= ctr)
+        {
+            std::cout << "#";
+            ++printCtr;
+        }
+        std::cout << "\n";
+    }
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    staircase(n);
+
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Sherlock and the Valid String
+
+Sherlock considers a string to be valid if all characters of the string appear the same number of times. It is also valid if he can remove just 1 character at 1 index in the string, and the remaining characters will occur the same number of times. Given a string s, determine if it is valid. If so, return YES, otherwise return NO.
+
+For example, if s=abc, it is a valid string because frequencies are {a:1 b:1 c:1}. So is s=abcc because we can remove one c and have 1 of each character in the remaining string. If s=abccc however, the string is not valid as we can only remove 1 occurrence of c. That would leave character frequencies of {a:1 b:1 c:2}.
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the isValid function below.
+string isValid(string s)
+{
+    std::unordered_map<char, unsigned> chAndCountMap;
+    for (const auto& ch : s)
+    {
+        ++chAndCountMap[ch];
+    }
+
+    if (chAndCountMap.size() >= 2)
+    {
+        auto it = chAndCountMap.begin();
+
+        unsigned char1Count = (it++)->second;
+        unsigned char2Count = (it++)->second;
+
+        unsigned baseNum = 0u;
+        bool isBaseNumPlusOnePresent = false;
+
+        std::cout << "\n char1Count " << char1Count << " char2Count " << char2Count;
+        if (char1Count == char2Count)
+        {
+            baseNum = char1Count;
+        }
+        else if (char1Count == 1 || char2Count == 1)
+        {
+            if (char1Count+1 != char2Count && char1Count != char2Count+1)
+            {
+                baseNum = std::max(char1Count, char2Count);
+            }
+            else
+            {
+                baseNum = (it != chAndCountMap.end()) ?
+                            (it++)->second :
+                            std::min(char1Count, char2Count);
+            }
+            isBaseNumPlusOnePresent = true;
+        }
+        else
+        {
+            if (char1Count+1 != char2Count && char1Count != char2Count+1)
+            {
+                return "NO";
+            }
+
+            baseNum = std::min(char1Count, char2Count);
+            isBaseNumPlusOnePresent = true;
+        }
+        while (it != chAndCountMap.end())
+        {
+            unsigned currentCharCount = (it++)->second;
+            std::cout << "\n currentCharCount " << currentCharCount;
+            if (currentCharCount != baseNum)
+            {
+                if (isBaseNumPlusOnePresent || baseNum+1 != currentCharCount)
+                {
+                    return "NO";
+                }
+
+                isBaseNumPlusOnePresent = true;
+            }
+        }
+    }
+
+    // for (auto [ch, count] : chAndCountMap)
+    // {
+    //     std::cout << "\n" << ch << "_" << count;
+    // }
+    return "YES";
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string s;
+    getline(cin, s);
+
+    string result = isValid(s);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Find Merge Point of Two Lists
+
+Given pointers to the head nodes of 2 linked lists that merge together at some point, find the Node where the two lists merge. It is guaranteed that the two head Nodes will be different, and neither will be NULL.
+
+In the diagram below, the two lists converge at Node x:
+
+[List #1] a--->b--->c
+                     \
+                      x--->y--->z--->NULL
+                     /
+     [List #2] p--->q
+
+Complete the int findMergeNode(SinglyLinkedListNode* head1, SinglyLinkedListNode* head2) method so that it finds and returns the data value of the Node where the two lists merge.
+
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class SinglyLinkedListNode {
+    public:
+        int data;
+        SinglyLinkedListNode *next;
+
+        SinglyLinkedListNode(int node_data) {
+            this->data = node_data;
+            this->next = nullptr;
+        }
+};
+
+class SinglyLinkedList {
+    public:
+        SinglyLinkedListNode *head;
+        SinglyLinkedListNode *tail;
+
+        SinglyLinkedList() {
+            this->head = nullptr;
+            this->tail = nullptr;
+        }
+
+        void insert_node(int node_data) {
+            SinglyLinkedListNode* node = new SinglyLinkedListNode(node_data);
+
+            if (!this->head) {
+                this->head = node;
+            } else {
+                this->tail->next = node;
+            }
+
+            this->tail = node;
+        }
+};
+
+void print_singly_linked_list(SinglyLinkedListNode* node, string sep, ofstream& fout) {
+    while (node) {
+        fout << node->data;
+
+        node = node->next;
+
+        if (node) {
+            fout << sep;
+        }
+    }
+}
+
+void free_singly_linked_list(SinglyLinkedListNode* node) {
+    while (node) {
+        SinglyLinkedListNode* temp = node;
+        node = node->next;
+
+        free(temp);
+    }
+}
+
+// Complete the findMergeNode function below.
+
+/*
+ * For your reference:
+ *
+ * SinglyLinkedListNode {
+ *     int data;
+ *     SinglyLinkedListNode* next;
+ * };
+ *
+ */
+std::unordered_set<SinglyLinkedListNode*> listNodePtrs;
+int findMergeNode(SinglyLinkedListNode* head1, SinglyLinkedListNode* head2)
+{
+    // std::cout << "\nthis " << head1->data << " " << head2->data;
+    listNodePtrs.insert(head1);
+    listNodePtrs.insert(head2);
+    while (head1 || head2)
+    {
+        if (head1)
+        {
+            head1 = head1->next;
+            if (head1)
+            {
+                    // std::cout << "\n\t" << head1->data;
+                auto result = listNodePtrs.insert(head1);
+                if (!result.second) return (*(result.first))->data;
+            }
+            // else
+            //         std::cout << "\n\tend of head1";
+        }
+        if (head2)
+        {
+            head2 = head2->next;
+            if (head2)
+            {
+                    // std::cout << "\n\t" << head2->data;
+                auto result = listNodePtrs.insert(head2);
+                if (!result.second) return (*(result.first))->data;
+            }
+            // else
+            //         std::cout << "\n\tend of head2";
+        }
+    }
+    return 0;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int tests;
+    cin >> tests;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (int tests_itr = 0; tests_itr < tests; tests_itr++) {
+        int index;
+        cin >> index;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        SinglyLinkedList* llist1 = new SinglyLinkedList();
+
+        int llist1_count;
+        cin >> llist1_count;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        for (int i = 0; i < llist1_count; i++) {
+            int llist1_item;
+            cin >> llist1_item;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            llist1->insert_node(llist1_item);
+        }
+
+        SinglyLinkedList* llist2 = new SinglyLinkedList();
+
+        int llist2_count;
+        cin >> llist2_count;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        for (int i = 0; i < llist2_count; i++) {
+            int llist2_item;
+            cin >> llist2_item;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            llist2->insert_node(llist2_item);
+        }
+
+        SinglyLinkedListNode* ptr1 = llist1->head;
+        SinglyLinkedListNode* ptr2 = llist2->head;
+
+        for (int i = 0; i < llist1_count; i++) {
+            if (i < index) {
+                ptr1 = ptr1->next;
+            }
+        }
+
+        for (int i = 0; i < llist2_count; i++) {
+            if (i != llist2_count-1) {
+                ptr2 = ptr2->next;
+            }
+        }
+
+        ptr2->next = ptr1;
+
+        int result = findMergeNode(llist1->head, llist2->head);
+
+        fout << result << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
+---------------------------------------------------------------------------
+/*
+Maximum profit
+
+You are a shoplifter and you have broke into a shop. You see N items that you can take adn you know the price for every item. The problem is that you can only take K items. Write a program that will output the maximum amount you can steal.
+
+Input: In the first line input the two numbers, N and K. In the following N lines input the price of each item.
+
+Output: In a single line print the resoult.
+
+Input:
+5 2
+4
+6
+3
+9
+2
+
+Output:
+15
+*/
+
+#include <cmath>
+#include <cstdio>
+#include <set>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+    unsigned N;
+    unsigned K;
+    std::cin >> N >> K;
+
+    unsigned ctr = 1u;
+
+    std::multiset<unsigned> prices;
+    while (ctr <= N)
+    {
+        unsigned temp;
+        std::cin >> temp;
+        prices.insert(temp);
+        ++ctr;
+    }
+
+    unsigned sum = 0u;
+    ctr = 1u;
+    for (auto it = prices.rbegin(); it != prices.rend() && ctr <= K; ++it, ++ctr)
+    {
+        sum += *it;
+    }
+    std::cout << sum;
+
+    return 0;
+}
+---------------------------------------------------------------------------
+
+/*
+Stock Maximize
+
+Your algorithms have become so good at predicting the market that you now know what the share price of Wooden Orange Toothpicks Inc. (WOT) will be for the next number of days.
+
+Each day, you can either buy one share of WOT, sell any number of shares of WOT that you own, or not make any transaction at all. What is the maximum profit you can obtain with an optimum trading strategy?
+
+For example, if you know that prices for the next two days are prices = [1 2], you should buy one share day one, and sell it day two for a profit of 1. If they are instead prices = [2 1], no profit can be made so you don't buy or sell stock those days.
+
+Sample Input
+3
+3
+5 3 2
+3
+1 2 100
+4
+1 3 1 2
+Sample Output
+0
+197
+3
+
+Others:
+7 6 9 3 1 4 5 2
+
+buy
+1 1   1 1 1
+sell
+    2       3
+profit ((sell_price * buy_count) - (buy1 + ... + buyn))
+    5       7
+
+7 6 9 3 1 4 3 2 4
+1 1   1 1   1 1
+    2     2     2
+
+3 1 4 3 2 4
+1 1   1 1
+    2     2
+    4     3
+
+3 1 4 3 2 4
+1 1 1 1 1
+          5
+          7
+
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+string ltrim(const string &);
+string rtrim(const string &);
+vector<string> split(const string &);
+
+/*
+ * Complete the 'stockmax' function below.
+ *
+ * The function is expected to return a LONG_INTEGER.
+ * The function accepts INTEGER_ARRAY prices as parameter.
+ */
+
+long stockmax(const std::vector<int>& prices)
+{
+    long result = 0L;
+    int largestSellingPrice = std::numeric_limits<int>::min();
+    for (auto it = prices.rbegin(); it != prices.rend(); ++it)
+    {
+        *it > largestSellingPrice ?
+            largestSellingPrice = *it :
+            result += (largestSellingPrice - *it);
+    }
+    return result;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string t_temp;
+    getline(cin, t_temp);
+
+    int t = stoi(ltrim(rtrim(t_temp)));
+
+    for (int t_itr = 0; t_itr < t; t_itr++) {
+        string n_temp;
+        getline(cin, n_temp);
+
+        int n = stoi(ltrim(rtrim(n_temp)));
+
+        string prices_temp_temp;
+        getline(cin, prices_temp_temp);
+
+        vector<string> prices_temp = split(rtrim(prices_temp_temp));
+
+        vector<int> prices(n);
+
+        for (int i = 0; i < n; i++) {
+            int prices_item = stoi(prices_temp[i]);
+
+            prices[i] = prices_item;
+        }
+
+        long result = stockmax(prices);
+
+        fout << result << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
+
+vector<string> split(const string &str) {
+    vector<string> tokens;
+
+    string::size_type start = 0;
+    string::size_type end = 0;
+
+    while ((end = str.find(" ", start)) != string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+
+        start = end + 1;
+    }
+
+    tokens.push_back(str.substr(start));
+
+    return tokens;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Common Child
+
+A string is said to be a child of a another string if it can be formed by deleting 0 or more characters from the other string. Given two strings of equal length, what's the longest string that can be constructed such that it is a child of both?
+For example, ABCD and ABDC have two children with maximum length 3, ABC and ABD . They can be formed by eliminating either the D or C from both strings. Note that we will not consider ABCD as a common child because we can't rearrange characters and ABCD != ABDC.
+
+Sample Input
+HARRY
+SALLY
+Sample Output
+2
+Explanation
+The longest string that can be formed by deleting zero or more characters from HARRY and SALLY is AY, whose length is 2.
+
+Sample Input 1
+AA
+BB
+Sample Output 1
+0
+Explanation 1
+AA and BB have no characters in common and hence the output is 0
+
+Sample Input 2
+SHINCHAN
+NOHARAAA
+Sample Output 2
+3
+Explanation 2
+The longest string that can be formed between SHINCHAN and NOHARAAA while maintaining the order is NHA.
+
+Sample Input 3
+ABCDEF
+FBDAMN
+Sample Output 3
+2
+Explanation 3
+BD is the longest child of the given strings.
+*/
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the commonChild function below.
+/*
+ABCDEFGH
+CEAFCGDE
+
+str1
+A B C D E F G H
+
+str2
+C E A F C G D E
+
+indexes
+0 1 2 3 4 5 6 7
+
+Combinations
+A C G
+A C D E
+A F G
+
+C E F G
+C D E
+
+D E
+
+E F G
+
+F G
+
+Map of str1 to corresponding indexes in str2
+A 2
+B x
+C 0 4
+D 6
+E 1 7
+F 3
+G 5
+H x
+
+Map
+2 - 1
+2 4 - 11
+0 - 1
+2 6 - 11
+2 4 6 - 111
+0 1 - 11
+2 7 - 11
+2 4 7 - 111
+0 7 - 11
+2 6 7 - 111
+2 4 6 7 - 1111
+0 1 7 - 111
+2 3 - 11
+0 3 - 11
+0 1 3 - 111
+2 5 - 11
+2 4 5 - 111
+0 5 - 11
+0 1 5 - 111
+2 3 5 - 111
+0 3 5 - 111
+0 1 3 5 - 1111
+
+Maximum from map = 1111 = 4
+
+Output from program
+D 6
+G 5
+F 3
+A 2
+C 0 4
+E 1 7
+done
+0 1
+1 2
+2 1
+3 2
+3 3
+3 2
+4 2
+5 2
+5 3
+5 2
+5 3
+5 4
+5 3
+5 3
+6 2
+6 2
+6 3
+7 2
+7 2
+7 3
+7 3
+7 3
+7 4
+*/
+int commonChild(string s1, string s2) {
+    std::unordered_map<char, std::vector<unsigned>> chAndIndexesMap;
+    std::multimap<unsigned, unsigned> indexAndCountMap;
+
+    for (unsigned ctr = 0u; ctr < s2.size(); ++ctr)
+    {
+        chAndIndexesMap[s2[ctr]].push_back(ctr);
+    }
+
+    for (unsigned ctr = 0u; ctr < s1.size(); ++ctr)
+    {
+        if (!chAndIndexesMap.count(s1[ctr])) continue;
+
+        std::multimap<unsigned, unsigned> currentIndexAndCountMap;
+        for (const auto& index : chAndIndexesMap[s1[ctr]])
+        {
+            bool inserted = false;
+            for (auto it = indexAndCountMap.begin(); it != indexAndCountMap.end() && it->first < index; ++it)
+            {
+                currentIndexAndCountMap.insert({index, it->second + 1u});
+                inserted = true;
+            }
+            if (!inserted) currentIndexAndCountMap.insert({index, 1u});
+        }
+        indexAndCountMap.insert(currentIndexAndCountMap.begin(), currentIndexAndCountMap.end());
+    }
+        // for (const auto& elem : chAndIndexesMap)
+        // {
+        //     std::cout << "\n" << elem.first << " ";
+        //     for (const auto& elem2 : elem.second)
+        //         std::cout << elem2 << " ";
+        // }
+        // std::cout << "\ndone\n";
+        // for (const auto& elem : indexAndCountMap)
+        // {
+        //     std::cout << "\n" << elem.first << " " << elem.second;
+        // }
+    auto max = std::max_element(indexAndCountMap.begin(), indexAndCountMap.end(),
+        [](const std::pair<unsigned, unsigned>& lhs, const std::pair<unsigned, unsigned>& rhs)
+        {
+            return lhs.second < rhs.second;
+        });
+    return max == indexAndCountMap.end() ?
+            0 :
+            max->second;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string s1;
+    getline(cin, s1);
+
+    string s2;
+    getline(cin, s2);
+
+    int result = commonChild(s1, s2);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Fraudulent Activity Notifications
+
+HackerLand National Bank has a simple policy for warning clients about possible fraudulent account activity. If the amount spent by a client on a particular day is greater than or equal to 2x the client's median spending for a trailing number of days, they send the client a notification about potential fraud. The bank doesn't send the client any notifications until they have at least that trailing number of prior days' transaction data.
+
+Given the number of trailing days d and a client's total daily expenditures for a period of n days, find and print the number of times the client will receive a notification over all n days.
+
+For example, d=3 and expenditures=[10,20,30,40,50]. On the first three days, they just collect spending data. At day 4, we have trailing expenditures of [10,20,30]. The median is 20 and the day's expenditure is 40. Because 40 >= 2 x 20, there will be a notice. The next day, our trailing expenditures are [20,30,40] and the expenditures are 50. This is less than 2 x 30 so no notice will be sent. Over the period, there was one notice sent.
+
+Note: The median of a list of numbers can be found by arranging all the numbers from smallest to greatest. If there is an odd number of numbers, the middle one is picked. If there is an even number of numbers, median is then defined to be the average of the two middle values.
+
+Function Description
+Complete the function activityNotifications in the editor below. It must return an integer representing the number of client notifications.
+activityNotifications has the following parameter(s):
+- expenditure: an array of integers representing daily expenditures
+- d: an integer, the lookback days for median spending
+
+Input Format
+The first line contains two space-separated integers n and d, the number of days of transaction data, and the number of trailing days' data used to calculate median spending.
+The second line contains n space-separated non-negative integers where each integer i denotes expenditure[i].
+
+Output Format
+Print an integer denoting the total number of times the client receives a notification over a period of n days.
+
+Sample Input 0
+9 5
+2 3 4 2 3 6 8 4 5
+Sample Output 0
+2
+Explanation 0
+We must determine the total number of notifications the client receives over a period of n=9 days. For the first five days, the customer receives no notifications because the bank has insufficient transaction data: notifications=0.
+On the sixth day, the bank has d=5 days of prior transaction data, {2,3,4,2,3} , and median=3 dollars. The client spends 6 dollars, which triggers a notification because 6 >= 2 x median: notifications = 0 + 1 = 1.
+On the seventh day, the bank has d=5 days of prior transaction data, {3,4,2,3,6} , and median=3 dollars. The client spends 8 dollars, which triggers a notification because 8 >= 2 x median: notifications = 1 + 1 = 2.
+On the eighth day, the bank has d=5 days of prior transaction data, {4,2,3,6,8} , and median=4 dollars. The client spends 4 dollars, which does not trigger a notification because 4 < 2 x median: notifications=2.
+On the ninth day, the bank has d=5 days of prior transaction data, {2,3,6,8,4} , and a transaction median of 4 dollars. The client spends 5 dollars, which does not trigger a notification because 5 < 2 x median: notifications=2.
+
+Sample Input 1
+5 4
+1 2 3 4 4
+Sample Output 1
+0
+
+2 3 4 2 3 6 8 4 5
+2 3 4 2 3
+2 2 3 3 4
+          1
+  2 3 3 4 6
+            1
+    2 3 4 6 8
+              x
+      2 3 4 6 8
+                x
+
+2 4 3 6 3 8 2 3
+2 4 3 = 3
+      1
+  4 3 6 = 4
+        x
+    3 6 3 = 3
+          1
+      6 3 8 = 6
+            x
+        3 8 2 = 3
+              x
+[2] 1
+[3] 1
+[4] 1
+
+[2] 0
+[3] 1
+[4] 1
+[6] 1
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+double getMedian(
+    const std::map<int, int>& elementAndFrequencyMap,
+    const int numOfElements)
+{
+    int middleIndexBase1 = numOfElements / 2;
+    if (numOfElements % 2 != 0) ++middleIndexBase1;
+
+    int currentIndex = 0;
+    int medianNumber = 0;
+    auto it = elementAndFrequencyMap.begin();
+    while (it != elementAndFrequencyMap.end())
+    {
+        currentIndex += it->second;
+        if (currentIndex >= middleIndexBase1)
+        {
+            medianNumber = it->first;
+                // std::cout << "\nmiddleIndexBase1 " << middleIndexBase1<< "="<< medianNumber;
+            break;
+        }
+        ++it;
+    }
+    if (it != elementAndFrequencyMap.end() && numOfElements % 2 == 0)
+    {
+        if (middleIndexBase1 + 1 > currentIndex) ++it;
+        medianNumber += it->first;
+                // std::cout << "\nmiddleIndexBase1+1 " << medianNumber / 2.0;
+        return medianNumber / 2.0;
+    }
+    return medianNumber;
+}
+
+// Complete the activityNotifications function below.
+int activityNotifications(vector<int> expenditure, int d)
+{
+    std::map<int, int> trailingExpenditureMap;
+    for (int ctr = 0; ctr < d; ++ctr)
+    {
+        ++trailingExpenditureMap[expenditure[ctr]];
+    }
+
+    int fraudCount = 0;
+    const int EXPENDITURE_SIZE = static_cast<int>(expenditure.size());
+    for (int ctr = d; ctr < EXPENDITURE_SIZE; ++ctr)
+    {
+        double median = getMedian(trailingExpenditureMap, d);
+        if (expenditure[ctr] >= median * 2) ++fraudCount;
+        // std::cout << "\n\nfraudCount++" << fraudCount; }
+
+        //         std::cout << "\nfor d " << d << " with median " << median;
+        //     for (auto a : trailingExpenditureMap)
+        //     {
+        //         std::cout << "\n\t" << a.first << ":" << a.second;
+        //     }
+        --trailingExpenditureMap[expenditure[ctr-d]];
+        ++trailingExpenditureMap[expenditure[ctr]];
+    }
+
+    return fraudCount;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string nd_temp;
+    getline(cin, nd_temp);
+
+    vector<string> nd = split_string(nd_temp);
+
+    int n = stoi(nd[0]);
+
+    int d = stoi(nd[1]);
+
+    string expenditure_temp_temp;
+    getline(cin, expenditure_temp_temp);
+
+    vector<string> expenditure_temp = split_string(expenditure_temp_temp);
+
+    vector<int> expenditure(n);
+
+    for (int i = 0; i < n; i++) {
+        int expenditure_item = stoi(expenditure_temp[i]);
+
+        expenditure[i] = expenditure_item;
+    }
+
+    int result = activityNotifications(expenditure, d);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
+        return x == y and x == ' ';
+    });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string[input_string.length() - 1] == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
+
+    return splits;
+}
+
+---------------------------------------------------------------------------
+
+/*
+Sherlock and Anagrams
+
+Two strings are anagrams of each other if the letters of one string can be rearranged to form the other string. Given a string, find the number of pairs of substrings of the string that are anagrams of each other.
+
+For example s=mom, the list of all anagrammatic pairs is [m,m], [mo,om] at positions [[0],[2]], [[0,1],[1,2]] respectively.
+
+Sample Input 0
+2
+abba
+abcd
+Sample Output 0
+4
+0
+Explanation 0
+The list of all anagrammatic pairs is [a,a], [ab,ba], [b,b] and [abb,bba] at positions [[0],[3]], [[0,1],[2,3]], [[1],[2]] and [[0,1,2],[1,2,3]] respectively.
+No anagrammatic pairs exist in the second query as no character repeats.
+
+Sample Input 1
+2
+ifailuhkqq
+kkkk
+Sample Output 1
+3
+10
+Explanation 1
+For the first query, we have anagram pairs [i,i], [q,q] and [ifa,fai].
+For the second query:
+There are 6 anagrams of the form [k,k]. There are 3 anagrams of the form [kk,kk]. There is 1 anagram of the form [kkk,kkk].
+
+Sample Input 2
+1
+cdcd
+Sample Output 2
+5
+Explanation 2
+There are two anagrammatic pairs of length 1: [c,c] and [d,d].
+There are three anagrammatic pairs of length 2: [cd,dc], [cd,cd], [dc,cd].
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the sherlockAndAnagrams function below.
+int sherlockAndAnagrams(string s)
+{
+    int totalCount = 0u;
+
+    std::map<std::multiset<char>, int> substringsCountMap;
+    for (int ctr = 0u; ctr < static_cast<int>(s.size()); ++ctr)
+    {
+        std::multiset<char> substring;
+        for (int ctrCopy = ctr; ctrCopy >= 0; --ctrCopy)
+        {
+            substring.insert(s[ctrCopy]);
+            auto insertRet = substringsCountMap.insert({substring, 0u});
+            if (!insertRet.second)
+            {
+                totalCount += insertRet.first->second;
+            }
+            ++(insertRet.first->second);
+        }
+    }
+    return totalCount;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int q;
+    cin >> q;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (int q_itr = 0; q_itr < q; q_itr++) {
+        string s;
+        getline(cin, s);
+
+        int result = sherlockAndAnagrams(s);
+
+        fout << result << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
+
+---------------------------------------------------------------------------
+/*
+Minimum Loss
+
+40 15 17 5 20 1 3 12 8
+40         20
+   15             12
+      17          12
+         5      3
+           20     12
+              1        x
+                3      x
+                  12 8
+                     8 x
+
+1 3 5 8 12 15 17 20 40
+
+Lauren has a chart of distinct projected prices for a house over the next several years. She must buy the house in one year and sell it in another, and she must do so at a loss. She wants to minimize her financial loss.
+
+For example, the house is valued at price=[20,15,8,2,12] over the next n=5 years. She can purchase the home in any year, but she must resell the house at a loss in one of the following years. Her minimum loss would be incurred by purchasing in year 2 at price[1]=15 and reselling in year 5 at price[4]=12.
+
+Find and print the minimum amount of money Lauren must lose if she buys the house and resells it within the next n years.
+
+Note: It's guaranteed that a valid answer exists.
+
+Sample Input 0
+3
+5 10 3
+Sample Output 0
+2
+
+Sample Input 1
+5
+20 7 8 2 5
+Sample Output 1
+2
+*/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+// Complete the minimumLoss function below.
+// int minimumLoss(vector<long> prices) {
+//     std::set<long> priceSorted{prices.begin(), prices.end()};
+//     long minimumLoss = std::numeric_limits<long>::max();
+//     for (const auto& price : prices)
+//     {
+//         auto it = priceSorted.find(price);
+//         if (it != priceSorted.begin() && it != priceSorted.end())
+//         {
+//             auto itCopy = it;
+//             long currentLoss = price - *(--itCopy);
+//             std::cout << "\n price " << price << " - *(--itCopy) " << *(--itCopy) << " = " << currentLoss;
+//             if (currentLoss < minimumLoss)
+//             {
+//                 minimumLoss = currentLoss;
+//             }
+//         }
+//         priceSorted.erase(it);
+//     }
+//     return minimumLoss;
+// }
+int minimumLoss(vector<long> prices) {
+    std::set<long> processedPrices;
+    long minimumLoss = std::numeric_limits<long>::max();
+    for (auto it = prices.rbegin(); it != prices.rend(); ++it)
+    {
+        auto insertResult = processedPrices.insert(*it);
+        auto pointOfInsertion = insertResult.first;
+
+        if (pointOfInsertion == processedPrices.begin() || pointOfInsertion == processedPrices.end()) continue;
+
+        long currentLoss = *it - *(--pointOfInsertion);
+        std::cout << "\n price " << *it << " - *(--pointOfInsertion) " << *(--pointOfInsertion) << " = " << currentLoss;
+        if (currentLoss < minimumLoss)
+        {
+            minimumLoss = currentLoss;
+        }
+    }
+    return minimumLoss;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int n;
+    cin >> n;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    string price_temp_temp;
+    getline(cin, price_temp_temp);
+
+    vector<string> price_temp = split_string(price_temp_temp);
+
+    vector<long> price(n);
+
+    for (int i = 0; i < n; i++) {
+        long price_item = stol(price_temp[i]);
+
+        price[i] = price_item;
+    }
+
+    int result = minimumLoss(price);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
+        return x == y and x == ' ';
+    });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string[input_string.length() - 1] == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
+
+    return splits;
+}
+
+---------------------------------------------------------------------------
+
