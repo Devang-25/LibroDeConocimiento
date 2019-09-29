@@ -1,0 +1,285 @@
+---------------------------------------------------------------------------
+
+#!/bin/bash
+
+# Looping with Numbers
+# Use for loops to display the natural numbers from 1 to 50.
+
+for ctr in {1..50}
+do
+    echo ${ctr}
+done
+
+---------------------------------------------------------------------------
+
+#!/bin/bash
+
+# Looping and Skipping
+# Your task is to use for loops to display only odd natural numbers from 1 to 99.
+
+for ctr in {1..100..2}
+do
+    echo ${ctr}
+done
+
+---------------------------------------------------------------------------
+
+#!/bin/bash
+
+# Let's Echo
+# Write a bash script which does just one thing: saying "HELLO".
+
+echo HELLO
+
+---------------------------------------------------------------------------
+
+#!/bin/bash
+
+# A Personalized Echo
+# Write a Bash script which accepts name as input and displays a greeting: "Welcome (name)"
+
+read name
+echo "Welcome "${name}
+
+---------------------------------------------------------------------------
+
+#!/bin/bash
+
+# The World of Numbers
+# Given two integers, x and y, find their sum, difference, product, and quotient.
+
+read num1
+read num2
+
+echo $((${num1} + ${num2}))
+echo $((${num1} - ${num2}))
+echo $((${num1} * ${num2}))
+echo $((${num1} / ${num2}))
+
+---------------------------------------------------------------------------
+
+#!/bin/bash
+
+# Comparing Numbers
+# Given two integers, X and Y, identify whether X>Y or X<Y or X=Y.
+# Exactly one of the following lines:
+# - X is less than Y
+# - X is greater than Y
+# - X is equal to Y
+
+read X
+read Y
+
+operationResult=""
+
+if [[ ${X} > ${Y} ]]; then
+    operationResult="is greater than"
+elif [[ ${X} < ${Y} ]]; then
+    operationResult="is less than"
+else
+    operationResult="is equal to"
+fi
+
+echo "X "${operationResult}" Y"
+
+---------------------------------------------------------------------------
+
+#!/bin/bash
+
+# Getting started with conditionals
+# Read in one character from the user (this may be 'Y', 'y', 'N', 'n'). If the character is 'Y' or 'y' display "YES". If the character is 'N' or 'n' display "NO". No other character will be provided as input.
+
+read input
+
+if [[ ${input} == 'Y' || ${input} == 'y' ]]; then
+    echo "YES"
+else
+    echo "NO"
+fi
+
+---------------------------------------------------------------------------
+
+#!/bin/bash
+
+# More on Conditionals
+# Given three integers (X, Y, and Z) representing the three sides of a triangle, identify whether the triangle is Scalene, Isosceles, or Equilateral.
+
+read x
+read y
+read z
+
+EQUILATERAL="EQUILATERAL"
+ISOSCELES="ISOSCELES"
+SCALENE="SCALENE"
+
+if [[ ${x} == ${y} && ${y} == ${z} ]]; then
+    echo ${EQUILATERAL}
+elif [[ ${x} == ${y} || ${x} == ${z} || ${y} == ${z} ]]; then
+    echo ${ISOSCELES}
+else
+    echo ${SCALENE}
+fi
+
+-----------------------------
+
+#!/bin/bash
+
+# Arithmetic Operations
+# We provide you with expressions containing +,-,*,^, / and parenthesis. None of the numbers in the expression involved will exceed 999.
+# Your task is to evaluate the expression and display the correct output rounding upto 3 decimal places.
+# Sample Input 1
+# 5+50*3/20 + (19*2)/7
+# Sample Input 2
+# -105+50*3/20 + (19^2)/7
+# Sample Input 3
+# (-105.5*7+50*3)/20 + (19^2)/7
+# Sample Output 1
+# 17.929
+# Sample Output 2
+# -45.929
+# Sample Output 3
+# 22.146
+
+read expression
+
+# bc alone does not include decimal places, the scale command would include them but will also truncate exceeding decimal places but will not round off
+echo "scale=4; ${expression}" | bc | xargs printf "%0.3f"
+
+# bc alone does not include decimal places, the -l somehow includes decimal places
+# echo ${expression} | bc -l | xargs printf "%0.3f"
+
+-----------------------------
+
+#!/bin/bash
+
+# Compute the Average
+# Given N integers, compute their average correct to three decimal places.
+
+read N
+result=0
+
+for (( ctr=1; ctr<=${N}; ctr++ ))
+do
+    read num
+    result=$((${result}+${num}))
+done
+
+# wrong answer, trims decimal places upon echo
+# echo $((${result}/N)) | xargs printf "%0.3f"
+
+# correct answer, does calculation by bc command
+# echo ${result}"/"${N} | bc -l | xargs printf "%0.3f"
+printf "%0.3f" $(echo ${result}"/"${N} | bc -l)
+
+-----------------------------
+
+#!/bin/bash
+
+# Cut #1
+# Given N lines of input, print the 3rd character from each line as a new line of output.
+# It is guaranteed that each of the n lines of input will have a 3rd character.
+
+# soln 1
+while read input; do
+{
+    echo ${input:2:1}
+}
+done
+
+# soln 2
+# cat | cut -c 3
+# cut works on every line, therefore is not necessary perform a loop.
+
+-----------------------------
+
+#!/bin/bash
+
+# Cut #2
+# Display the 2nd and 7th character from each line of text.
+# Sample Input
+# Hello
+# World
+# how are you
+# Sample Output
+# e
+# o
+# oe
+
+cut -c 2,7
+
+-----------------------------
+
+
+#!/bin/bash
+
+# Cut #3
+# Display a range of characters starting at the 2nd position of a string and ending at the 7th position (both positions included).
+# Sample Input
+# Hello
+# World
+# how are you
+# Sample Output
+# ello
+# orld
+# ow are
+
+cut -c 2-7
+
+-----------------------------
+
+#!/bin/bash
+
+# Cut #4
+# Display the first four characters from each line of text.
+# Sample Input
+# Hello
+# World
+# how are you
+# Sample Output
+# Hell
+# Worl
+# how
+
+cut -c -4
+
+-----------------------------
+
+#!/bin/bash
+
+# Cut #5
+# Given a tab delimited file with several columns (tsv format) print the first three fields.
+# Sample Input
+# 1   New York, New York[10]  8,244,910   1   New York-Northern New Jersey-Long Island, NY-NJ-PA MSA  19,015,900  1   New York-Newark-Bridgeport, NY-NJ-CT-PA CSA 22,214,083
+# 2   Los Angeles, California 3,819,702   2   Los Angeles-Long Beach-Santa Ana, CA MSA    12,944,801  2   Los Angeles-Long Beach-Riverside, CA CSA    18,081,569
+# 3   Chicago, Illinois   2,707,120   3   Chicago-Joliet-Naperville, IL-IN-WI MSA 9,504,753   3   Chicago-Naperville-Michigan City, IL-IN-WI CSA  9,729,825
+# 4   Houston, Texas  2,145,146   4   Dallas-Fort Worth-Arlington, TX MSA 6,526,548   4   Washington-Baltimore-Northern Virginia, DC-MD-VA-WV CSA 8,718,083
+# 5   Philadelphia, Pennsylvania[11]  1,536,471   5   Houston-Sugar Land-Baytown, TX MSA  6,086,538   5   Boston-Worcester-Manchester, MA-RI-NH CSA   7,601,061
+# Sample Output
+# 1   New York, New York[10]  8,244,910
+# 2   Los Angeles, California 3,819,702
+# 3   Chicago, Illinois   2,707,120
+# 4   Houston, Texas  2,145,146
+# 5   Philadelphia, Pennsylvania[11]  1,536,471
+
+cut -f 1-3
+
+-----------------------------
+
+#!/bin/bash
+
+Cut #6
+# Print the characters from thirteenth position to the end.
+# Sample Input
+# New York is a state in the Northeastern and Mid-Atlantic regions of the United States.
+# New York is the 27th-most extensive, the third-most populous populated of the 50 United States.
+# New York is bordered by New Jersey and Pennsylvania to the south.
+# About one third of all the battles of the Revolutionary War took place in New York.
+# Henry Hudson's 1609 voyage marked the beginning of European involvement with the area.
+# Sample Output
+# a state in the Northeastern and Mid-Atlantic regions of the United States.
+# the 27th-most extensive, the third-most populous populated of the 50 United States.
+# bordered by New Jersey and Pennsylvania to the south.
+# ird of all the battles of the Revolutionary War took place in New York.
+# 's 1609 voyage marked the beginning of European involvement with the area.
+
+cut -c 13-
