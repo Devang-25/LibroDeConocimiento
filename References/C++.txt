@@ -5056,3 +5056,242 @@ vector<string> split_string(string input_string) {
 
 ---------------------------------------------------------------------------
 
+/*
+Basic Data Types
+
+Print each element on a new line in the same order it was received as input. Note that the floating point value should be correct up to 3 decimal places and the double to 9 decimal places.
+
+Sample Input
+3 12345678912345 a 334.23 14049.30493
+Sample Output
+3
+12345678912345
+a
+334.230
+14049.304930000
+*/
+
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+using namespace std;
+
+int main() {
+    // Complete the code.
+    int intVar;
+    long longVar;
+    char charVar;
+    float floatVar;
+    double doubleVar;
+
+    std::cin >> intVar >> longVar >> charVar >> floatVar >> doubleVar;
+    std::cout << intVar << "\n";
+    std::cout << longVar << "\n";
+    std::cout << charVar << "\n";
+    std::cout << std::fixed << std::setprecision(3) << floatVar << "\n";
+    std::cout << std::fixed << std::setprecision(9) << doubleVar;
+    return 0;
+}
+
+---------------------------------------------------------------------------
+
+// Maximum Palindromes
+// Madam Hannah Otto, the CEO of Reviver Corp., is fond of palindromes, or words that read the same forwards or backwards. She thinks palindromic brand names are appealing to millennials.
+
+// As part of the marketing campaign for the company's new juicer called the Rotator, Hannah decided to push the marketing team's palindrome-searching skills to a new level with a new challenge.
+
+// In this challenge, Hannah provides a string s consisting of lowercase English letters. Every day, for q days, she would select two integers l and r, take the substring s_l...r (the substring of s from index l to index r), and ask the following question:
+
+// Consider all the palindromes that can be constructed from some of the letters from s_l...r. You can reorder the letters as you need. Some of these palindromes have the maximum length among all these palindromes. How many maximum-length palindromes are there?
+
+// For example, if s = madamimadam, l = 4 and r = 7, then we have,
+// s = madamimadam -> s_l...r -> s_4...7 = amim -> palindromes: [mam, mim] -> number of maximum length palindromes = 2
+
+// Your job as the head of the marketing team is to answer all the queries. Since the answers can be very large, you are only required to find the answer modulo 10^9 + 7.
+
+// Complete the functions initialize and answerQuery and return the number of maximum-length palindromes modulo 10^9 + 7.
+
+// Sample Input 0
+// week
+// 2
+// 1 4
+// 2 3
+// Sample Output 0
+// 2
+// 1
+// Explanation 0
+// On the first day, l=1 and r=4. The maximum-length palindromes are "ewe" and "eke".
+// On the second day, l=2 and r=3. The maximum-length palindrome is "ee".
+
+// Sample Input 1
+// abab
+// 1
+// 1 4
+// Sample Output 1
+// 2
+// Explanation 1
+// Here, the maximum-length palindromes are "abba" and "baab".
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+string ltrim(const string &);
+string rtrim(const string &);
+vector<string> split(const string &);
+
+/*
+ * Complete the 'initialize' function below.
+ *
+ * The function accepts STRING s as parameter.
+ */
+std::string s;
+void initialize(string s) {
+    // This function is called once before all queries.
+    ::s = s;
+}
+
+/*
+ * Complete the 'answerQuery' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts following parameters:
+ *  1. INTEGER l
+ *  2. INTEGER r
+ */
+
+long long unsigned factorial(int n)
+{
+    long long unsigned result = 1;
+    for (int ctr = 1; ctr <= n; ++ctr)
+    {
+        result *= ctr;
+    }
+    return result;
+}
+
+int answerQuery(int l, int r)
+{
+    // Return the answer for this query modulo 1000000007.
+    std::string sortedSubstr = s.substr(l-1, r-l+1);
+    // std::cout << "\n sortedSubstr " << sortedSubstr;
+    std::sort(sortedSubstr.begin(), sortedSubstr.end());
+    // std::cout << " - " << sortedSubstr << "\n";
+
+    int nonRepeatingCharsCount = 0;
+    int repeatingCharsCount = 0;
+    std::string repeatingChars = "";
+    bool isLastCharCounted = false;
+
+    unsigned sortedSubstrSize = sortedSubstr.size();
+    for (unsigned ctr = 1u; ctr < sortedSubstrSize; ++ctr)
+    {
+        if (sortedSubstr[ctr] == sortedSubstr[ctr-1])
+        {
+            repeatingCharsCount += 2;
+            repeatingChars += sortedSubstr[ctr];
+            ++ctr;
+            if (ctr >= sortedSubstrSize) isLastCharCounted = true;
+        }
+        else
+        {
+            ++nonRepeatingCharsCount;
+        }
+    }
+    if (sortedSubstrSize >= 1 && !isLastCharCounted)
+    {
+        ++nonRepeatingCharsCount;
+    }
+
+    // Solution 1: without considering same characters in repeatingCharsCount
+    // long long unsigned permutations = factorial(repeatingCharsCount/2);
+    // long long unsigned maximumPalindromes = nonRepeatingCharsCount != 0 ?
+    //                                         permutations * nonRepeatingCharsCount :
+    //                                         permutations;
+    // return maximumPalindromes % 1000000007;
+
+    // Solution 2: considering same characters in repeatingCharsCount
+    std::unordered_set<std::string> permutations;
+    do
+    {
+        permutations.insert(repeatingChars);
+    }
+    while (std::next_permutation(repeatingChars.begin(), repeatingChars.end()));
+    long long unsigned maximumPalindromes = nonRepeatingCharsCount != 0 ?
+                                            permutations.size() * nonRepeatingCharsCount :
+                                            permutations.size();
+    return maximumPalindromes % 1000000007;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string s;
+    getline(cin, s);
+
+    initialize(s);
+
+    string q_temp;
+    getline(cin, q_temp);
+
+    int q = stoi(ltrim(rtrim(q_temp)));
+
+    for (int q_itr = 0; q_itr < q; q_itr++) {
+        string first_multiple_input_temp;
+        getline(cin, first_multiple_input_temp);
+
+        vector<string> first_multiple_input = split(rtrim(first_multiple_input_temp));
+
+        int l = stoi(first_multiple_input[0]);
+
+        int r = stoi(first_multiple_input[1]);
+
+        int result = answerQuery(l, r);
+
+        fout << result << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
+
+vector<string> split(const string &str) {
+    vector<string> tokens;
+
+    string::size_type start = 0;
+    string::size_type end = 0;
+
+    while ((end = str.find(" ", start)) != string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+
+        start = end + 1;
+    }
+
+    tokens.push_back(str.substr(start));
+
+    return tokens;
+}
