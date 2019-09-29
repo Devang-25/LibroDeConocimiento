@@ -1,0 +1,1923 @@
+---------------------------------------------------------------------------
+
+# List Comprehensions
+# Let's learn about list comprehensions! You are given three integers X, Y and Z representing the dimensions of a cuboid along with an integer N. You have to print a list of all possible coordinates given by (i, j, k) on a 3D grid where the sum of i+j+k is not equal to N. Here, 0<=i<=X; 0<=j<=Y; 0<=k<=Z;
+# Sample Input 0
+# 1
+# 1
+# 1
+# 2
+# Sample Output 0
+# [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 1]]
+# Sample Input 1
+# 2
+# 2
+# 2
+# 2
+# Sample Output 1
+# [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 2], [0, 2, 1], [0, 2, 2], [1, 0, 0], [1, 0, 2], [1, 1, 1], [1, 1, 2], [1, 2, 0], [1, 2, 1], [1, 2, 2], [2, 0, 1], [2, 0, 2], [2, 1, 0], [2, 1, 1], [2, 1, 2], [2, 2, 0], [2, 2, 1], [2, 2, 2]]
+
+if __name__ == '__main__':
+    x = int(input())
+    y = int(input())
+    z = int(input())
+    n = int(input())
+
+# coordinatesX = [i for i in range(x+1)]
+# coordinatesY = [j for j in range(y+1)]
+# coordinatesZ = [k for k in range(z+1)]
+# coordinatesXYZ = []
+# for elementX in coordinatesX:
+#     for elementY in coordinatesY:
+#         for elementZ in coordinatesZ:
+#             if not elementX + elementY + elementZ == n:
+#                 coordinatesXYZ.append([elementX, elementY, elementZ])
+# print(coordinatesXYZ)
+
+coordinates = [[i, j, k] for i in range(x+1) for j in range(y+1) for k in range(z+1) if i+j+k != n]
+print(coordinates)
+
+---------------------------------------------------------------------------
+
+# Write a function
+# We add a Leap Day on February 29, almost every four years. The leap day is an extra, or intercalary day and we add it to the shortest month of the year, February.
+# In the Gregorian calendar three criteria must be taken into account to identify leap years:
+# The year can be evenly divided by 4, is a leap year, unless:
+#     The year can be evenly divided by 100, it is NOT a leap year, unless:
+#         The year is also evenly divisible by 400. Then it is a leap year.
+
+def is_leap(year):
+    leap = False
+
+    if year % 4 == 0:
+        if year % 400 == 0:
+            leap = True
+        elif year % 100 == 0:
+            leap = False
+        else:
+            leap = True
+
+    return leap
+
+year = int(raw_input())
+print is_leap(year)
+
+---------------------------------------------------------------------------
+
+# Find the Runner-Up Score!
+# Given the participants' score sheet for your University Sports Day, you are required to find the runner-up score. You are given n scores. Store them in a list and find the score of the runner-up.
+# Sample Input 0
+# 5
+# 2 3 6 6 5
+# Sample Output 0
+# 5
+
+if __name__ == '__main__':
+    n = int(raw_input())
+    arr = list(map(int, raw_input().split()))
+
+if not arr:
+    exit
+
+# Solution 1
+# arr.sort(reverse = True)
+# arrSet = sorted(set(arr), reverse = True)
+# if len(arrSet) > 1:
+#     print(arrSet[1])
+
+# Solution 2
+# maxElement = max(arr)
+# while maxElement in arr:
+#     arr.remove(maxElement)
+# if len(arr) > 0:
+#     print(max(arr))
+
+# Solution 3
+arr.sort(reverse = True)
+for index in range (1, len(arr)):
+    if arr[index] != arr[index-1]:
+        print(arr[index])
+        break
+
+---------------------------------------------------------------------------
+
+# Nested Lists
+# Given the names and grades for each student in a Physics class of N students, store them in a nested list and print the name(s) of any student(s) having the second lowest grade.
+# Note: If there are multiple students with the same grade, order their names alphabetically and print each name on a new line.
+# Sample Input 0
+# 5
+# Harry
+# 37.21
+# Berry
+# 37.21
+# Tina
+# 37.2
+# Akriti
+# 41
+# Harsh
+# 39
+# Sample Output 0
+# Berry
+# Harry
+
+
+# Solution 1
+# nameAndScoreList = []
+
+# Solution 2
+scoreAndNamesDict = {}
+
+if __name__ == '__main__':
+    for _ in range(int(input())):
+        name = input()
+        score = float(input())
+
+        # Solution 1
+        # nameAndScoreList.append({"name" : name, "score" : score})
+
+        # Solution 2
+        if scoreAndNamesDict.get(score):
+            scoreAndNamesDict[score].append(name)
+        else:
+            scoreAndNamesDict[score] = [name]
+
+# Solution 1
+# if not nameAndScoreList:
+#     exit
+
+# def getScore(nameAndScoreDict):
+#     return nameAndScoreDict["score"]
+
+# nameAndScoreList.sort(key = getScore)
+
+# secondLowestScore = None
+# secondLowestScorers = []
+
+# index = 1
+# while index < len(nameAndScoreList):
+#     if nameAndScoreList[index]["score"] != nameAndScoreList[index-1]["score"]:
+#         secondLowestScore = nameAndScoreList[index]["score"]
+#         break
+# while secondLowestScore == nameAndScoreList[index]["score"]:
+#     secondLowestScorers.append(nameAndScoreList[index]["name"])
+#     index += 1
+
+# for scorer in sorted(secondLowestScorers):
+#     print(scorer)
+
+
+# Solution 2
+if len(scoreAndNamesDict) <= 1:
+    exit
+
+secondLowestScorers = sorted(scoreAndNamesDict.items())[1][1]
+for name in sorted(secondLowestScorers):
+    print(name)
+
+---------------------------------------------------------------------------
+
+# Lists
+# Consider a list (list = []). You can perform the following commands:
+# 1. insert i e: Insert integer e at position i.
+# 2. print: Print the list.
+# 3. remove e: Delete the first occurrence of integer e.
+# 4. append e: Insert integer e at the end of the list.
+# 5. sort: Sort the list.
+# 6. pop: Pop the last element from the list.
+# 7. reverse: Reverse the list.
+# Initialize your list and read in the value of n followed by n lines of commands where each command will be of the 7 types listed above. Iterate through each command in order and perform the corresponding operation on your list.
+# Sample Input 0
+# 12
+# insert 0 5
+# insert 1 10
+# insert 0 6
+# print
+# remove 6
+# append 9
+# append 1
+# sort
+# print
+# pop
+# reverse
+# print
+# Sample Output 0
+# [6, 5, 10]
+# [1, 5, 9, 10]
+# [9, 5, 1]
+
+if __name__ == '__main__':
+    N = int(input())
+
+listToProcess = list()
+listToProcessName = "listToProcess"
+
+for ctr in range(N):
+    inputText = input().split(" ")
+    inputCommand = inputText[0]
+    inputArgs = inputText[1:]
+
+    if inputCommand == "print":
+        command = inputCommand + "(" + listToProcessName + ")"
+    else:
+        command = listToProcessName + "." + inputCommand + "(" + ", ".join(inputArgs) + ")"
+
+    eval(command)
+
+---------------------------------------------------------------------------
+
+# Tuples
+# Given an integer, n, and n space-separated integers as input, create a tuple, t, of those n integers. Then compute and print the result of hash(t).
+# Note: hash() is one of the functions in the __builtins__ module, so it need not be imported.
+# Sample Input 0
+# 2
+# 1 2
+# Sample Output 0
+# 3713081631934410656
+
+if __name__ == '__main__':
+    n = int(input())
+    integer_list = map(int, input().split())
+
+tupleVar = tuple(integer_list)
+print(hash(tupleVar))
+
+---------------------------------------------------------------------------
+
+# Finding the percentage
+# You have a record of N students. Each record contains the student's name, and their percent marks in Maths, Physics and Chemistry. The marks can be floating values. The user enters some integer N followed by the names and marks for N students. You are required to save the record in a dictionary data type. The user then enters a student's name. Output the average percentage marks obtained by that student, correct to two decimal places.
+# Sample Input 0
+# 3
+# Krishna 67 68 69
+# Arjun 70 98 63
+# Malika 52 56 60
+# Malika
+# Sample Output 0
+# 56.00
+
+def average(numbersList):
+    return sum(numbersList) / len(numbersList)
+
+if __name__ == '__main__':
+    n = int(input())
+    student_marks = {}
+    for _ in range(n):
+        name, *line = input().split()
+        scores = list(map(float, line))
+        student_marks[name] = scores
+    query_name = input()
+    averageForQuery = average(student_marks[query_name])
+    # print(round(averageForQuery, 2))
+    # print("%.2f" % averageForQuery, " %.4f" % averageForQuery)
+    # print("%.2f %.4f" % (averageForQuery, averageForQuery))
+    print("%.2f" % averageForQuery)
+
+# Solution from editorial
+# d={}
+# for i in range(int(raw_input())):
+#     line=raw_input().split()
+#     d[line[0]]=sum(map(float,line[1:]))/3
+
+# print '%.2f' % d[raw_input()]
+
+---------------------------------------------------------------------------
+
+# sWAP cASE
+# You are given a string and your task is to swap cases. In other words, convert all lowercase letters to uppercase letters and vice versa.
+# For Example:
+# Www.HackerRank.com → wWW.hACKERrANK.COM
+# Pythonist 2 → pYTHONIST 2
+
+def swap_case(s):
+    swapped = str()
+    for char in s:
+        if char.isupper(): swapped += char.lower()
+        else:              swapped += char.upper()
+    return swapped
+
+if __name__ == '__main__':
+    s = input()
+    result = swap_case(s)
+    print(result)
+
+# Solution from editorial
+# import string
+# print string.swapcase(raw_input())
+
+---------------------------------------------------------------------------
+
+# String Split and Join
+# You are given a string. Split the string on a " " (space) delimiter and join using a - hyphen.
+# Sample Input
+# this is a string
+# Sample Output
+# this-is-a-string
+
+def split_and_join(line):
+    # write your code here
+    listOfStrings = line.split(" ")
+    listOfStringsJoined = "-".join(listOfStrings)
+    return listOfStringsJoined
+
+if __name__ == '__main__':
+    line = input()
+    result = split_and_join(line)
+    print(result)
+
+# Solution from editorial
+# print "-".join(raw_input().split())
+
+---------------------------------------------------------------------------
+
+# Mutations
+# Read a given string, change the character at a given index and then print the modified string.
+# Sample Input
+# abracadabra
+# 5 k
+# Sample Output
+# abrackdabra
+
+def mutate_string(string, position, character):
+    # Solution 1
+    # stringInList = list(string)
+    # stringInList[position] = character
+    # return "".join(stringInList)
+    modifiedString = string[:position] + character + string[position+1:]
+    return modifiedString
+
+if __name__ == '__main__':
+    s = input()
+    i, c = input().split()
+    s_new = mutate_string(s, int(i), c)
+    print(s_new)
+
+---------------------------------------------------------------------------
+
+# String Validators
+# You are given a string S.
+# Your task is to find out if the string S contains: alphanumeric characters, alphabetical characters, digits, lowercase and uppercase characters.
+# In the first line, print True if S has any alphanumeric characters. Otherwise, print False.
+# In the second line, print True if S has any alphabetical characters. Otherwise, print False.
+# In the third line, print True if S has any digits. Otherwise, print False.
+# In the fourth line, print True if S has any lowercase characters. Otherwise, print False.
+# In the fifth line, print True if S has any uppercase characters. Otherwise, print False.
+# Sample Input
+# qA2
+# Sample Output
+# True
+# True
+# True
+# True
+# True
+
+if __name__ == '__main__':
+    s = input()
+
+# Solution 1
+# stringValidationState = {
+#     "hasAnyAlphaNumeric" : False,
+#     "hasAnyAlphabetical" : False,
+#     "hasAnyDigits" : False,
+#     "hasAnyLowercase" : False,
+#     "hasAnyUppercase" : False
+# }
+
+# for char in s:
+#     if char.isalnum():
+#         stringValidationState["hasAnyAlphaNumeric"] = True
+#     if char.isalpha():
+#         stringValidationState["hasAnyAlphabetical"] = True
+#     if char.isdigit():
+#         stringValidationState["hasAnyDigits"] = True
+#     if char.islower():
+#         stringValidationState["hasAnyLowercase"] = True
+#     if char.isupper():
+#         stringValidationState["hasAnyUppercase"] = True
+
+# stringValidationStateList = [str(value) for value in stringValidationState.values()]
+# print("\n".join(stringValidationStateList))
+
+# Solution 2
+hasAnyAlphabetical = any([char.isalpha() for char in s])
+hasAnyDigits = any([char.isdigit() for char in s])
+hasAnyLowercase = any([char.islower() for char in s])
+hasAnyUppercase = any([char.isupper() for char in s])
+
+print(hasAnyAlphabetical or hasAnyDigits)
+print(hasAnyAlphabetical)
+print(hasAnyDigits)
+print(hasAnyLowercase)
+print(hasAnyUppercase)
+
+---------------------------------------------------------------------------
+
+# Text Alignment
+# You are given a partial code that is used for generating the HackerRank Logo of variable thickness.
+# Your task is to replace the blank (______) with rjust, ljust or center.
+# Sample Input
+
+# 5
+# Sample Output
+
+#     H    
+#    HHH   
+#   HHHHH  
+#  HHHHHHH 
+# HHHHHHHHH
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#   HHHHHHHHHHHHHHHHHHHHHHHHH   
+#   HHHHHHHHHHHHHHHHHHHHHHHHH   
+#   HHHHHHHHHHHHHHHHHHHHHHHHH   
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#   HHHHH               HHHHH             
+#                     HHHHHHHHH 
+#                      HHHHHHH  
+#                       HHHHH   
+#                        HHH    
+#                         H 
+
+#Replace all ______ with rjust, ljust or center.
+
+thickness = int(input()) #This must be an odd number
+c = 'H'
+
+#Top Cone
+for i in range(thickness):
+    print((c*i).rjust(thickness-1)+c+(c*i).ljust(thickness-1))
+
+#Top Pillars
+for i in range(thickness+1):
+    print((c*thickness).center(thickness*2)+(c*thickness).center(thickness*6))
+
+# #Middle Belt
+for i in range((thickness+1)//2):
+    print((c*thickness*5).center(thickness*6))
+
+# #Bottom Pillars
+for i in range(thickness+1):
+    print((c*thickness).center(thickness*2)+(c*thickness).center(thickness*6))
+
+# #Bottom Cone
+for i in range(thickness):
+    print(((c*(thickness-i-1)).rjust(thickness)+c+(c*(thickness-i-1)).ljust(thickness)).rjust(thickness*6))
+
+---------------------------------------------------------------------------
+
+import textwrap
+
+# Text Wrap
+# You are given a string s and width w.
+# Your task is to wrap the string into a paragraph of width w.
+# Sample Input 0
+# ABCDEFGHIJKLIMNOQRSTUVWXYZ
+# 4
+# Sample Output 0
+# ABCD
+# EFGH
+# IJKL
+# IMNO
+# QRST
+# UVWX
+# YZ
+
+# Solution 1
+# import math
+# def wrap(string, max_width):
+#     # ceiling 1
+#     # rows = len(string) // max_width
+#     # if len(string) % max_width != 0:
+#     #     rows += 1
+
+#     # ceiling 2
+#     rows = math.ceil(len(string) / max_width)
+
+#     dividedString = [string[max_width*ctr:max_width*(ctr+1)] for ctr in range(rows+1)]
+#      # dividedString = [string[i:i+max_width] for i in range(0, len(string), max_width)]
+#     return "\n".join(dividedString)
+
+# Solution 2
+def wrap(string, max_width):
+    # wrappedStringList = textwrap.wrap(string, max_width)
+    return textwrap.fill(string, max_width)
+
+if __name__ == '__main__':
+    string, max_width = input(), int(input())
+    result = wrap(string, max_width)
+    print(result)
+
+---------------------------------------------------------------------------
+
+# Find a string
+# In this challenge, the user enters a string and a substring. You have to print the number of times that the substring occurs in the given string. String traversal will take place from left to right, not from right to left.
+# Sample Input
+# ABCDCDC
+# CDC
+# Sample Output
+# 2
+
+def count_substring(string, sub_string):
+    lastIndexPlusOne = len(string)
+    startIndex = string.find(sub_string, 0, lastIndexPlusOne)
+
+    totalCount = 0
+    while startIndex != -1:
+        totalCount += 1
+        startIndex = string.find(sub_string, startIndex+1, lastIndexPlusOne)
+
+    return totalCount
+
+# From editorial, using regex
+# import re
+# a = raw_input()
+# b = raw_input()
+# match = re.findall('(?='+b+')',a)
+# print len(match)
+
+if __name__ == '__main__':
+    string = input().strip()
+    sub_string = input().strip()
+
+    count = count_substring(string, sub_string)
+    print(count)
+
+---------------------------------------------------------------------------
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+# Designer Door Mat
+# Mr. Vincent works in a door mat manufacturing company. One day, he designed a new door mat with the following specifications:
+#     Mat size must be N X M. (N is an odd natural number, and M is 3 times N.)
+#     The design should have 'WELCOME' written in the center.
+#     The design pattern should only use | . and - characters.
+# Sample Designs
+#     Size: 7 x 21
+#     ---------.|.---------
+#     ------.|..|..|.------
+#     ---.|..|..|..|..|.---
+#     -------WELCOME-------
+#     ---.|..|..|..|..|.---
+#     ------.|..|..|.------
+#     ---------.|.---------
+#     Size: 11 x 33
+#     ---------------.|.---------------
+#     ------------.|..|..|.------------
+#     ---------.|..|..|..|..|.---------
+#     ------.|..|..|..|..|..|..|.------
+#     ---.|..|..|..|..|..|..|..|..|.---
+#     -------------WELCOME-------------
+#     ---.|..|..|..|..|..|..|..|..|.---
+#     ------.|..|..|..|..|..|..|.------
+#     ---------.|..|..|..|..|.---------
+#     ------------.|..|..|.------------
+#     ---------------.|.---------------
+
+fillerChar = "-"
+designChar = ".|."
+welcomeChar = "WELCOME"
+
+n, m = map(int, input().split())
+rowsHalf = n // 2
+
+# Solution 1
+
+# designCharCount = 1
+# for row in range(rowsHalf):
+#     print((designChar * designCharCount).center(m, fillerChar))
+#     designCharCount += 2
+
+# print(welcomeChar.center(m, fillerChar))
+
+# designCharCount -= 2
+# for row in range(rowsHalf):
+#     print((designChar * designCharCount).center(m, fillerChar))
+#     designCharCount -= 2
+
+# Solution 2
+for row in range(rowsHalf):
+    designCharToPrintInRow = designChar + (2 * (designChar * row))
+    print(designCharToPrintInRow.center(m, fillerChar))
+
+print(welcomeChar.center(m, fillerChar))
+
+for row in range(rowsHalf):
+    designCharToPrintInRow = designChar + (2 * (designChar * (rowsHalf - 1 - row)))
+    print(designCharToPrintInRow.center(m, fillerChar))
+
+# Solution 3
+# sideCount = (m - len(designChar)) // 2
+
+# for row in range(rowsHalf):
+#     print((designChar * row).rjust(sideCount, fillerChar) +
+#             designChar +
+#             (designChar * row).ljust(sideCount, fillerChar))
+
+# print(welcomeChar.center(m, fillerChar))
+
+# for row in range(rowsHalf):
+#     print((designChar * (rowsHalf - 1 - row)).rjust(sideCount, fillerChar) +
+#             designChar +
+#             (designChar * (rowsHalf - 1 - row)).ljust(sideCount, fillerChar))
+
+---------------------------------------------------------------------------
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+# Capitalize!
+# You are asked to ensure that the first and last names of people begin with a capital letter in their passports. For example, alison heck should be capitalised correctly as Alison Heck.
+# Sample Input
+# chris alan
+# Sample Output
+# Chris Alan
+
+# Complete the solve function below.
+def solve(s):
+    # Solution 1 - this is wrong for cases such as 12abc since it should still be 12abc but would be 12Abc here
+    # return s.title()
+
+    # Solution 2
+    # if not s: return str()
+
+    # sList = list(s)
+    # sList[0] = sList[0].upper()
+    # for ctr in range(1, len(sList)):
+    #     if sList[ctr-1] == " ":
+    #         sList[ctr] = sList[ctr].upper()
+    # return "".join(sList)
+
+    # Solution 3
+    sList = s.split(" ")
+    sListCapitalized = [word.capitalize() for word in sList]
+    return " ".join(sListCapitalized)
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    s = input()
+
+    result = solve(s)
+
+    fptr.write(result + '\n')
+
+    fptr.close()
+
+---------------------------------------------------------------------------
+
+# Alphabet Rangoli
+# You are given an integer, N. Your task is to print an alphabet rangoli of size N. (Rangoli is a form of Indian folk art based on creation of patterns.)
+# Different sizes of alphabet rangoli are shown below:
+# #size 3
+# ----c----
+# --c-b-c--
+# c-b-a-b-c
+# --c-b-c--
+# ----c----
+# #size 5
+# --------e--------
+# ------e-d-e------
+# ----e-d-c-d-e----
+# --e-d-c-b-c-d-e--
+# e-d-c-b-a-b-c-d-e
+# --e-d-c-b-c-d-e--
+# ----e-d-c-d-e----
+# ------e-d-e------
+# --------e--------
+
+def print_rangoli(size):
+    maxChar = chr(size + 96)
+    width = (4 * size) - 3 # from n + (n - 1) + (n + (n - 1) - 1)
+
+    # Solution 1
+    # for row in range(1, size + 1):
+    #     chars = list()
+    #     currentChar = maxChar
+    #     for ctr in range(row):
+    #         chars.append(currentChar)
+    #         currentChar = chr(ord(currentChar) - 1)
+    #     charsReverse = chars[:]
+    #     charsReverse.reverse()
+    #     charsReverse.pop(0)
+    #     chars += charsReverse
+    #     print("-".join(chars).center(width, "-"))
+    # for row in range(1, size):
+    #     chars = list()
+    #     currentChar = maxChar
+    #     for ctr in range(size - row):
+    #         chars.append(currentChar)
+    #         currentChar = chr(ord(currentChar) - 1)
+    #     charsReverse = chars[:]
+    #     charsReverse.reverse()
+    #     charsReverse.pop(0)
+    #     chars += charsReverse
+    #     print("-".join(chars).center(width, "-"))
+
+    # Solution 2
+    for row in range(size):
+        chars = list()
+        currentChar = maxChar
+        for ctr in range(row):
+            chars.append(currentChar)
+            currentChar = chr(ord(currentChar) - 1)
+        chars += [currentChar] + chars[::-1]
+        print("-".join(chars).center(width, "-"))
+    for row in range(size - 1):
+        chars = list()
+        currentChar = maxChar
+        for ctr in range(size - row - 2):
+            chars.append(currentChar)
+            currentChar = chr(ord(currentChar) - 1)
+        chars += [currentChar] + chars[::-1]
+        print("-".join(chars).center(width, "-"))
+
+# Solution from editorial
+# n = int(raw_input())
+# for i in range(n):
+#     s = "-".join(chr(ord('a')+n-j-1) for j in range(i+1))
+#     print((s+s[::-1][1:]).center(n*4-3, '-'))
+
+# for i in range(n-1):
+#     s = "-".join(chr(ord('a')+n-j-1) for j in range(n-i-1))
+#     print((s+s[::-1][1:]).center(n*4-3, '-'))
+
+if __name__ == '__main__':
+    n = int(input())
+    print_rangoli(n)
+
+---------------------------------------------------------------------------
+
+# String Formatting
+# Given an integer, n, print the following values for each integer i from 1 to n:
+# 1. Decimal
+# 2. Octal
+# 3. Hexadecimal (capitalized)
+# 4. Binary
+# The four values must be printed on a single line in the order specified above for each i from 1 to n. Each value should be space-padded to match the width of the binary value of n.
+# Sample Input
+# 17
+# Sample Output
+#     1     1     1     1
+#     2     2     2    10
+#     3     3     3    11
+#     4     4     4   100
+#     5     5     5   101
+#     6     6     6   110
+#     7     7     7   111
+#     8    10     8  1000
+#     9    11     9  1001
+#    10    12     A  1010
+#    11    13     B  1011
+#    12    14     C  1100
+#    13    15     D  1101
+#    14    16     E  1110
+#    15    17     F  1111
+#    16    20    10 10000
+#    17    21    11 10001
+
+def print_formatted(number):
+    # your code goes here
+    width = len(bin(number)[2:])
+
+    for ctr in range(1, number + 1):
+        octal = oct(ctr)[2:]
+        hexadecimal = hex(ctr)[2:].upper()
+        binary = bin(ctr)[2:]
+
+        print(str(ctr).rjust(width),
+                octal.rjust(width),
+                hexadecimal.rjust(width),
+                binary.rjust(width))
+
+if __name__ == '__main__':
+    n = int(input())
+    print_formatted(n)
+
+---------------------------------------------------------------------------
+
+# Merge the Tools!
+# Consider the following:
+# - A string, s, of length n where s = c0c1...cn-1.
+# - An integer, k, where k is a factor of n.
+# We can split s into n/k subsegments where each subsegment, ti, consists of a contiguous block of k characters in s. Then, use each ti to create string ui such that:
+# - The characters in ui are a subsequence of the characters in ti.
+# - Any repeat occurrence of a character is removed from the string such that each character in ui occurs exactly once. In other words, if the character at some index j in ti occurs at a previous index <j in ti, then do not include the character in string ui.
+# Given s and k, print n/k lines where each line i denotes string ui.
+# Sample Input
+# AABCAAADA
+# 3
+# Sample Output
+# AB
+# CA
+# AD
+
+import textwrap
+from collections import OrderedDict
+
+def merge_the_tools(string, k):
+    # your code goes here
+    tList = textwrap.wrap(string, k)
+    uList = list()
+    for t in tList:
+        uniqueOrderedString = OrderedDict()
+        for char in t:
+            uniqueOrderedString[char] = None
+        uList.append("".join(uniqueOrderedString.keys()))
+    print("\n".join(uList))
+
+if __name__ == '__main__':
+    string, k = input(), int(input())
+    merge_the_tools(string, k)
+
+---------------------------------------------------------------------------
+
+# The Minion Game
+# Kevin and Stuart want to play the 'The Minion Game'.
+# Game Rules
+# Both players are given the same string, S.
+# Both players have to make substrings using the letters of the string S.
+# Stuart has to make words starting with consonants.
+# Kevin has to make words starting with vowels.
+# The game ends when both players have made all possible substrings.
+# Scoring
+# A player gets +1 point for each occurrence of the substring in the string S.
+# Ex.
+# S = BANANA
+# Stuart
+# {
+#     'B': 1,
+#     'BA': 1,
+#     'BAN': 1,
+#     'BANA': 1,
+#     'BANAN': 1,
+#     'BANANA': 1,
+#     'N': 2,
+#     'NA': 2,
+#     'NAN': 1,
+#     'NANA': 1
+# }
+# Total = 12
+
+# Kevin
+# {
+#     'A': 3,
+#     'AN': 2,
+#     'ANA': 2,
+#     'ANAN': 1,
+#     'ANANA': 1
+# }
+# Total = 9
+
+# Note :
+# Vowels are only defined as AEIOU. In this problem, Y is not considered a vowel.
+# WHAT THE HELL VOWEL ANG Y!!! 2019 9Sep 22 ko lang nalaman!!!
+
+# Solution 1
+# class Player:
+#     def __init__(self, name, shouldStartWithVowel):
+#         self.name = name
+#         self.shouldStartWithVowel = shouldStartWithVowel
+#         self.scoreDict = {} # not needed!
+#         self.totalScore = 0
+
+# vowels = {'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u'}
+
+# def isVowel(char):
+#     return char in vowels
+
+# def isConsonant(char):
+#     if isVowel(char):
+#         return False
+
+#     charAsciiCode = ord(char)
+#     return (charAsciiCode >= ord('A') and charAsciiCode <= ord('Z')) or \
+#             (charAsciiCode >= ord('a') and charAsciiCode <= ord('z'))
+
+# def processSubstrings(player, string):
+#     for index in range(len(string)):
+#         if (player.shouldStartWithVowel and not isVowel(string[index]) or \
+#             (not player.shouldStartWithVowel and not isConsonant(string[index]))):
+#                 continue
+#         substring = str() # not needed!
+#         for substringIndex in range(index, len(string)):
+#             substring += string[substringIndex] # not needed!
+#             if substring not in player.scoreDict.keys(): # not needed!
+#                 player.scoreDict[substring] = 0 # not needed!
+#             player.scoreDict[substring] += 1 # not needed!
+#             player.totalScore += 1
+
+# def minion_game(string):
+#     # your code goes here
+#     players = [Player("Stuart", False), Player("Kevin", True)]
+#     processSubstrings(players[0], string)
+#     processSubstrings(players[1], string)
+#     players.sort(key = lambda player: player.totalScore, reverse = True)
+#     if players[0].totalScore == players[1].totalScore:
+#         print("Draw")
+#     else:
+#         print(players[0].name, players[0].totalScore)
+
+
+# Solution 2
+class Player:
+    def __init__(self, name, shouldStartWithVowel):
+        self.name = name
+        self.shouldStartWithVowel = shouldStartWithVowel
+        self.totalScore = 0
+
+vowels = {'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u'}
+
+def isVowel(char):
+    return char in vowels
+
+def isConsonant(char):
+    if isVowel(char):
+        return False
+
+    charAsciiCode = ord(char)
+    return (charAsciiCode >= ord('A') and charAsciiCode <= ord('Z')) or \
+            (charAsciiCode >= ord('a') and charAsciiCode <= ord('z'))
+
+def processSubstrings(player, string):
+    for index in range(len(string)):
+        if (player.shouldStartWithVowel and not isVowel(string[index]) or \
+            (not player.shouldStartWithVowel and not isConsonant(string[index]))):
+                continue
+        player.totalScore += len(string) - index
+
+def minion_game(string):
+    # your code goes here
+    players = [Player("Stuart", False), Player("Kevin", True)]
+    processSubstrings(players[0], string)
+    processSubstrings(players[1], string)
+    players.sort(key = lambda player: player.totalScore, reverse = True)
+    if players[0].totalScore == players[1].totalScore:
+        print("Draw")
+    else:
+        print(players[0].name, players[0].totalScore)
+
+if __name__ == '__main__':
+    s = input()
+    minion_game(s)
+
+---------------------------------------------------------------------------
+
+#!/bin/python3
+
+# Python If-Else
+# Given an integer, n, perform the following conditional actions:
+# If n is odd, print Weird
+# If n is even and in the inclusive range of 2 to 5, print Not Weird
+# If n is even and in the inclusive range of 6 to 20, print Weird
+# If n is even and greater than 20, print Not Weird
+
+import math
+import os
+import random
+import re
+import sys
+
+
+
+if __name__ == '__main__':
+    n = int(input().strip())
+
+if n % 2 == 1 or n in range(6, 21) :
+    print("Weird")
+else:
+    print("Not Weird")
+
+---------------------------------------------------------------------------
+
+# Print Function
+# Read an integer N.
+# Without using any string methods, try to print the following:
+# 123...N
+# Note that "..." represents the values in between
+
+if __name__ == '__main__':
+    n = int(input())
+
+for ctr in range(1, n+1):
+    print(ctr, end='')
+
+---------------------------------------------------------------------------
+
+# Arithmetic Operators
+# Task
+# Read two integers from STDIN and print three lines where:
+# 1. The first line contains the sum of the two numbers.
+# 2. The second line contains the difference of the two numbers (first - second).
+# 3. The third line contains the product of the two numbers.
+# Sample Input 0
+# 3
+# 2
+# Sample Output 0
+# 5
+# 1
+# 6
+
+if __name__ == '__main__':
+    a = int(raw_input())
+    b = int(raw_input())
+
+print(a+b)
+print(a-b)
+print(a*b)
+
+---------------------------------------------------------------------------
+
+# # Python: Division
+# Task
+# Read two integers and print two lines. The first line should contain integer division, a//b. The second line should contain float division,  a/b .
+# You don't need to perform any rounding or formatting operations.
+# Sample Input 0
+# 4
+# 3
+# Sample Output 0
+# 1
+# 1.33333333333
+
+from __future__ import division
+
+if __name__ == '__main__':
+    a = int(raw_input())
+    b = int(raw_input())
+
+print(a//b)
+print(a/b)
+
+---------------------------------------------------------------------------
+
+# Loops
+# Task
+# Read an integer N. For all non-negative integers i<N, print i^2. See the sample for details.
+# Sample Input 0
+# 5
+# Sample Output 0
+# 0
+# 1
+# 4
+# 9
+# 16
+
+if __name__ == '__main__':
+    n = int(raw_input())
+
+squares = [number**2 for number in range(0, n)]
+for item in squares:
+    print(item)
+
+---------------------------------------------------------------------------
+
+# You are given the firstname and lastname of a person on two different lines. Your task is to read them and print the following:
+# Hello firstname lastname! You just delved into python.
+# Sample Input 0
+# Ross
+# Taylor
+# Sample Output 0
+# Hello Ross Taylor! You just delved into python.
+
+def print_full_name(a, b):
+    message = "Hello " + a + " " + b + "! You just delved into python."
+    print(message)
+
+if __name__ == '__main__':
+    first_name = raw_input()
+    last_name = raw_input()
+    print_full_name(first_name, last_name)
+
+---------------------------------------------------------------------------
+
+# Introduction to Sets
+# Now, let's use our knowledge of sets and help Mickey.
+# Ms. Gabriel Williams is a botany professor at District College. One day, she asked her student Mickey to compute the average of all the plants with distinct heights in her greenhouse.
+# Formula used:
+# Average = Sum of Distinct Heights / Total Number of Distinct Heights
+# Sample Input
+# 10
+# 161 182 161 154 176 170 167 171 170 174
+# Sample Output
+# 169.375
+
+def average(array):
+    # your code goes here
+    uniqueElements = set(array)
+    return sum(uniqueElements) / len(uniqueElements)
+
+if __name__ == '__main__':
+    n = int(input())
+    arr = list(map(int, input().split()))
+    result = average(arr)
+    print(result)
+
+---------------------------------------------------------------------------
+
+# Symmetric Difference
+# Objective
+
+# Today, we're learning about a new data type: sets.
+
+# Concept
+
+# If the inputs are given on one line separated by a space character, use split() to get the separate values in the form of a list:
+
+# >> a = raw_input()
+# 5 4 3 2
+# >> lis = a.split()
+# >> print (lis)
+# ['5', '4', '3', '2']
+
+# If the list values are all integer types, use the map() method to convert all the strings to integers.
+
+# >> newlis = list(map(int, lis))
+# >> print (newlis)
+# [5, 4, 3, 2]
+
+# Sets are an unordered bag of unique values. A single set contains values of any immutable data type.
+
+# CREATING SETS
+
+# >> myset = {1, 2} # Directly assigning values to a set
+# >> myset = set()  # Initializing a set
+# >> myset = set(['a', 'b']) # Creating a set from a list
+# >> myset
+# {'a', 'b'}
+
+
+# MODIFYING SETS
+
+# Using the add() function:
+
+# >> myset.add('c')
+# >> myset
+# {'a', 'c', 'b'}
+# >> myset.add('a') # As 'a' already exists in the set, nothing happens
+# >> myset.add((5, 4))
+# >> myset
+# {'a', 'c', 'b', (5, 4)}
+
+# Using the update() function:
+
+# >> myset.update([1, 2, 3, 4]) # update() only works for iterable objects
+# >> myset
+# {'a', 1, 'c', 'b', 4, 2, (5, 4), 3}
+# >> myset.update({1, 7, 8})
+# >> myset
+# {'a', 1, 'c', 'b', 4, 7, 8, 2, (5, 4), 3}
+# >> myset.update({1, 6}, [5, 13])
+# >> myset
+# {'a', 1, 'c', 'b', 4, 5, 6, 7, 8, 2, (5, 4), 13, 3}
+
+# REMOVING ITEMS
+
+# Both the discard() and remove() functions take a single value as an argument and removes that value from the set. If that value is not present, discard() does nothing, but remove() will raise a KeyError exception.
+
+# >> myset.discard(10)
+# >> myset
+# {'a', 1, 'c', 'b', 4, 5, 7, 8, 2, 12, (5, 4), 13, 11, 3}
+# >> myset.remove(13)
+# >> myset
+# {'a', 1, 'c', 'b', 4, 5, 7, 8, 2, 12, (5, 4), 11, 3}
+
+
+# COMMON SET OPERATIONS Using union(), intersection() and difference() functions.
+
+# >> a = {2, 4, 5, 9}
+# >> b = {2, 4, 11, 12}
+# >> a.union(b) # Values which exist in a or b
+# {2, 4, 5, 9, 11, 12}
+# >> a.intersection(b) # Values which exist in a and b
+# {2, 4}
+# >> a.difference(b) # Values which exist in a but not in b
+# {9, 5}
+
+# The union() and intersection() functions are symmetric methods:
+
+# >> a.union(b) == b.union(a)
+# True
+# >> a.intersection(b) == b.intersection(a)
+# True
+# >> a.difference(b) == b.difference(a)
+# False
+
+# Given 2 sets of integers, M and N, print their symmetric difference in ascending order. The term symmetric difference indicates those values that exist in either M or N but do not exist in both.
+# Sample Input
+# 4
+# 2 4 5 9
+# 4
+# 2 4 11 12
+# Sample Output
+# 5
+# 9
+# 11
+# 12
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+input()
+M = set(map(int, input().split()))
+input()
+N = set(map(int, input().split()))
+
+# Solution 1
+# Mdiff = M.difference(N)
+# Ndiff = N.difference(M)
+
+# sortedCombinedDiff = sorted(Mdiff.union(Ndiff))
+# # print("\n".join([str(element) for element in sortedCombinedDiff]))
+# print("\n".join(list(map(str, sortedCombinedDiff))))
+
+# Solution 2
+sortedCombinedDiff = sorted(M ^ N)
+print("\n".join(map(str, sortedCombinedDiff)))
+
+---------------------------------------------------------------------------
+
+# # Enter your code here. Read input from STDIN. Print output to STDOUT
+
+# Set .add()
+# Rupal has a huge collection of country stamps. She decided to count the total number of distinct country stamps in her collection. She asked for your help. You pick the stamps one by one from a stack of N country stamps.
+# Find the total number of distinct country stamps.
+# Sample Input
+# 7
+# UK
+# China
+# USA
+# France
+# New Zealand
+# UK
+# France
+# Sample Output
+# 5
+
+distinctCountries = set()
+for _ in range(int(input())):
+    distinctCountries.add(input())
+
+print(len(distinctCountries))
+
+---------------------------------------------------------------------------
+
+# Set .discard(), .remove() & .pop()
+# The first line contains integer n, the number of elements in the set s.
+# The second line contains n space separated elements of set s. All of the elements are non-negative integers, less than or equal to 9.
+# The third line contains integer N, the number of commands.
+# The next N lines contains either pop, remove and/or discard commands followed by their associated value.
+# Sample Input
+# 9
+# 1 2 3 4 5 6 7 8 9
+# 10
+# pop
+# remove 9
+# discard 9
+# discard 8
+# remove 7
+# pop
+# discard 6
+# remove 5
+# pop
+# discard 5
+# Sample Output
+# 4
+
+n = int(input())
+s = set(map(int, input().split()))
+
+for _ in range(int(input())):
+    inputTextList = input().split()
+    commandText = inputTextList[0]
+    argumentsText = ",".join(inputTextList[1:])
+
+    command = commandText + "(" + argumentsText + ")"
+    eval("s." + command)
+
+print(sum(s))
+
+---------------------------------------------------------------------------
+
+# Set .union() Operation
+# The first line contains an integer, n, the number of students who have subscribed to the English newspaper.
+# The second line contains n space separated roll numbers of those students.
+# The third line contains b, the number of students who have subscribed to the French newspaper.
+# The fourth line contains b space separated roll numbers of those students.
+# Sample Input
+# 9
+# 1 2 3 4 5 6 7 8 9
+# 9
+# 10 1 2 3 11 21 55 6 8
+# Sample Output
+# 13
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+input()
+n = set(input().split())
+input()
+b = set(input().split())
+
+# Solution 1
+print(len(n) + len(b-n))
+
+# Solution 2
+# print(len(n.union(b)))
+
+---------------------------------------------------------------------------
+
+# Set .intersection() Operation
+# The students of District College have subscriptions to English and French newspapers. Some students have subscribed only to English, some have subscribed only to French, and some have subscribed to both newspapers.
+# You are given two sets of student roll numbers. One set has subscribed to the English newspaper, one set has subscribed to the French newspaper. Your task is to find the total number of students who have subscribed to both newspapers.
+# Sample Input
+# 9
+# 1 2 3 4 5 6 7 8 9
+# 9
+# 10 1 2 3 11 21 55 6 8
+# Sample Output
+# 5
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+input()
+n = set(input().split())
+input()
+b = set(input().split())
+
+# Solution 1
+print(len(n) - len(n-b))
+
+# Solution 2
+# print(len(n.intersection(b)))
+
+---------------------------------------------------------------------------
+
+# Set .difference() Operation
+# Students of District College have a subscription to English and French newspapers. Some students have subscribed to only the English newspaper, some have subscribed to only the French newspaper, and some have subscribed to both newspapers.
+# You are given two sets of student roll numbers. One set has subscribed to the English newspaper, and one set has subscribed to the French newspaper. Your task is to find the total number of students who have subscribed to only English newspapers.
+# Sample Input
+# 9
+# 1 2 3 4 5 6 7 8 9
+# 9
+# 10 1 2 3 11 21 55 6 8
+# Sample Output
+# 4
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+input()
+n = set(input().split())
+input()
+b = set(input().split())
+
+print(len(n - b))
+# print(len(n.difference(b)))
+
+---------------------------------------------------------------------------
+
+# Set .symmetric_difference() Operation
+# Students of District College have subscriptions to English and French newspapers. Some students have subscribed to English only, some have subscribed to French only, and some have subscribed to both newspapers.
+# You are given two sets of student roll numbers. One set has subscribed to the English newspaper, and one set has subscribed to the French newspaper. Your task is to find the total number of students who have subscribed to either the English or the French newspaper but not both.
+# Sample Input
+# 9
+# 1 2 3 4 5 6 7 8 9
+# 9
+# 10 1 2 3 11 21 55 6 8
+# Sample Output
+# 8
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+input()
+n = set(input().split())
+input()
+b = set(input().split())
+
+print(len(n-b) + len(b-n))
+# print(len(n ^ b))
+# print(len(n.symmetric_difference(b)))
+
+---------------------------------------------------------------------------
+
+# Set Mutations
+# You are given a set A and N number of other sets. These N number of sets have to perform some specific mutation operations on set A.
+# Your task is to execute those operations and print the sum of elements from set A.
+# Sample Input
+#  16
+#  1 2 3 4 5 6 7 8 9 10 11 12 13 14 24 52
+#  4
+#  intersection_update 10
+#  2 3 5 6 8 9 1 4 7 11
+#  update 2
+#  55 66
+#  symmetric_difference_update 5
+#  22 7 35 62 58
+#  difference_update 7
+#  11 22 35 55 58 62 66
+# Sample Output
+# 38
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+input()
+A = set(map(int, input().split()))
+
+for _ in range(int(input())):
+    commandText = input().split()[0]
+    otherSet = set(map(int, input().split()))
+    eval("A." + commandText + "(otherSet)")
+    # eval("A." + commandText + "({" + ",".join(map(str, otherSet)) + "})")
+
+print(sum(A))
+
+---------------------------------------------------------------------------
+
+# The Captain's Room
+# Mr. Anant Asankhya is the manager at the INFINITE hotel. The hotel has an infinite amount of rooms.
+# One fine day, a finite number of tourists come to stay at the hotel.
+# The tourists consist of:
+# - A Captain.
+# - An unknown group of families consisting of K members per group where K != 1.
+# The Captain was given a separate room, and the rest were given one room per group.
+# Mr. Anant has an unordered list of randomly arranged room entries. The list consists of the room numbers for all of the tourists. The room numbers will appear K times per group except for the Captain's room.
+# Mr. Anant needs you to help him find the Captain's room number.
+# The total number of tourists or the total number of groups of families is not known to you.
+# You only know the value of K and the room number list.
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+# Solution 1 - did not work due to timeout
+# input()
+# roomNumberList = input().split()
+# roomNumberSet = set(roomNumberList)
+
+# for num in roomNumberSet:
+#     numCount = roomNumberList.count(num)
+#     if numCount == 1:
+#         print(num)
+#         break
+
+# Solution 2 - worked, fuck why
+# input()
+# roomNumberList = input().split()
+# roomNumberDict = dict()
+
+# for num in roomNumberList:
+#     if not num in roomNumberDict:
+#         roomNumberDict[num] = 0
+#     roomNumberDict[num] += 1
+
+# print(sorted(roomNumberDict.items(), key = lambda element : element[1])[0][0])
+# # print(sorted(roomNumberDict.values())[0])
+
+# Solution 3 - worked
+input()
+roomNumberList = input().split()
+choicesSet = set()
+ignoreSet = set()
+
+for roomNumber in roomNumberList:
+    if roomNumber in ignoreSet: continue
+
+    if roomNumber in choicesSet:
+        choicesSet.remove(roomNumber)
+        ignoreSet.add(roomNumber)
+    else:
+        choicesSet.add(roomNumber)
+
+print(choicesSet.pop())
+
+# Editorial by DOSHI
+# The approach to solve this problem follows:
+# 1. Store List: Store the list in a variable. Let roomList be the variable storing the list of room numbers.
+# 2. Room Set: In the variable roomSet, store the set of roomList.
+# 3. Sum Room Set and List: In the variable sumRoomSet and sumRoomList, store the summations of roomSet and roomList, respectively.
+# 4. Multiply K and Subtract: Now, we multiply K with sumRoomSet, subtract the sumRoomList from it and then store the result in the variable temp. Therefore, temp = the Captain's room number * (K-1) .
+# 5. Divide by K-1: Divide temp by (K-1) and store the result in the variable answer.
+# 6. Output: Print answer.
+
+# Set by DOSHI
+# Problem Setter's code:
+
+# K = int(raw_input())
+
+# #Step 1
+# roomList = map(int,raw_input().split())
+
+# #Step 2
+# roomSet = set(roomList)
+
+# #Step 3
+# sumRoomSet = sum(roomSet)
+# sumRoomList = sum(roomList)
+
+# # Step 4
+# temp = sumRoomSet * K - sumRoomList
+
+# # Step 5
+# answer = temp / (K - 1)
+
+# # Step 6
+# print answer
+
+# Explanation:
+# K = 3
+# list = 2 3 1 1 2 2 3 4 3 1
+# set  = 1 2 3 4
+# answer = 4
+
+# sumOfList = 22
+# sumOfSet  = 10
+
+# sumOfSet is basically composed of:
+#     (1+2+3) + (4)
+# and we know that sumOfList is basically composed of:
+#     ((1+2+3)+(1+2+3)+(1+2+3)) + (4)
+#     or
+#     ((1+2+3) * 3) + (4)
+# because all elements will repeat K times except one (which is the captain's room, the answer to the problem)
+# so if we multiply sumOfSet by K, it is basically:
+#     10 * 3
+#     or
+#     ((1+2+3) + (4)) * 3
+#     or
+#     ((1+2+3) * 3) + ((4) * 3)
+# now, if we subtract (sumOfSet * K) to sumOfList, we are basically removing all repeating elements (which are the rooms for the family groups)
+#     ((1+2+3) * 3) + ((4) * 3)
+#     -
+#     ((1+2+3) * 3) + (4)
+# with all repeating elements removed, we are now left with:
+#     ((4) * 3)
+#     -
+#     (4)
+#     which is equivalent to
+#     ((4) + (4) + (4))
+#     -
+#     (4)
+#     which is
+#     ((4) + (4))
+#     or
+#     ((4) * 2)
+# now since we previously multiplied the target answer by K and we know that the subtraction not just removed the repeating elements of family groups room but also removed one repeating instance of the captain's room caused by multiplication of the answer by K, so we just have to get the base answer by removing the remaining repeating instances caused by the multiplication which is K -1
+#     ((4) + (4)) / (3 - 1)
+#     which is
+#     4
+
+---------------------------------------------------------------------------
+
+# Check Subset
+# You are given two sets, A and B.
+# Your job is to find whether set A is a subset of set B.
+# Sample Input
+# 3
+# 5
+# 1 2 3 5 6
+# 9
+# 9 8 5 6 3 2 1 4 7
+# 1
+# 2
+# 5
+# 3 6 5 4 1
+# 7
+# 1 2 3 5 6 8 9
+# 3
+# 9 8 2
+# Sample Output
+# True
+# False
+# False
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+for _ in range(int(input())):
+    input()
+    A = set(input().split())
+    input()
+    B = set(input().split())
+    print(A <= B)
+
+---------------------------------------------------------------------------
+
+# # Check Strict Superset
+# # You are given a set A and n other sets.
+# # Your job is to find whether set A is a strict superset of each of the N sets.
+# Print True, if A is a strict superset of each of the N sets. Otherwise, print False.
+# A strict superset has at least one element that does not exist in its subset.
+# Sample Input 0
+# 1 2 3 4 5 6 7 8 9 10 11 12 23 45 84 78
+# 2
+# 1 2 3 4 5
+# 100 11 12
+# Sample Output 0
+# False
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+A = set(input().split())
+result = True
+
+for _ in range(int(input())):
+    N = set(input().split())
+    if not A > N:
+        result = False
+        break
+
+print(result)
+
+---------------------------------------------------------------------------
+
+# itertools.product()
+# This tool computes the cartesian product of input iterables.
+# It is equivalent to nested for-loops.
+# For example, product(A, B) returns the same as ((x,y) for x in A for y in B).
+# Sample Code
+# >>> from itertools import product
+# >>>
+# >>> print list(product([1,2,3],repeat = 2))
+# [(1, 1), (1, 2), (1, 3), (2, 1), (2, 2), (2, 3), (3, 1), (3, 2), (3, 3)]
+# >>>
+# >>> print list(product([1,2,3],[3,4]))
+# [(1, 3), (1, 4), (2, 3), (2, 4), (3, 3), (3, 4)]
+# >>>
+# >>> A = [[1,2,3],[3,4,5]]
+# >>> print list(product(*A))
+# [(1, 3), (1, 4), (1, 5), (2, 3), (2, 4), (2, 5), (3, 3), (3, 4), (3, 5)]
+# >>>
+# >>> B = [[1,2,3],[3,4,5],[7,8]]
+# >>> print list(product(*B))
+# [(1, 3, 7), (1, 3, 8), (1, 4, 7), (1, 4, 8), (1, 5, 7), (1, 5, 8), (2, 3, 7), (2, 3, 8), (2, 4, 7), (2, 4, 8), (2, 5, 7), (2, 5, 8), (3, 3, 7), (3, 3, 8), (3, 4, 7), (3, 4, 8), (3, 5, 7), (3, 5, 8)]
+# Task
+# You are given a two lists A and B. Your task is to compute their cartesian product AXB
+# Note: A and B are sorted lists, and the cartesian product's tuples should be output in sorted order.
+# Sample Input
+#  1 2
+#  3 4
+# Sample Output
+#  (1, 3) (1, 4) (2, 3) (2, 4)
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+from itertools import product
+
+# A = list(map(int, input().split()))
+# B = list(map(int, input().split()))
+A = [int(element) for element in input().split()]
+B = [int(element) for element in input().split()]
+productList = list(product(A, B))
+
+# print(" ".join(map(str, productList)))
+print(" ".join(str(element) for element in productList))
+
+# from editorial
+# for item in product(A,B):
+#     print(item,end=' ')
+
+---------------------------------------------------------------------------
+
+# itertools.permutations()
+# itertools.permutations(iterable[, r])
+# This tool returns successive r length permutations of elements in an iterable.
+# If r is not specified or is None, then r defaults to the length of the iterable, and all possible full length permutations are generated.
+# Permutations are printed in a lexicographic sorted order. So, if the input iterable is sorted, the permutation tuples will be produced in a sorted order.
+
+# Sample Code
+
+# >>> from itertools import permutations
+# >>> print permutations(['1','2','3'])
+# <itertools.permutations object at 0x02A45210>
+# >>>
+# >>> print list(permutations(['1','2','3']))
+# [('1', '2', '3'), ('1', '3', '2'), ('2', '1', '3'), ('2', '3', '1'), ('3', '1', '2'), ('3', '2', '1')]
+# >>>
+# >>> print list(permutations(['1','2','3'],2))
+# [('1', '2'), ('1', '3'), ('2', '1'), ('2', '3'), ('3', '1'), ('3', '2')]
+# >>>
+# >>> print list(permutations('abc',3))
+# [('a', 'b', 'c'), ('a', 'c', 'b'), ('b', 'a', 'c'), ('b', 'c', 'a'), ('c', 'a', 'b'), ('c', 'b', 'a')]
+
+# You are given a string S.
+# Your task is to print all possible permutations of size k of the string in lexicographic sorted order.
+# Sample Input
+# HACK 2
+# Sample Output
+# AC
+# AH
+# AK
+# CA
+# CH
+# CK
+# HA
+# HC
+# HK
+# KA
+# KC
+# KH
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+from itertools import permutations
+
+inputText = input().split()
+sortedS = sorted(inputText[0])
+
+for item in permutations(sortedS, int(inputText[1])):
+    print("".join(item))
+    # print(str(item).replace("(", "").replace("'", "").replace(",", "") \
+    #         .replace(" ", "").replace(")", ""))
+
+---------------------------------------------------------------------------
+
+# itertools.combinations(iterable, r)
+# This tool returns the r length subsequences of elements from the input iterable.
+
+# Combinations are emitted in lexicographic sorted order. So, if the input iterable is sorted, the combination tuples will be produced in sorted order.
+# Sample Code
+
+# >>> from itertools import combinations
+# >>>
+# >>> print list(combinations('12345',2))
+# [('1', '2'), ('1', '3'), ('1', '4'), ('1', '5'), ('2', '3'), ('2', '4'), ('2', '5'), ('3', '4'), ('3', '5'), ('4', '5')]
+# >>>
+# >>> A = [1,1,3,3,3]
+# >>> print list(combinations(A,4))
+# [(1, 1, 3, 3), (1, 1, 3, 3), (1, 1, 3, 3), (1, 3, 3, 3), (1, 3, 3, 3)]
+
+# You are given a string S.
+# Your task is to print all possible combinations, up to size k, of the string in lexicographic sorted order.
+
+# Sample Input
+# HACK 2
+# Sample Output
+# A
+# C
+# H
+# K
+# AC
+# AH
+# AK
+# CH
+# CK
+# HK
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+from itertools import combinations
+
+inputText = input().split()
+sortedS = sorted(inputText[0])
+
+# Solution 1 - cleaner
+# for count in range (1, int(inputText[1]) + 1):
+#     for element in combinations(sortedS, count):
+#         print("".join(element))
+
+# Solution 2 - dirty!
+print("\n".join( \
+        ["".join(element) \
+            for count in range(1, int(inputText[1]) + 1) \
+            for element in combinations(sortedS, count)]))
+
+---------------------------------------------------------------------------
+
+# itertools.combinations_with_replacement(iterable, r)
+# This tool returns r length subsequences of elements from the input iterable allowing individual elements to be repeated more than once.
+
+# Combinations are emitted in lexicographic sorted order. So, if the input iterable is sorted, the combination tuples will be produced in sorted order.
+
+# Sample Code
+
+# >>> from itertools import combinations_with_replacement
+# >>>
+# >>> print list(combinations_with_replacement('12345',2))
+# [('1', '1'), ('1', '2'), ('1', '3'), ('1', '4'), ('1', '5'), ('2', '2'), ('2', '3'), ('2', '4'), ('2', '5'), ('3', '3'), ('3', '4'), ('3', '5'), ('4', '4'), ('4', '5'), ('5', '5')]
+# >>>
+# >>> A = [1,1,3,3,3]
+# >>> print list(combinations(A,2))
+# [(1, 1), (1, 3), (1, 3), (1, 3), (1, 3), (1, 3), (1, 3), (3, 3), (3, 3), (3, 3)]
+
+# Sample Code
+
+# from itertools import combinations
+# from itertools import combinations_with_replacement
+# a=[1,2,3]
+# print(list(combinations(a, 2)))
+# print(list(combinations_with_replacement(a, 2)))
+
+# Output
+# [(1, 2), (1, 3), (2, 3)]
+# [(1, 1), (1, 2), (1, 3), (2, 2), (2, 3), (3, 3)]
+
+# You are given a string S.
+# Your task is to print all possible size k replacement combinations of the string in lexicographic sorted order.
+
+# Sample Input
+# HACK 2
+# Sample Output
+# AA
+# AC
+# AH
+# AK
+# CC
+# CH
+# CK
+# HH
+# HK
+# KK
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+from itertools import combinations_with_replacement
+
+inputText = input().split()
+sortedS = sorted(inputText[0])
+
+for element in combinations_with_replacement(sortedS, int(inputText[1])):
+    print("".join(element))
+
+---------------------------------------------------------------------------
+
+# Compress the String!
+
+# In this task, we would like for you to appreciate the usefulness of the groupby() function of itertools . To read more about this function, Check this out .
+
+# You are given a string S. Suppose a character 'c' occurs consecutively X times in the string. Replace these consecutive occurrences of the character 'c' with (X, c) in the string.
+
+# Sample Input
+# 1222311
+# Sample Output
+# (1, 1) (3, 2) (1, 3) (2, 1)
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+from itertools import groupby
+
+S = input()
+
+if not S:
+    exit
+
+# Solution 1
+# currentElement = S[0]
+# currentElementCount = 0
+# compressedList = list()
+
+# for c in S:
+#     if c == currentElement:
+#         currentElementCount += 1
+#     else:
+#         # compressedList.append(tuple((currentElementCount, currentElement)))
+#         print("({0}, {1})".format(currentElementCount, currentElement), end = " ")
+#         currentElement = c
+#         currentElementCount = 1
+
+# print("({0}, {1})".format(currentElementCount, currentElement), end = " ")
+
+for c, values in groupby(S):
+    print("({0}, {1})".format(len(list(values)), c), end = " ")
+    # from editorial
+    # print(tuple([len(list(j)), i]) ,end = " ")
+
+---------------------------------------------------------------------------
+
+# Iterables and Iterators
+# The input consists of three lines. The first line contains the integer N, denoting the length of the list. The next line consists of N space-separated lowercase English letters, denoting the elements of the list.
+# The third and the last line of input contains the integer K, denoting the number of indices to be selected.
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+
+from itertools import combinations
+# from itertools import ifilter
+
+input()
+englishLetters = input().split()
+K = int(input())
+
+# Solution 1
+# # allCombinations = combinations(englishLetters, K)
+# allCombinations = list(combinations(englishLetters, K))
+# combinationsWithLetterA = 0
+
+# for element in filter(lambda comb: "a" in comb, allCombinations):
+#     combinationsWithLetterA += 1
+
+# print(combinationsWithLetterA / len(allCombinations))
+
+# Solution 2
+# combinationsWithLetterA = [current for current in combinations(englishLetters, K) if "a" in current]
+# print(len(combinationsWithLetterA) / len(list(combinations(englishLetters, K))))
+
+# Solution 3
+total = 0
+hasA = 0
+for current in combinations(englishLetters, K):
+    total += 1
+    hasA += "a" in current
+    # if "a" in current:
+    #     hasA += 1
+print(hasA / total)
