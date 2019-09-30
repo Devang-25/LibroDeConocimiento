@@ -1,3 +1,6 @@
+HuffmanCoding
+1. Add node solution
+
 LibroDeConocimiento
 1. In ChessboardTraveling challenge during traversal of paths from one square to another, apply dynamic programming
    Add unordered_set[11,12,22,32,42,43] and just search all with subset of it if is present already
@@ -9,13 +12,13 @@ LibroDeConocimiento
    Add parseInput to a common file and use across all files using it
 3. Design files that will make it easy to have input lets say for QueensAttack.cpp
 
-HuffmanCoding
-1. Add node solution
-
 MessageEncryption
 1. Add new encrypt version, for example [ a 2 14 17 ] [ g 3 ] | [ q 1 4 ]
    But replace those letters (a, g, q in this example) based on index in keycode or in ASCII.
    Put a separator to indicate between letters present in keycode and those that are not.
+
+MySTL
+1. Redo implementation of std::next_permutation which was already done within LibroDeConocimiento
 
 Others
 1. Develop projects with Python, SQL, Multithreading, different Algorithms, different Design Patterns
