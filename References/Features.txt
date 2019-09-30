@@ -24,3 +24,5 @@ Others
 1. Develop projects with Python, SQL, Multithreading, different Algorithms, different Design Patterns
 2. Develop project in C++, Bash, and Python that will read a file and display all words ranked by there number of occurrences in the file
    Purpose: Evaluate most common technologies required for hiring developer jobs
+3. Create a new repository that will hold all small tools and scripts.
+   First script: Parse learnings.txt and get the line numbers of the main topics (those that are not indented)
