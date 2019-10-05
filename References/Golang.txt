@@ -1,0 +1,360 @@
+/*
+Angry Professor
+
+A Discrete Mathematics professor has a class of students. Frustrated with their lack of discipline,
+he decides to cancel class if fewer than some number of students are present when class starts.
+Arrival times go from on time (arrivalTime <= 0) to arrived late (arrivalTime > 0).
+
+Given the arrival time of each student and a threshhold number of attendees, determine if the class
+is canceled.
+
+Sample Input
+2
+4 3
+-1 -3 4 2
+4 2
+0 -1 2 1
+Sample Output
+YES
+NO
+
+Sample testcases
+4 3 -1 -3 4 2  = YES
+4 3 -1 -3 4 -2 = NO
+4 2 -1 -3 4 2  = NO
+4 2 0 -1 2 1   = NO
+*/
+
+package main
+
+import (
+    "fmt"
+)
+
+func shouldClassBeCancelledUsingOneThread(
+    threshold int32,
+    studentsArrivalTime []int32) string {
+    var numOfStudents int32 = int32(len(studentsArrivalTime))
+    if threshold > numOfStudents {
+        return "YES"
+    }
+
+    maxNumOfLate := numOfStudents - threshold
+    fmt.Println("numOfStudents: ", numOfStudents)
+    fmt.Println("maxNumOfLate: ", maxNumOfLate)
+
+    for _, currentStudentTime := range studentsArrivalTime {
+        if currentStudentTime > 0 {
+            maxNumOfLate--
+        }
+        if maxNumOfLate < 0 {
+            return "YES"
+        }
+    }
+    return "NO"
+}
+
+func shouldClassBeCancelledUsingMultiThread(
+    threshold int32,
+    studentsArrivalTime []int32) string {
+    var numOfStudents int32 = int32(len(studentsArrivalTime))
+    if threshold > numOfStudents {
+        return "YES"
+    }
+
+    maxNumOfLate := numOfStudents - threshold
+    fmt.Println("numOfStudents: ", numOfStudents)
+    fmt.Println("maxNumOfLate: ", maxNumOfLate)
+
+    countLate := func(studentsArrivalTime []int32, channel chan int32) {
+        var totalCount int32 = 0
+        for _, currentStudentTime := range studentsArrivalTime {
+            if currentStudentTime > 0 {
+                totalCount++
+            }
+        }
+        channel <- totalCount
+    }
+
+    channel := make(chan int32, 2)
+    go countLate(studentsArrivalTime[:len(studentsArrivalTime)/2], channel)
+    go countLate(studentsArrivalTime[len(studentsArrivalTime)/2:], channel)
+    firstHalfLateCount, secondHalfLateCount := <-channel, <-channel
+    totalLateCount := firstHalfLateCount + secondHalfLateCount
+
+    if totalLateCount > maxNumOfLate {
+        return "YES"
+    }
+    return "NO"
+}
+
+func main() {
+    var studentsCount int32
+    var lateThresholdBeforeCancellation int32
+    var studentsArrivalTime []int32
+
+    fmt.Println("Enter number of students: ")
+    fmt.Scan(&studentsCount)
+
+    fmt.Println("Enter students count threshold before cancellation: ")
+    fmt.Scan(&lateThresholdBeforeCancellation)
+
+    fmt.Println("Enter arrival time of students: ")
+    for ctr := int32(0); ctr < studentsCount; ctr++ {
+        var temp int32
+        fmt.Scan(&temp)
+        studentsArrivalTime = append(studentsArrivalTime, temp)
+    }
+
+    var result1 string = shouldClassBeCancelledUsingOneThread(lateThresholdBeforeCancellation,
+                                                                studentsArrivalTime)
+    var result2 string = shouldClassBeCancelledUsingMultiThread(lateThresholdBeforeCancellation,
+                                                                studentsArrivalTime)
+    fmt.Println("shouldClassBeCancelled result1:", result1)
+    fmt.Println("shouldClassBeCancelled result2:", result2)
+}
+
+---------------------------------------------------------------------------
+
+package main
+import "fmt"
+
+func firstReverse(str string) string {
+  strRune := []rune(str)
+  for ctr, rctr := 0, len(strRune)-1; ctr < rctr; ctr, rctr = ctr+1, rctr-1 {
+    var temp rune = strRune[rctr]
+    strRune[rctr] = strRune[ctr]
+    strRune[ctr] = temp
+  }
+  strResult := string(strRune)
+  return strResult
+}
+
+func main() {
+    var input string
+    fmt.Scan(&input)
+    fmt.Println(firstReverse(input))
+}
+
+---------------------------------------------------------------------------
+
+/*
+Highest Value Palindrome
+
+Palindromes are strings that read the same from the left or right, for example madam or 0110.
+
+You will be given a string representation of a number and a maximum number of changes you can make.
+Alter the string, one digit at a time, to create the string representation of the largest number
+possible given the limit to the number of changes. The length of the string may not be altered, so
+you must consider 0's left of all higher digits in your tests. For example 0110 is valid, 0011 is not.
+
+Given a string representing the starting number and a maximum number of changes allowed, create the
+largest palindromic string of digits possible or the string -1 if it's impossible to create a palindrome
+under the contstraints.
+
+Sample Input 0
+4 1
+3943
+Sample Output 0
+3993
+
+Sample Input 1
+6 3
+092282
+Sample Output 1
+992299
+
+Sample Input 2
+4 1
+0011
+Sample Output 2
+-1
+
+*/
+
+package main
+
+import (
+    "fmt"
+)
+
+// Complete the highestValuePalindrome function below.
+func highestValuePalindrome(numberToChange string, numberOfAllowedChanges int32) string {
+    var left int32 = 0
+    var right int32 = int32(len(numberToChange))-1
+    var numberToChangeArr = []byte(numberToChange)
+    var changedIndexesMap = make(map[int32]bool)
+
+    for ; left < right; left, right = left+1, right-1 {
+        if numberOfAllowedChanges <= 0 && numberToChangeArr[left] != numberToChangeArr[right] {
+            return "-1"
+        } else if numberToChangeArr[left] > numberToChangeArr[right] {
+            numberToChangeArr[right] = numberToChangeArr[left]
+            changedIndexesMap[right] = true
+            numberOfAllowedChanges--
+        } else if numberToChangeArr[right] > numberToChangeArr[left] {
+            numberToChangeArr[left] = numberToChangeArr[right]
+            changedIndexesMap[left] = true
+            numberOfAllowedChanges--
+        }
+    }
+
+    left = 0
+    right = int32(len(numberToChange))-1
+    for ; left <= right && numberOfAllowedChanges > 0; left, right = left+1, right-1 {
+        var requiredChanges int32 = 0
+
+        if numberToChangeArr[left] != '9' {
+            _, isAlreadyChanged := changedIndexesMap[left]
+            if !isAlreadyChanged {
+                requiredChanges++
+            }
+        }
+        if numberToChangeArr[right] != '9' && right != left  {
+            _, isAlreadyChanged := changedIndexesMap[right]
+            if !isAlreadyChanged {
+                requiredChanges++
+            }
+        }
+
+        if requiredChanges <= numberOfAllowedChanges {
+            numberOfAllowedChanges -= requiredChanges
+            numberToChangeArr[left] = '9'
+            numberToChangeArr[right] = '9'
+        }
+    }
+
+    return string(numberToChangeArr)
+}
+
+func main() {
+    var numberToChange string
+    var numberOfAllowedChanges int32
+
+    fmt.Println("Enter number to change: ")
+    fmt.Scan(&numberToChange)
+
+    fmt.Println("Enter number of allowed changes: ")
+    fmt.Scan(&numberOfAllowedChanges)
+
+    result := highestValuePalindrome(numberToChange, numberOfAllowedChanges)
+    fmt.Println("Result:", result)
+}
+
+---------------------------------------------------------------------------
+
+package main
+import "fmt"
+
+func FirstFactorial(num int) int {
+  // code goes here
+  // Note: feel free to modify the return type of this function
+  var result int = 1
+  for ; num > 0; num-- {
+    result = result * num
+  }
+  return result
+}
+
+func main() {
+
+  // do not modify below here, readline is our function
+  // that properly reads in the input for you
+  fmt.Println(FirstFactorial(readline()))
+
+}
+
+---------------------------------------------------------------------------
+
+/*
+Plus Minus
+
+Given an array of integers, calculate the fractions of its elements that are positive, negative, and are zeros. Print the decimal value of each fraction on a new line.
+
+Note: This challenge introduces precision problems. The test cases are scaled to six decimal places, though answers with absolute error of up to 10 ^ -4 are acceptable.
+
+For example, given the array arr=[1,1,0,-1,-1] there are 5 elements, two positive, two negative and one zero. Their ratios would be , 2/5=0.400000, 2/5=0.400000 and 1/5=0.200000. It should be printed as
+0.400000
+0.400000
+0.200000
+
+Sample Input
+6
+-4 3 -9 0 4 1
+Sample Output
+0.500000
+0.333333
+0.166667
+*/
+
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "io"
+    "os"
+    "strconv"
+    "strings"
+)
+
+// Complete the plusMinus function below.
+func plusMinus(arr []int32) {
+    var totalCount float32 = float32(len(arr))
+
+    var positiveCount float32 = 0
+    var negativeCount float32 = 0
+    var zeroCount float32 = 0
+
+    for _, value := range arr {
+        if value == 0 {
+            zeroCount++
+        } else if value > 0 {
+            positiveCount++
+        } else if value < 0 {
+            negativeCount++
+        }
+    }
+    fmt.Printf("%f\n", positiveCount/totalCount)
+    fmt.Printf("%f\n", negativeCount/totalCount)
+    fmt.Printf("%f", zeroCount/totalCount)
+
+}
+
+func main() {
+    reader := bufio.NewReaderSize(os.Stdin, 1024 * 1024)
+
+    nTemp, err := strconv.ParseInt(readLine(reader), 10, 64)
+    checkError(err)
+    n := int32(nTemp)
+
+    arrTemp := strings.Split(readLine(reader), " ")
+
+    var arr []int32
+
+    for i := 0; i < int(n); i++ {
+        arrItemTemp, err := strconv.ParseInt(arrTemp[i], 10, 64)
+        checkError(err)
+        arrItem := int32(arrItemTemp)
+        arr = append(arr, arrItem)
+    }
+
+    plusMinus(arr)
+}
+
+func readLine(reader *bufio.Reader) string {
+    str, _, err := reader.ReadLine()
+    if err == io.EOF {
+        return ""
+    }
+
+    return strings.TrimRight(string(str), "\r\n")
+}
+
+func checkError(err error) {
+    if err != nil {
+        panic(err)
+    }
+}
+
+---------------------------------------------------------------------------
