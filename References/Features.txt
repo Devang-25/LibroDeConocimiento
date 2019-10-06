@@ -17,9 +17,6 @@ MessageEncryption
    But replace those letters (a, g, q in this example) based on index in keycode or in ASCII.
    Put a separator to indicate between letters present in keycode and those that are not.
 
-MySTL
-1. Redo implementation of std::next_permutation which was already done within LibroDeConocimiento
-
 Others
 1. Develop projects with Python, SQL, Multithreading, different Algorithms, different Design Patterns
 2. Develop project in C++, Bash, and Python that will read a file and display all words ranked by there number of occurrences in the file
