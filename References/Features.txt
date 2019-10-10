@@ -17,6 +17,9 @@ MessageEncryption
    But replace those letters (a, g, q in this example) based on index in keycode or in ASCII.
    Put a separator to indicate between letters present in keycode and those that are not.
 
+WordCounter
+1. Add support for finding 2 words such as Artifical Intelligence, Machine Learning, etc.
+
 Others
 1. Develop projects with Python, SQL, Multithreading, different Algorithms, different Design Patterns
 2. Create a new repository that will hold all small tools and scripts.
