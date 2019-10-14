@@ -21,7 +21,10 @@ WordCounter
 1. Add support for finding 2 words such as Artifical Intelligence, Machine Learning, etc.
 2. Sort by name the words that appear under the same count
 
-Others
+Others-Game
+1. Save the trees. Player needs to fight against forest fires, illegal loggers, replanting in exchange of dying trees, etc.
+
+Others-All
 1. Develop projects with Python, SQL, Multithreading, different Algorithms, different Design Patterns
 2. Create a new repository that will hold all small tools and scripts.
    First script: Parse learnings.txt and get the line numbers of the main topics (those that are not indented)
