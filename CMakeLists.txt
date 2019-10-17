@@ -4,6 +4,7 @@ project(libro)
 set(CMAKE_CXX_STANDARD 17)
 
 # -O0 # add least optimization flag if needed for debugging
+# -fno-elide-constructors # disable copying optimization caused by copy elision
 add_compile_options(-g -Wall -Wextra -Werror -pedantic)
 
 add_subdirectory(src)
