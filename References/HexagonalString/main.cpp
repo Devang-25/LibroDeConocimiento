@@ -19,6 +19,8 @@ USAGE
 3. To test (this will run both BfsAlgorithm and RecursiveAlgorithm approach for verification)
     <python3 RandomStringGenerator.py | xargs ./a.out --test>
     or
+    <./RandomStringGenerator.py | xargs ./a.out --test>
+    or
     <./a.out --test HEXAGON HEAR QHN QHNQ AJ HARP Y RAPE>
 
 SAMPLE RUN
@@ -56,35 +58,35 @@ SAMPLE RUN
 SAMPLE TEST
     root@nponcian:/var/fpwork/nponcian/zzz2/HexagonalString# clear && python3 RandomStringGenerator.py | xargs ./a.out --test
 
-    [RecursiveAlgorithm] The hexagonal grid contains 0 instance(s) of the word "RXPA"
     [BfsAlgorithm] The hexagonal grid contains 0 instance(s) of the word "RXPA"
+    [RecursiveAlgorithm] The hexagonal grid contains 0 instance(s) of the word "RXPA"
 
-    [RecursiveAlgorithm] The hexagonal grid contains 0 instance(s) of the word "RXAP"
     [BfsAlgorithm] The hexagonal grid contains 0 instance(s) of the word "RXAP"
+    [RecursiveAlgorithm] The hexagonal grid contains 0 instance(s) of the word "RXAP"
 
-    [RecursiveAlgorithm] The hexagonal grid contains 1 instance(s) of the word "RPXA"
     [BfsAlgorithm] The hexagonal grid contains 1 instance(s) of the word "RPXA"
+    [RecursiveAlgorithm] The hexagonal grid contains 1 instance(s) of the word "RPXA"
 
-    [RecursiveAlgorithm] The hexagonal grid contains 2 instance(s) of the word "RPAX"
     [BfsAlgorithm] The hexagonal grid contains 2 instance(s) of the word "RPAX"
+    [RecursiveAlgorithm] The hexagonal grid contains 2 instance(s) of the word "RPAX"
 
-    [RecursiveAlgorithm] The hexagonal grid contains 1 instance(s) of the word "RAXP"
     [BfsAlgorithm] The hexagonal grid contains 1 instance(s) of the word "RAXP"
+    [RecursiveAlgorithm] The hexagonal grid contains 1 instance(s) of the word "RAXP"
 
-    [RecursiveAlgorithm] The hexagonal grid contains 0 instance(s) of the word "RAPX"
     [BfsAlgorithm] The hexagonal grid contains 0 instance(s) of the word "RAPX"
+    [RecursiveAlgorithm] The hexagonal grid contains 0 instance(s) of the word "RAPX"
 
-    [RecursiveAlgorithm] The hexagonal grid contains 4 instance(s) of the word "XRPA"
     [BfsAlgorithm] The hexagonal grid contains 4 instance(s) of the word "XRPA"
+    [RecursiveAlgorithm] The hexagonal grid contains 4 instance(s) of the word "XRPA"
 
-    [RecursiveAlgorithm] The hexagonal grid contains 1 instance(s) of the word "XRAP"
     [BfsAlgorithm] The hexagonal grid contains 1 instance(s) of the word "XRAP"
+    [RecursiveAlgorithm] The hexagonal grid contains 1 instance(s) of the word "XRAP"
 
-    [RecursiveAlgorithm] The hexagonal grid contains 1 instance(s) of the word "XPRA"
     [BfsAlgorithm] The hexagonal grid contains 1 instance(s) of the word "XPRA"
+    [RecursiveAlgorithm] The hexagonal grid contains 1 instance(s) of the word "XPRA"
 
-    [RecursiveAlgorithm] The hexagonal grid contains 0 instance(s) of the word "XPAR"
     [BfsAlgorithm] The hexagonal grid contains 0 instance(s) of the word "XPAR"
+    [RecursiveAlgorithm] The hexagonal grid contains 0 instance(s) of the word "XPAR"
 
     root@nponcian:/var/fpwork/nponcian/zzz2/HexagonalString# ./a.out --test HEXAGON HEAR QHN QHNQ AJ HARP Y RAPE
 
@@ -128,9 +130,7 @@ int main(int argc, char** argv)
 void src_main(int, char**)
 {
     std::string input = inout::getUserInputString();
-    inout::printStringInstancesCount(input,
-                                    algo::BfsAlgorithm::NAME,
-                                    algo::BfsAlgorithm(input)());
+    inout::printStringInstancesCount(input, algo::BfsAlgorithm::NAME, algo::BfsAlgorithm(input)());
 }
 
 void test_main(int argc, char** argv)
