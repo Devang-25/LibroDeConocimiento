@@ -5295,3 +5295,51 @@ vector<string> split(const string &str) {
 
     return tokens;
 }
+
+---------------------------------------------------------------------------
+
+// Find first non-repeated character in a string
+
+#include <iostream>
+#include <set>
+#include <string>
+#include <unordered_map>
+
+char findFirstNonRepeatingChar(const std::string& stringToRead)
+{
+    std::unordered_map<char, int> insertedCharsAndFirstIndex;
+    std::set<unsigned> nonRepeatingCharIndexes;
+
+    for (unsigned index = 0u; index < stringToRead.size(); ++index)
+    {
+        auto foundIt = insertedCharsAndFirstIndex.find(stringToRead[index]);
+        if (foundIt == insertedCharsAndFirstIndex.end())
+        {
+            insertedCharsAndFirstIndex.insert({stringToRead[index], index});
+            nonRepeatingCharIndexes.insert(index);
+        }
+        else
+        {
+            if (foundIt->second != -1)
+            {
+                nonRepeatingCharIndexes.erase(foundIt->second);
+                foundIt->second = -1;
+            }
+        }
+    }
+    return nonRepeatingCharIndexes.empty() ?
+            '-' :
+            stringToRead[*nonRepeatingCharIndexes.begin()];
+}
+
+int main()
+{
+    std::string stringToRead
+        // = "swiss";
+        // = "swissi";
+        // = "swissw";
+        = "niel godffrrrey pablo poncianodg";
+    std::cout << "\n" << stringToRead << " = " << findFirstNonRepeatingChar(stringToRead);
+
+    return 0;
+}
