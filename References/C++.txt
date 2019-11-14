@@ -5343,3 +5343,98 @@ int main()
 
     return 0;
 }
+
+---------------------------------------------------------------------------
+
+#include <array>
+#include <iostream>
+#include <sstream>
+
+template <typename DataType>
+struct Node
+{
+    DataType data;
+    Node<DataType>* next;
+};
+
+template <typename DataType>
+void print(Node<DataType>* head)
+{
+    while (head != nullptr)
+    {
+        std::cout << "\n" << head->data;
+        head = head->next;
+    }
+}
+
+template <typename DataType>
+void print(
+    const Node<DataType>* previous,
+    const Node<DataType>* current,
+    const Node<DataType>* next)
+{
+    std::string NULL_STR = "null";
+    std::stringstream previousSs;
+    std::stringstream currentSs;
+    std::stringstream nextSs;
+
+    if (previous) previousSs << previous->data;
+    else          previousSs << NULL_STR;
+    if (current)  currentSs << current->data;
+    else          currentSs << NULL_STR;
+    if (next)     nextSs << next->data;
+    else          nextSs << NULL_STR;
+
+    std::cout << "\n\t" << currentSs.str() << "::next changed from "
+                << previousSs.str() << " to " << nextSs.str();
+}
+
+Node<int>* constructLinkedList()
+{
+    constexpr unsigned ARRAY_SIZE = 10u;
+    const std::array<int, ARRAY_SIZE> dataForTheList
+        {
+            11, 22, -333, 4, 5, 666, 777, -8, -9999, 12345
+        };
+
+    Node<int>* head = new Node<int>{dataForTheList[0], nullptr};
+    auto current = head;
+    for (unsigned index = 1u; index < ARRAY_SIZE; ++index)
+    {
+        current->next = new Node<int>{dataForTheList[index], nullptr};
+        current = current->next;
+    }
+    return head;
+}
+
+template <typename DataType>
+Node<DataType>* reverseLinkedList(Node<DataType>* head)
+{
+    Node<DataType>* previous = nullptr;
+    Node<DataType>* current = head;
+    // Node<DataType>* newHead = head;
+    while (current != nullptr)
+    {
+        auto next = current->next;
+        current->next = previous;
+        print(previous, current, next);
+        previous = current;
+        // newHead = current;
+        current = next;
+    }
+    // return newHead;
+    return previous;
+}
+
+int main()
+{
+    auto head = constructLinkedList();
+    std::cout<<"\nconstructLinkedList()";
+    print(head);
+
+    head = reverseLinkedList(head);
+    std::cout<<"\nreverseLinkedList()";
+    print(head);
+
+    return 0;
+}
