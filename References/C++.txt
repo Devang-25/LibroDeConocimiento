@@ -5438,3 +5438,274 @@ int main()
 
     return 0;
 }
+
+---------------------------------------------------------------------------
+
+// Dijkstra's Algorithm
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+
+/*
+INPUT
+A B 5
+A C 3
+B C 2
+B G 1
+B E 3
+C D 7
+C E 7
+D A 2
+D F 6
+E D 2
+E F 1
+G E 1
+0
+D E
+F B
+A F
+B D
+C F
+F C
+B A
+0
+
+OUTPUT
+
+Data: F
+Data: B
+	C : 2
+	G : 1
+	E : 3
+Data: A
+	B : 5
+	C : 3
+Data: C
+	D : 7
+	E : 7
+Data: G
+	E : 1
+Data: E
+	D : 2
+	F : 1
+Data: D
+	A : 2
+	F : 6
+Path from D to E
+	Nodes: D A B G E 
+	Distance: 9
+Path from F to B
+	No path found!
+Path from A to F
+	Nodes: A B G E F 
+	Distance: 8
+Path from B to D
+	Nodes: B G E D 
+	Distance: 4
+Path from C to F
+	Nodes: C E F 
+	Distance: 8
+Path from F to C
+	No path found!
+Path from B to A
+	Nodes: B G E D A 
+	Distance: 6
+*/
+
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <sstream>
+#include <set>
+#include <string>
+#include <tuple>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
+template <typename DataType>
+struct Node
+{
+    struct Neighbor
+    {
+        Node<DataType>* node;
+        int weight;
+    };
+
+    DataType data;
+    std::vector<Neighbor> neighbors;
+};
+
+template <typename DataType>
+struct Path
+{
+    std::vector<Node<DataType>*> nodes;
+    int distance;
+};
+
+std::unordered_map<char, Node<char>*> charAndNodeMap;
+std::unordered_map<Node<char>*, Path<char>> nodeAndPathMap;
+
+void printNodes()
+{
+    // for (const auto& [std::ignore, node] : charAndNodeMap)
+    for (const auto& charAndNode : charAndNodeMap)
+    {
+        std::cout << "\nData: " << charAndNode.second->data;
+        for (const auto& neighbor : charAndNode.second->neighbors)
+        {
+            std::cout << "\n\t" << neighbor.node->data << " : " << neighbor.weight;
+        }
+    }
+}
+
+template <typename DataType>
+void printPath(
+    DataType source,
+    DataType destination,
+    const Path<DataType>& path)
+{
+    std::cout << "\nPath from " << source << " to " << destination;
+    if (path.nodes.empty())
+    {
+        std::cout << "\n\tNo path found!";
+    }
+    else
+    {
+        std::cout << "\n\tNodes: ";
+        for (const auto& node : path.nodes)
+        {
+            std::cout << node->data << " ";
+        }
+        std::cout << "\n\tDistance: " << path.distance;
+    }
+}
+
+void constructNodes()
+{
+    std::string input = "";
+    while (true)
+    {
+        std::getline(std::cin, input);
+        if (input == "0") break;
+
+        char source;
+        char destination;
+        int weightToDestination;
+        std::stringstream ss(input);
+        ss >> source >> destination >> weightToDestination;
+        // std::cout << "\n" << source << "-" << destination << ":" << weightToDestination;
+
+        if (!charAndNodeMap[source])
+        {
+            charAndNodeMap[source] = new Node<char>{source, {}};
+            nodeAndPathMap.insert(
+                {
+                    charAndNodeMap[source],
+                    Path<char>
+                        {
+                            {}, std::numeric_limits<int>::max()
+                        }
+                });
+        }
+        if (!charAndNodeMap[destination])
+        {
+            charAndNodeMap[destination] = new Node<char>{destination, {}};
+            nodeAndPathMap.insert(
+                {
+                    charAndNodeMap[destination],
+                    Path<char>
+                        {
+                            {}, std::numeric_limits<int>::max()
+                        }
+                });
+        }
+
+        charAndNodeMap[source]->neighbors.push_back(
+            {
+                charAndNodeMap[destination],
+                weightToDestination
+            });
+    }
+}
+
+void dijkstraAlgorithm()
+{
+    std::string input = "";
+    while (true)
+    {
+        std::getline(std::cin, input);
+        if (input == "0") break;
+
+        char source;
+        char destination;
+        std::stringstream ss(input);
+        ss >> source >> destination;
+
+        auto nodeAndPathMapCopy = nodeAndPathMap;
+
+        auto sourceNode = charAndNodeMap[source];
+        nodeAndPathMapCopy[sourceNode].nodes.push_back(sourceNode);
+        nodeAndPathMapCopy[sourceNode].distance = 0;
+
+        std::multiset<int> distances{0};
+        bool isDestinationFound = false;
+        while (!nodeAndPathMapCopy.empty() && !distances.empty())
+        {
+            auto lowestDistanceIt = distances.begin();
+            auto currentNodeAndPathIt = std::find_if(nodeAndPathMapCopy.begin(),
+                                                    nodeAndPathMapCopy.end(),
+                                                    [&lowestDistanceIt](const auto& nodeAndPath)
+                                                    {
+                                                        return nodeAndPath.second.distance ==
+                                                                *lowestDistanceIt;
+                                                    });
+            const auto& currentNode = currentNodeAndPathIt->first;
+            const auto& currentPath = currentNodeAndPathIt->second;
+
+            if (currentNode->data == destination)
+            {
+                isDestinationFound = true;
+                break;
+            }
+
+            for (const auto& neighborNode : currentNode->neighbors)
+            {
+                if (nodeAndPathMapCopy.count(neighborNode.node) == 0) continue; // means it is already visited
+
+                int neighborDistance = currentPath.distance + neighborNode.weight;
+                if (nodeAndPathMapCopy[neighborNode.node].distance < neighborDistance) continue; // means it is already in queue for visiting with a lower path
+    
+                auto distancesIt = std::find(distances.begin(),
+                                            distances.end(),
+                                            nodeAndPathMapCopy[neighborNode.node].distance);
+                if (distancesIt != distances.end()) distances.erase(distancesIt);
+                distances.insert(neighborDistance);
+    
+                nodeAndPathMapCopy[neighborNode.node].nodes = currentPath.nodes;
+                nodeAndPathMapCopy[neighborNode.node].nodes.push_back(neighborNode.node);
+                nodeAndPathMapCopy[neighborNode.node].distance = neighborDistance;
+            }
+            distances.erase(lowestDistanceIt);
+            nodeAndPathMapCopy.erase(currentNodeAndPathIt);
+        }
+
+        auto destinationNode = charAndNodeMap[destination];
+        printPath(source, destination, nodeAndPathMapCopy[destinationNode]);
+    }
+}
+
+int main()
+{
+    constructNodes();
+    printNodes();
+    dijkstraAlgorithm();
+
+    return 0;
+}
