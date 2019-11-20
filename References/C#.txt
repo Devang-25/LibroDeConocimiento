@@ -1,0 +1,995 @@
+// Sock Merchant
+
+// John works at a clothing store. He has a large pile of socks that he must pair by color for sale. Given an array of integers representing the color of each sock, determine how many pairs of socks with matching colors there are.
+
+// For example, there are n=7 socks with colors ar = [1,2,1,2,1,3,2]. There is one pair of color 1 and one of color 2. There are three odd socks left, one of each color. The number of pairs is 2.
+
+// Sample Input
+// 9
+// 10 20 20 10 10 30 50 10 20
+// Sample Output
+// 3
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the sockMerchant function below.
+    static int sockMerchant(int n, int[] ar)
+    {
+        HashSet<int> arHashSet = new HashSet<int>();
+        int count = 0;
+        foreach (var sock in ar)
+        {
+            if (arHashSet.Contains(sock))
+            {
+                ++count;
+                arHashSet.Remove(sock);
+            }
+            else
+            {
+                arHashSet.Add(sock);
+            }
+        }
+        return count;
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int n = Convert.ToInt32(Console.ReadLine());
+
+        int[] ar = Array.ConvertAll(Console.ReadLine().Split(' '), arTemp => Convert.ToInt32(arTemp))
+        ;
+        int result = sockMerchant(n, ar);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// Counting Valleys
+
+// Gary is an avid hiker. He tracks his hikes meticulously, paying close attention to small details like topography. During his last hike he took exactly  steps. For every step he took, he noted if it was an uphill, U, or a downhill, D step. Gary's hikes start and end at sea level and each step up or down represents a 1 unit change in altitude. We define the following terms:
+// - A mountain is a sequence of consecutive steps above sea level, starting with a step up from sea level and ending with a step down to sea level.
+// - A valley is a sequence of consecutive steps below sea level, starting with a step down from sea level and ending with a step up to sea level.
+
+// Given Gary's sequence of up and down steps during his last hike, find and print the number of valleys he walked through.
+
+// For example, if Gary's path is s = [DDUUUUDD], he first enters a valley 2 units deep. Then he climbs out an up onto a mountain 2 units high. Finally, he returns to sea level and ends his hike.
+
+// Sample Input
+// 8
+// UDDDUDUU
+// Sample Output
+// 1
+// Explanation
+// If we represent _ as sea level, a step up as /, and a step down as \, Gary's hike can be drawn as:
+// _/\      _
+//    \    /
+//     \/\/
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the countingValleys function below.
+    static int countingValleys(int n, string s) {
+        if (n == 0 || s.Length == 0) return 0;
+
+        Dictionary<char, int> STEP_VALUE = new Dictionary<char, int>()
+                                            {
+                                                {'U', 1},
+                                                {'D', -1},
+                                            };
+        int currentLevel = 0;
+        int valleysCount = 0;
+        foreach (var ch in s)
+        {
+            currentLevel += STEP_VALUE[ch];
+            valleysCount += Convert.ToInt32(currentLevel == 0 && ch == 'U');
+        }
+        return valleysCount;
+
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int n = Convert.ToInt32(Console.ReadLine());
+
+        string s = Console.ReadLine();
+
+        int result = countingValleys(n, s);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// Jumping on the Clouds
+
+// Emma is playing a new mobile game that starts with consecutively numbered clouds. Some of the clouds are thunderheads and others are cumulus. She can jump on any cumulus cloud having a number that is equal to the number of the current cloud plus 1 or 2. She must avoid the thunderheads. Determine the minimum number of jumps it will take Emma to jump from her starting postion to the last cloud. It is always possible to win the game.
+
+// For each game, Emma will get an array of clouds numbered 0 if they are safe or 1 if they must be avoided. For example, c=[0,1,0,0,0,1,0] indexed from 0...6. The number on each cloud is its index in the list so she must avoid the clouds at indexes 1 and 5. She could follow the following two paths: 0-2-4-6 or 0-2-3-4-6. The first path takes 3 jumps while the second takes 4.
+
+// Sample Input 0
+// 7
+// 0 0 1 0 0 1 0
+// Sample Output 0
+// 4
+
+// Sample Input 1
+// 6
+// 0 0 0 0 1 0
+// Sample Output 1
+// 3
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the jumpingOnClouds function below.
+    static int jumpingOnClouds(int[] c)
+    {
+        int numberOfJumps = 0;
+        int LAST_CLOUD = c.Length - 1;
+        for (int ctr = 0; ctr < LAST_CLOUD; )
+        {
+            if (ctr + 2 >= LAST_CLOUD || c[ctr + 2] != 1) ctr += 2;
+            else ctr += 1;
+            ++numberOfJumps;
+        }
+        return numberOfJumps;
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int n = Convert.ToInt32(Console.ReadLine());
+
+        int[] c = Array.ConvertAll(Console.ReadLine().Split(' '), cTemp => Convert.ToInt32(cTemp))
+        ;
+        int result = jumpingOnClouds(c);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// Repeated String
+
+// Lilah has a string, s, of lowercase English letters that she repeated infinitely many times.
+
+// Given an integer, n, find and print the number of letter a's in the first n letters of Lilah's infinite string.
+
+// For example, if the string s='abcac' and n=10, the substring we consider is abcacabcac, the first 10 characters of her infinite string. There are 4 occurrences of a in the substring.
+
+// Sample Input 0
+// aba
+// 10
+// Sample Output 0
+// 7
+// Explanation 0
+// The first n=10 letters of the infinite string are abaabaabaa. Because there are 7 a's, we print 7 on a new line.
+
+// Sample Input 1
+// a
+// 1000000000000
+// Sample Output 1
+// 1000000000000
+// Explanation 1
+// Because all of the first n=1000000000000 letters of the infinite string are a, we print 1000000000000 on a new line.
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the repeatedString function below.
+    static long repeatedString(string s, long n)
+    {
+        long stringLength = s.Length;
+        long fullRepeatingStringCountOfA = (n / stringLength) * s.Count(ch => ch == 'a');
+        int stringRemainderLength = Convert.ToInt32(n % stringLength);
+        string stringRemainder = s.Substring(0, stringRemainderLength);
+        return fullRepeatingStringCountOfA + stringRemainder.Count(ch => ch == 'a');
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string s = Console.ReadLine();
+
+        long n = Convert.ToInt64(Console.ReadLine());
+
+        long result = repeatedString(s, n);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// Find Merge Point of Two Lists
+
+// This challenge is part of a tutorial track by MyCodeSchool
+
+// Given pointers to the head nodes of 2 linked lists that merge together at some point, find the Node where the two lists merge. It is guaranteed that the two head Nodes will be different, and neither will be NULL.
+
+// In the diagram below, the two lists converge at Node x:
+
+// [List #1] a--->b--->c
+//                      \
+//                       x--->y--->z--->NULL
+//                      /
+//      [List #2] p--->q
+
+// Complete the int findMergeNode(SinglyLinkedListNode* head1, SinglyLinkedListNode* head2) method so that it finds and returns the data value of the Node where the two lists merge.
+
+// Test Case 0
+//  1
+//   \
+//    2--->3--->NULL
+//   /
+//  1
+// Test Case 1
+// 1--->2
+//       \
+//        3--->Null
+//       /
+//      1
+// Sample Output
+// 2
+// 3
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    class SinglyLinkedListNode {
+        public int data;
+        public SinglyLinkedListNode next;
+
+        public SinglyLinkedListNode(int nodeData) {
+            this.data = nodeData;
+            this.next = null;
+        }
+    }
+
+    class SinglyLinkedList {
+        public SinglyLinkedListNode head;
+        public SinglyLinkedListNode tail;
+
+        public SinglyLinkedList() {
+            this.head = null;
+            this.tail = null;
+        }
+
+        public void InsertNode(int nodeData) {
+            SinglyLinkedListNode node = new SinglyLinkedListNode(nodeData);
+
+            if (this.head == null) {
+                this.head = node;
+            } else {
+                this.tail.next = node;
+            }
+
+            this.tail = node;
+        }
+    }
+
+    static void PrintSinglyLinkedList(SinglyLinkedListNode node, string sep, TextWriter textWriter) {
+        while (node != null) {
+            textWriter.Write(node.data);
+
+            node = node.next;
+
+            if (node != null) {
+                textWriter.Write(sep);
+            }
+        }
+    }
+
+    // Complete the findMergeNode function below.
+
+    /*
+     * For your reference:
+     *
+     * SinglyLinkedListNode {
+     *     int data;
+     *     SinglyLinkedListNode next;
+     * }
+     *
+     */
+    static int findMergeNode(SinglyLinkedListNode head1, SinglyLinkedListNode head2)
+    {
+        HashSet<SinglyLinkedListNode> nodeSet = new HashSet<SinglyLinkedListNode>();
+        while (head1 != null || head2 != null)
+        {
+            if (head1 != null)
+            {
+                if (!nodeSet.Add(head1)) return head1.data;
+                head1 = head1.next;
+            }
+            if (head2 != null)
+            {
+                if (!nodeSet.Add(head2)) return head2.data;
+                head2 = head2.next;
+            }
+        }
+        return -1;
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int tests = Convert.ToInt32(Console.ReadLine());
+
+        for (int testsItr = 0; testsItr < tests; testsItr++) {
+            int index = Convert.ToInt32(Console.ReadLine());
+
+            SinglyLinkedList llist1 = new SinglyLinkedList();
+
+            int llist1Count = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < llist1Count; i++) {
+                int llist1Item = Convert.ToInt32(Console.ReadLine());
+                llist1.InsertNode(llist1Item);
+            }
+
+            SinglyLinkedList llist2 = new SinglyLinkedList();
+
+            int llist2Count = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < llist2Count; i++) {
+                int llist2Item = Convert.ToInt32(Console.ReadLine());
+                llist2.InsertNode(llist2Item);
+            }
+
+            SinglyLinkedListNode ptr1 = llist1.head;
+            SinglyLinkedListNode ptr2 = llist2.head;
+
+            for (int i = 0; i < llist1Count; i++) {
+                if (i < index) {
+                    ptr1 = ptr1.next;
+                }
+            }
+
+            for (int i = 0; i < llist2Count; i++) {
+                if (i != llist2Count-1) {
+                    ptr2 = ptr2.next;
+                }
+            }
+
+            ptr2.next = ptr1;
+
+            int result = findMergeNode(llist1.head, llist2.head);
+
+            textWriter.WriteLine(result);
+        }
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// Sherlock and the Valid String
+
+// Sherlock considers a string to be valid if all characters of the string appear the same number of times. It is also valid if he can remove just 1 character at 1 index in the string, and the remaining characters will occur the same number of times. Given a string , determine if it is valid. If so, return YES, otherwise return NO.
+
+// For example, if s=abc, it is a valid string because frequencies are {a:1, b:1, c:1}. So is s=abcc because we can remove one c and have 1 of each character in the remaining string. If s=abccc however, the string is not valid as we can only remove 1 occurrence of c. That would leave character frequencies of {a:1, b:1, c:2}.
+
+// Sample Input 0
+// aabbcd
+// Sample Output 0
+// NO
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the isValid function below.
+    static string isValid(string s)
+    {
+        Dictionary<char, int> charAndCountDict = new Dictionary<char, int>();
+        foreach (var ch in s)
+        {
+            if (!charAndCountDict.ContainsKey(ch))
+            {
+                charAndCountDict.Add(ch, 0);
+            }
+            ++charAndCountDict[ch];
+        }
+
+        if (charAndCountDict.Count == 1)
+        {
+            return "YES";
+        }
+        else if (charAndCountDict.Count == 2)
+        {
+            return Math.Abs(charAndCountDict.Values.ElementAt(0) -
+                            charAndCountDict.Values.ElementAt(1))
+                    <= 1 ?
+                    "YES" :
+                    "NO";
+        }
+
+        int repeatingCount = charAndCountDict.Values.ElementAt(0) ==
+                            charAndCountDict.Values.ElementAt(1) ?
+                                charAndCountDict.Values.ElementAt(0) :
+                                charAndCountDict.Values.ElementAt(2);
+        bool isOtherCountKnown = false;
+
+        foreach (var currentCount in charAndCountDict.Values)
+        {
+            if (currentCount == repeatingCount) continue;
+            if (isOtherCountKnown ||
+                (currentCount != 1 && Math.Abs(currentCount - repeatingCount) != 1))
+            {
+                return "NO";
+            }
+
+            isOtherCountKnown = true;
+        }
+        return "YES";
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string s = Console.ReadLine();
+
+        string result = isValid(s);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// 2D Array - DS
+
+// Given a 6x6 2D Array, arr:
+// 1 1 1 0 0 0
+// 0 1 0 0 0 0
+// 1 1 1 0 0 0
+// 0 0 0 0 0 0
+// 0 0 0 0 0 0
+// 0 0 0 0 0 0
+
+// We define an hourglass in A to be a subset of values with indices falling in this pattern in arr's graphical representation:
+// a b c
+//   d
+// e f g
+
+// There are 16 hourglasses in arr, and an hourglass sum is the sum of an hourglass' values. Calculate the hourglass sum for every hourglass in arr, then print the maximum hourglass sum.
+
+// For example, given the 2D array:
+// -9 -9 -9  1 1 1
+//  0 -9  0  4 3 2
+// -9 -9 -9  1 2 3
+//  0  0  8  6 6 0
+//  0  0  0 -2 0 0
+//  0  0  1  2 4 0
+//  We calculate the following 16 hourglass values:
+// -63, -34, -9, 12,
+// -10, 0, 28, 23,
+// -27, -11, -2, 10,
+// 9, 17, 25, 18
+// Our highest hourglass value is 28 from the hourglass:
+// 0 4 3
+//   1
+// 8 6 6
+
+// Sample Input
+// 1 1 1 0 0 0
+// 0 1 0 0 0 0
+// 1 1 1 0 0 0
+// 0 0 2 4 4 0
+// 0 0 0 2 0 0
+// 0 0 1 2 4 0
+// Sample Output
+// 19
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the hourglassSum function below.
+    static int hourglassSum(int[][] arr)
+    {
+        int[] hourGlassesSums = new int[16];
+
+        int topHourGlassCtr = 0;
+        int midHourGlassCtr = 0;
+        int botHourGlassCtr = 0;
+
+        // int firstTopHourGlassLine = 0; // No need to specify
+        int firstMidHourGlassLine = 1;
+        int firstBotHourGlassLine = 2;
+
+        int HOUR_GLASS_PER_LINE = 4;
+
+        for (int line = 0; line < 6; ++line)
+        {
+            int currentThreeSum = arr[line][0] + arr[line][1] + arr[line][2];
+
+            for (int hourGlassCtr = 0; hourGlassCtr < HOUR_GLASS_PER_LINE; ++hourGlassCtr)
+            {
+                if (hourGlassCtr > 0)
+                {
+                    currentThreeSum += arr[line][hourGlassCtr + 2];
+                    currentThreeSum -= arr[line][hourGlassCtr - 1];
+                }
+
+                if (topHourGlassCtr < 16)
+                {
+                    hourGlassesSums[topHourGlassCtr++] += currentThreeSum;
+                }
+                if (line >= firstBotHourGlassLine && botHourGlassCtr < 16)
+                {
+                    hourGlassesSums[botHourGlassCtr++] += currentThreeSum;
+                }
+                if (line >= firstMidHourGlassLine && midHourGlassCtr < 16)
+                {
+                    hourGlassesSums[midHourGlassCtr++] += arr[line][hourGlassCtr + 1];
+                }
+            }
+        }
+
+        return hourGlassesSums.Max();
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int[][] arr = new int[6][];
+
+        for (int i = 0; i < 6; i++) {
+            arr[i] = Array.ConvertAll(Console.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
+        }
+
+        int result = hourglassSum(arr);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// Arrays: Left Rotation
+
+// A left rotation operation on an array shifts each of the array's elements 1 unit to the left. For example, if 2 left rotations are performed on array [1,2,3,4,5], then the array would become [3,4,5,1,2].
+
+// Given an array a of n integers and a number, d, perform d left rotations on the array. Return the updated array to be printed as a single line of space-separated integers.
+
+// Sample Input
+// 5 4
+// 1 2 3 4 5
+// Sample Output
+// 5 1 2 3 4
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the rotLeft function below.
+    static int[] rotLeft(int[] a, int d) {
+        d %= a.Length;
+
+        Queue buffer = new Queue();
+        int currentIndex = 0;
+        for (int ctr = d; ctr < a.Length; ++ctr)
+        {
+            buffer.Enqueue(a[currentIndex]);
+            a[currentIndex++] = a[ctr];
+        }
+        while (currentIndex < a.Length)
+        {
+            buffer.Enqueue(a[currentIndex]);
+            a[currentIndex++] = Convert.ToInt32(buffer.Dequeue());
+        }
+        return a;
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string[] nd = Console.ReadLine().Split(' ');
+
+        int n = Convert.ToInt32(nd[0]);
+
+        int d = Convert.ToInt32(nd[1]);
+
+        int[] a = Array.ConvertAll(Console.ReadLine().Split(' '), aTemp => Convert.ToInt32(aTemp))
+        ;
+        int[] result = rotLeft(a, d);
+
+        textWriter.WriteLine(string.Join(" ", result));
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// New Year Chaos
+
+// It's New Year's Day and everyone's in line for the Wonderland rollercoaster ride! There are a number of people queued up, and each person wears a sticker indicating their initial position in the queue. Initial positions increment by 1 from 1 at the front of the line to n at the back.
+
+// Any person in the queue can bribe the person directly in front of them to swap positions. If two people swap positions, they still wear the same sticker denoting their original places in line. One person can bribe at most two others. For example, if n=8 and Person 5 bribes Person 4, the queue will look like this: 1,2,3,4,5,6,7,8.
+
+// Fascinated by this chaotic queue, you decide you must know the minimum number of bribes that took place to get the queue into its current state!
+
+// Sample Input
+// 2
+// 5
+// 2 1 5 3 4
+// 5
+// 2 5 1 3 4
+// Sample Output
+// 3
+// Too chaotic
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the minimumBribes function below.
+    // solution 1 - too slow
+    // static void minimumBribes(int[] q)
+    // {
+    //     var qList = q.ToList();
+
+    //     int totalBribes = 0;
+    //     for (int ctr = qList.Count - 1; ctr >= 0; --ctr)
+    //     {
+    //         int originalPerson = ctr + 1;
+    //         int currentPosition = qList.IndexOf(originalPerson) + 1;
+    //         int diff = originalPerson - currentPosition;
+
+    //         if (diff > 2)
+    //         {
+    //             Console.WriteLine("Too chaotic");
+    //             return;
+    //         }
+    //         totalBribes += diff;
+    //         qList.Remove(originalPerson);
+    //     }
+    //     Console.WriteLine(totalBribes);
+    // }
+
+    // solution 2 - slow
+    // static void minimumBribes(int[] q)
+    // {
+    //     // var qList = q.ToList();
+    //     int totalBribes = 0;
+    //     for (int ctr = q.Length - 1; ctr >= 0; --ctr)
+    //     {
+    //         if (q[ctr] > ctr + 2 + 1)
+    //         {
+    //             Console.WriteLine("Too chaotic");
+    //             return;
+    //         }
+    //         // Where(elem => elem > q[ctr])
+    //         for (int ctr2 = 0; ctr2 < ctr; ++ctr2)
+    //         {
+    //             if (q[ctr2] > q[ctr]) ++totalBribes;
+    //         }
+    //     }
+    //     Console.WriteLine(totalBribes);
+    // }
+
+    static void minimumBribes(int[] q)
+    {
+        // var qList = q.ToList();
+        int totalBribes = 0;
+        for (int ctr = q.Length - 1; ctr >= 0; --ctr)
+        {
+            if (q[ctr] > ctr + 2 + 1)
+            {
+                Console.WriteLine("Too chaotic");
+                return;
+            }
+            // Where(elem => elem > q[ctr])
+            int maxForwardMovement = Math.Max(q[ctr] - 2 - 1, 0);
+            for (int ctr2 = maxForwardMovement; ctr2 < ctr; ++ctr2)
+            {
+                if (q[ctr2] > q[ctr]) ++totalBribes;
+            }
+        }
+        Console.WriteLine(totalBribes);
+    }
+
+    static void Main(string[] args) {
+        int t = Convert.ToInt32(Console.ReadLine());
+
+        for (int tItr = 0; tItr < t; tItr++) {
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            int[] q = Array.ConvertAll(Console.ReadLine().Split(' '), qTemp => Convert.ToInt32(qTemp))
+            ;
+            minimumBribes(q);
+        }
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// Minimum Swaps 2
+
+// You are given an unordered array consisting of consecutive integers [1, 2, 3, ..., n] without any duplicates. You are allowed to swap any two elements. You need to find the minimum number of swaps required to sort the array in ascending order.
+
+// For example, given the array arr=[7,1,3,2,4,5,6] we perform the following steps:
+
+// i   arr                         swap (indices)
+// 0   [7, 1, 3, 2, 4, 5, 6]   swap (0,3)
+// 1   [2, 1, 3, 7, 4, 5, 6]   swap (0,1)
+// 2   [1, 2, 3, 7, 4, 5, 6]   swap (3,4)
+// 3   [1, 2, 3, 4, 7, 5, 6]   swap (4,5)
+// 4   [1, 2, 3, 4, 5, 7, 6]   swap (5,6)
+// 5   [1, 2, 3, 4, 5, 6, 7]
+
+// It took 5 swaps to sort the array.
+
+// Sample Input 0
+// 4
+// 4 3 1 2
+// Sample Output 0
+// 3
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the minimumSwaps function below.
+    // solution 1 - working ok
+    // static int minimumSwaps(int[] arr)
+    // {
+    //     // var arrSorted = (int[])arr.Clone();
+    //     // var arrSorted = arr.Clone().Cast<int>().ToArray();
+    //     // var arrSorted = Array.ConvertAll<System.Int32, int>(arr.Clone(), elem => Convert.ToInt32(elem));
+    //     // Console.WriteLine(arrSorted.GetType());
+
+    //     // Array.Sort(arrSorted);
+    //     int totalSwaps = 0;
+    //     for (int ctr = 0; ctr < arr.Length; ++ctr)
+    //     {
+    //         while (arr[ctr] != ctr + 1)
+    //         {
+    //             int temp = arr[ctr];
+    //             arr[ctr] = arr[temp - 1];
+    //             arr[temp - 1] = temp;
+    //             ++totalSwaps;
+    //         }
+    //     }
+    //     return totalSwaps;// > 0 ? totalSwaps - 1 : 0;
+    // }
+
+    static int minimumSwaps(int[] arr)
+    {
+        Dictionary<int, int> arrDict = new Dictionary<int, int>();
+        for (int ctr = 0; ctr < arr.Length; ++ctr)
+        {
+            arrDict.Add(arr[ctr], ctr);
+        }
+        int totalSwaps = 0;
+        for (int ctr = 0; ctr < arr.Length; ++ctr)
+        {
+            int indexToSwap = arrDict[ctr + 1];
+            if (indexToSwap == ctr) continue;
+
+            arr[indexToSwap] = arr[ctr];
+            arrDict[arr[ctr]] = indexToSwap;
+            ++totalSwaps;
+        }
+        return totalSwaps;
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int n = Convert.ToInt32(Console.ReadLine());
+
+        int[] arr = Array.ConvertAll(Console.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp))
+        ;
+        int res = minimumSwaps(arr);
+
+        textWriter.WriteLine(res);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------
+
+// PermMissingElem
+
+// An array A consisting of N different integers is given. The array contains integers in the range [1..(N + 1)], which means that exactly one element is missing.
+
+// Your goal is to find that missing element.
+
+// Write a function:
+
+// class Solution { public int solution(int[] A); }
+
+// that, given an array A, returns the value of the missing element.
+
+// For example, given array A such that:
+
+//   A[0] = 2
+//   A[1] = 3
+//   A[2] = 1
+//   A[3] = 5
+// the function should return 4, as it is the missing element.
+
+// Write an efficient algorithm for the following assumptions:
+
+// N is an integer within the range [0..100,000];
+// the elements of A are all distinct;
+// each element of array A is an integer within the range [1..(N + 1)].
+// Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
+
+using System;
+// you can also use other imports, for example:
+// using System.Collections.Generic;
+
+// you can write to stdout for debugging purposes, e.g.
+// Console.WriteLine("this is a debug message");
+
+class Solution {
+    public int solution(int[] A) {
+        // write your code in C# 6.0 with .NET 4.5 (Mono)
+        Array.Sort(A);
+        for (int ctr = 0; ctr < A.Length; ++ctr)
+        {
+            if (A[ctr] != ctr + 1) return ctr + 1;
+        }
+        return A.Length + 1;
+    }
+}
