@@ -993,3 +993,380 @@ class Solution {
         return A.Length + 1;
     }
 }
+
+-------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace eto
+{
+
+/*
+3 using 1 2
+1 1 1
+1 2
+2 1
+
+4 using 1 2
+1 1 1 1
+1 1 2
+1 2 1
+2 1 1
+2 2
+
+5 using 1 2
+1 1 1 1 1
+1 1 1 2
+1 1 2 1
+1 2 1 1
+1 2 2
+2 1 1 1
+2 1 2
+2 2 1
+
+6 using 1 2
+1 1 1 1 1 1
+1 1 1 1 2
+1 1 1 2 1
+1 1 2 1 1
+1 1 2 2
+1 2 1 1 1
+1 2 1 2
+1 2 2 1
+2 1 1 1 1
+2 1 1 2
+2 1 2 1
+2 2 1 1
+2 2 2
+
+6 using 1 3 5
+1 1 1 1 1 1
+1 1 1 3
+1 1 3 1
+1 3 1 1
+1 5
+3 1 1 1
+3 3
+5 1
+*/
+
+public class MainProgram
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine();
+        (new MainProgram()).RealMain();
+    }
+
+    public void RealMain()
+    {
+        int[] allowedSteps = {1, 3, 5};//{1, 2};
+        int stairsHeight = 4;//6;//Convert.ToInt32(Console.ReadLine());
+
+        int initialHeight = 0;
+        int waysCount = 0;
+
+        countNumberOfWays(allowedSteps, stairsHeight, initialHeight, ref waysCount);
+        Console.WriteLine("Number of ways to climb the stairs is " + waysCount);
+    }
+
+    private void countNumberOfWays(
+        int[] allowedSteps,
+        int stairsHeight,
+        int currentHeight,
+        ref int waysCount)
+    {
+        foreach (var step in allowedSteps)
+        {
+            int updatedHeight = currentHeight + step;
+            if (updatedHeight == stairsHeight)
+            {
+                ++waysCount;
+                return;
+            }
+            else if (updatedHeight > stairsHeight)
+            {
+                return;
+            }
+            else
+            {
+                countNumberOfWays(allowedSteps, stairsHeight, updatedHeight, ref waysCount);
+            }
+        }
+    }
+}
+
+}
+
+-------------------------------------------------------------------------------
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+interface ReachableEndChecker
+{
+    string name();
+    void reachTheEnd(int[] numbers);
+}
+
+class BackwardsValidator : ReachableEndChecker
+{
+    public virtual string name()
+    {
+        return "[BackwardsValidator]";
+    }
+
+    public virtual void reachTheEnd(int[] numbers)
+    {
+        // bool[] reachableEnd = new bool[numbers.Length]; // default is false
+        bool[] reachableEndArr = Enumerable.Repeat<bool>(false, numbers.Length).ToArray();
+
+        for (int index = numbers.Length - 1; index >= 0; --index)
+        {
+            int maxReachableIndex = index + numbers[index];
+            if (maxReachableIndex >= numbers.Length) reachableEndArr[index] = true;
+            for (int reachedIndex = index + 1;
+                reachedIndex < numbers.Length && reachedIndex <= maxReachableIndex;
+                ++reachedIndex)
+            {
+                if (reachableEndArr[reachedIndex])
+                {
+                    reachableEndArr[index] = true;
+                    break;
+                }
+            }
+        }
+
+        bool result = reachableEndArr.Length == 0 ? false : reachableEndArr[0];
+        Console.Write("\n" + this.name() + " " + result);
+        if (result)
+        {
+            Console.Write("\n" + name() + "\tPossible indexes path to end : 0 ");
+            for (int index = 0, maxReachableIndex = 0; maxReachableIndex < numbers.Length;)
+            {
+                maxReachableIndex = index + numbers[index];
+                for (int reachedIndex = maxReachableIndex;
+                    reachedIndex < numbers.Length && reachedIndex > index;
+                    --reachedIndex)
+                {
+                    if (reachableEndArr[reachedIndex])
+                    {
+                        Console.Write(reachedIndex + " ");
+                        index = reachedIndex;
+                        break;
+                    }
+                }
+            }
+            Console.Write("end");
+        }
+        else
+        {
+            Console.Write("\n" + name() + "\tPossible indexes path to end : None");
+        }
+    }
+}
+
+class DfsRecursion : ReachableEndChecker
+{
+    public virtual string name()
+    {
+        return "[DfsRecursion]";
+    }
+
+    public virtual void reachTheEnd(int[] numbers)
+    {
+        List<int> indexesInPath = new List<int>();
+        bool result = dfs(numbers, 0, indexesInPath);
+
+        Console.Write("\n" + name() + " " + result);
+        Console.Write("\n" + name() + "\tPossible indexes path to end : ");
+        if (result)
+        {
+            foreach (var index in indexesInPath) Console.Write(index + " ");
+            Console.Write("end");
+        }
+        else
+        {
+            Console.Write("None");
+        }
+    }
+
+    private bool dfs(
+        int[] numbers,
+        int currentIndex,
+        List<int> indexesInPath)
+    {
+        indexesInPath.Add(currentIndex);
+        int maxReachableIndex = currentIndex + numbers[currentIndex];
+        if (maxReachableIndex >= numbers.Length)
+        {
+            return true;
+        }
+        for (int index = maxReachableIndex;
+            index > currentIndex && index < numbers.Length;
+            --index)
+        {
+            bool result = dfs(numbers, index, indexesInPath);
+            if (result) return true;
+        }
+        indexesInPath.RemoveAt(indexesInPath.Count - 1);
+        return false;
+    }
+}
+
+// abstract class BfsGraphNodes : ReachableEndChecker
+// {
+//     public abstract string Name();
+//     public abstract void reachTheEnd(int[] numbers);
+// }
+
+class BfsGraphNodes : ReachableEndChecker
+// this finds the guaranteed shortest path unlike the others which just prioritizes
+// the next longest step possible on every step thus failing on cases like [4, 2, 1, 9, 1, 1, 1]
+{
+    public virtual string name()
+    {
+        return "[BfsGraphNodes]";
+    }
+
+    public virtual void reachTheEnd(int[] numbers)
+    {
+        var nodeDict = createNodes(numbers);
+        connectNodes(numbers, nodeDict);
+
+        bool isPathFound = false;
+        HashSet<int> visited = new HashSet<int>();
+
+        Queue nodesQueue = new Queue();
+        nodesQueue.Enqueue(nodeDict[0]);
+        while (nodesQueue.Count > 0)
+        {
+            var currentNode = (Node<int>)nodesQueue.Dequeue();
+
+            if (visited.Contains(currentNode.index)) continue;
+            visited.Add(currentNode.index);
+
+            currentNode.path.Add(currentNode);
+            if (currentNode.index + currentNode.data >= numbers.Length)
+            {
+                isPathFound = true;
+                Console.Write("\n" + name() + " " + isPathFound);
+                Console.Write("\n" + name() + "\tPossible indexes path to end : ");
+                foreach (var node in currentNode.path) Console.Write(node.index + " ");
+                Console.Write("end");
+                break;
+            }
+            foreach (var conn in currentNode.connected)
+            {
+                if (conn.path.Count != 0) continue;
+                conn.path = new List<Node<int>>(currentNode.path);
+                nodesQueue.Enqueue(conn);
+            }
+        }
+
+        if (!isPathFound)
+        {
+            Console.Write("\n" + name() + " " + isPathFound);
+            Console.Write("\n" + name() + "\tPossible indexes path to end : None");
+        }
+    }
+
+    private Dictionary<int, Node<int>> createNodes(int[] numbers)
+    {
+        var nodeDict = new Dictionary<int, Node<int>>();
+        for (int index = 0; index < numbers.Length; ++index)
+        {
+            var node = new Node<int>
+                        {
+                            index = index,
+                            data = numbers[index],
+                            connected = new List<Node<int>>(),
+                            path = new List<Node<int>>()
+                        };
+            nodeDict.Add(index, node);
+        }
+        return nodeDict;
+    }
+
+    private void connectNodes(
+        int[] numbers,
+        Dictionary<int, Node<int>> nodeDict)
+    {
+        for (int index = 0; index < numbers.Length; ++index)
+        {
+            int maxReachableIndex = index + numbers[index];
+            for (int reachedIndex = index + 1;
+                reachedIndex < numbers.Length && reachedIndex <= maxReachableIndex;
+                ++reachedIndex)
+            {
+                nodeDict[index].connected.Add(nodeDict[reachedIndex]);
+            }
+        }
+        // Console.WriteLine();
+        // foreach (var node in nodeDict)
+        // {
+        //     Console.WriteLine(node.Value.data);
+        //     foreach (var conn in node.Value.connected)
+        //     {
+        //         Console.WriteLine("\t" + conn.index + ":" + conn.data);
+        //     }
+        // }
+    }
+
+    private class Node<DataType>
+    {
+        public int index;
+        public DataType data;// { get; set; }
+        public List<Node<DataType>> connected;// { get; set; }
+        public List<Node<DataType>> path;
+    }
+}
+
+class HelloWorld
+{
+  static void Main()
+  {
+    (new HelloWorld()).RealMain();
+  }
+
+  void RealMain()
+  {
+        ReachableEndChecker[] checkers =
+            {
+                new BackwardsValidator(),
+                new DfsRecursion(),
+                new BfsGraphNodes(),
+            };
+
+        List<List<int>> numbersList =
+            new List<List<int>>
+            {
+                new List<int>{4, 3, 1, 3, 1, 0, 4},
+                new List<int>{1, 0, 1, 0, 0, 1},
+                new List<int>{3, 2, 2, 1, 0},
+                new List<int>{3, 2, 3, 1, 0},
+                new List<int>{6, 0, 3, 0, 2, 1, 0},
+                new List<int>{6, 0, 3, 0, 3, 1, 0},
+                new List<int>{4, 2, 1, 9, 1, 1, 1},
+            };
+
+        foreach (var numbers in numbersList)
+        {
+            Console.WriteLine();
+            foreach (var number in numbers) Console.Write(number + " ");
+            foreach (var checker  in checkers) checker.reachTheEnd(numbers.ToArray());
+        }
+  }
+}
