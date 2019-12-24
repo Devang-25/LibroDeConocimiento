@@ -1,6 +1,8 @@
 #ifndef SRC_COMMON_SAFEEXECUTION_HPP
 #define SRC_COMMON_SAFEEXECUTION_HPP
 
+#include <functional>
+
 #include <Common/Logger.hpp>
 
 namespace src::common
@@ -12,10 +14,17 @@ common::Logger safeExecutionLogger("SafeExecution");
 
 } // namespace
 
+template <typename Func = std::function<void()>>
 class SafeExecution
 {
 public:
-    SafeExecution()
+    SafeExecution() :
+        func_([](){return;})
+    {
+    }
+
+    SafeExecution(Func func) :
+        func_(func)
     {
     }
 
@@ -23,8 +32,18 @@ public:
     {
     }
 
-    template <typename Func>
-    void execute(Func func)
+    void operator()()
+    {
+        execute(func_);
+    }
+
+    void execute()
+    {
+        execute(func_);
+    }
+
+    template <typename NewFunc>
+    void execute(NewFunc func)
     {
         try
         {
@@ -47,6 +66,9 @@ public:
             safeExecutionLogger.print("Caught generic exception");
         }
     }
+
+private:
+    Func func_;
 };
 
 } // namespace src::common
