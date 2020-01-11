@@ -20,6 +20,7 @@ MessageEncryption
 WordCounter
 1. Add support for finding 2 words such as Artifical Intelligence, Machine Learning, etc.
 2. Sort by name the words that appear under the same count
+3. Implement multithreading or some concept of Map-Reduce
 
 Others-Game
 1. Save the trees. Player needs to fight against forest fires, illegal loggers, replanting in exchange of dying trees, etc.
