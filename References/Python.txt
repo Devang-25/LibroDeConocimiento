@@ -3332,3 +3332,213 @@ for _ in range(int(input())):
         print("False")
         continue
     print("True")
+
+--------------------------------------------------------------------
+
+# Minimum Operations
+
+# You are given a number N. You have to find the number of operations required to reach N from 0. You have 2 operations available:
+
+# Double the number
+# Add one to the number
+# Input:
+# The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. Each test case contains an integer N.
+
+# Output:
+# For each test case, in a new line, print the minimum number of operations required to reach N from 0.
+
+# Constraints:
+# 1<=T<=100
+# 1<=N<=104
+
+# Example:
+# Input:
+# 2
+# 8
+# 7
+# Input:
+# 4
+# 5
+
+# Explanation:
+# Testcase1:
+# Input  : N = 8
+# Output : 4
+# 0 + 1 = 1, 1 + 1 = 2, 2 * 2 = 4, 4 * 2 = 8
+# Testcase2:
+# Input  : N = 7
+# Output : 5
+# 0 + 1 = 1, 1 + 1 = 2, 1 + 2 = 3, 3 * 2 = 6, 6 + 1 = 7
+
+#code
+
+for _ in range(int(input())):
+    num = int(input())
+    ctr = 0
+    while (num != 0):
+        if num % 2 == 0:
+            num /= 2
+        else:
+            num -= 1
+        ctr = ctr + 1
+    print(ctr)
+
+--------------------------------------------------------------------
+
+# Find the element that appears once in sorted array
+
+# Given a sorted array A, size N, of integers; every element appears twice except for one. Find that element that appears once in array.
+
+# Input:
+# The first line of input consists of T, the number of the test cases. T testcases follow. Each testcase contains two lines of input.
+# The first line of each test case contains the size of the array, and the second line has the elements of the array.
+
+# Output:
+# For each testcase, in a new line, print the number that appears only once in the array.
+
+# Constraints:
+# 1 ≤ T ≤ 100
+# 1 ≤ N ≤ 107
+# 0 ≤ A[i] ≤ 1017
+
+# Example:
+# Input:
+# 1
+# 11
+# 1 1 2 2 3 3 4 50 50 65 65
+# Output:
+# 4
+
+#code
+
+# Solution 1
+# for _ in range(int(input())):
+#     length = int(input())
+#     numbers = list(map(int, input().split()))
+#     for index in range(0, length, 2):
+#         if index + 1 == length or numbers[index] != numbers[index+1]:
+#             print(numbers[index])
+#             break
+
+# Solution 2
+for _ in range(int(input())):
+    length = int(input())
+    numbers = list(map(int, input().split()))
+    
+    start = 0
+    end = length - 1
+    while start <= end:
+        middle = int((start + end) / 2)
+        # print("start", start, "middle", middle, "end", end)
+
+        isEqualToNext = middle + 1 < length and numbers[middle] == numbers[middle + 1]
+        isEqualToPrev = middle - 1 >= 0 and numbers[middle] == numbers[middle - 1]
+
+        if middle % 2 == 0:
+            if isEqualToNext: start = middle + 2
+            elif isEqualToPrev: end = middle - 2
+            else:
+                print(numbers[middle])
+                break
+        else:
+            if isEqualToNext: end = middle - 1
+            elif isEqualToPrev: start = middle + 1
+            else:
+                print(numbers[middle])
+                break
+
+--------------------------------------------------------------------
+
+# Search in a Rotated Array
+
+# Given a sorted and rotated array A of N distinct elements which is rotated at some point, and given an element K. The task is to find the index of the given element K in the array A.
+
+# Input:
+# The first line of the input contains an integer T, denoting the total number of test cases. Then T test cases follow. Each test case consists of three lines. First line of each test case contains an integer N denoting the size of the given array. Second line of each test case contains N space separated integers denoting the elements of the array A. Third line of each test case contains an integer K denoting the element to be searched in the array.
+
+# Output:
+# Corresponding to each test case, output the index of the element found in the array.  If element is not present, then output -1.
+
+# Constraints:
+# 1 ≤ T ≤ 100
+# 1 ≤ N ≤ 107
+# 0 ≤ Ai ≤ 108
+# 1 ≤ K ≤ 108
+
+# Example:
+# Input:
+# 3
+# 9
+# 5 6 7 8 9 10 1 2 3
+# 10
+# 3
+# 3 1 2
+# 1
+# 4
+# 3 5 1 2
+# 6
+
+# Output:
+# 5
+# 1
+# -1
+
+# Explanation:
+# Testcase 1: 10 is found at index 5.
+
+#code
+
+for _ in range(int(input())):
+    size = int(input())
+    array = list(map(int, input().split()))
+    target = int(input())
+
+    isInLeftPartition = lambda number : number >= array[0]
+    isInRightPartition = lambda number : number <= array[size - 1]
+    isFound = False
+    start = 0
+    end = size - 1
+    while start <= end:
+        middle = (start + end) // 2
+        if array[middle] == target:
+            isFound = True
+            print(middle)
+            break
+        elif isInLeftPartition(array[middle]):
+            if isInLeftPartition(target) and target < array[middle]:
+                end = middle - 1
+            else:
+                start = middle + 1
+        else: # isInRightPartition(array[middle])
+            if isInRightPartition(target) and target > array[middle]:
+                start = middle + 1
+            else:
+                end = middle - 1
+    if not isFound:
+        print(-1)
+
+--------------------------------------------------------------------
+
+# Trees: Is This a Binary Search Tree?
+
+""" Node is defined as
+class node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+"""
+def checkBST(root):
+    lastValue = [None]
+    return checkBSTImpl(root, lastValue)
+    
+def checkBSTImpl(root, lastValue):
+    if not root:
+        return True
+    if not checkBSTImpl(root.left, lastValue):
+        return False
+    if lastValue[0] and lastValue[0] >= root.data:
+        return False
+
+    lastValue[0] = root.data
+    return checkBSTImpl(root.right, lastValue)
