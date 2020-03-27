@@ -33,7 +33,9 @@ Others-All
 2. Create a new repository that will hold all small tools and scripts.
    First script: Parse learnings.txt and get the line numbers of the main topics (those that are not indented)
 3. Develop a Lifestyle app
-   a. Track daily expenses storing amount, currency, type of purchase (lunch, junk food, sweets, rent, etc.), payment mode
+   a. Track daily expenses storing amount, currency, type of purchase (lunch, junk food, sweets, meat, vegetables, fruits, rent,
+      etc.), payment mode
    b. Visualize data in charts
    c. Support both browser and mobile app
    d. More instances of Google Translator app
+   e. Track movies watched
