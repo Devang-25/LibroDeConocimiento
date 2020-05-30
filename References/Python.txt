@@ -3542,3 +3542,2508 @@ def checkBSTImpl(root, lastValue):
 
     lastValue[0] = root.data
     return checkBSTImpl(root.right, lastValue)
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+#!/bin/python3
+
+# 3D Surface Area
+
+# Madison, is a little girl who is fond of toys. Her friend Mason works in a toy manufacturing
+# factory . Mason has a 2D board A of size H x W with H rows and W columns. The board is divided
+# into cells of size 1x1 with each cell indicated by it's coordinate (i, j). The cell (i, j) has
+# an integer Aij written on it. To create the toy Mason stacks Aij number of cubes of size 1x1x1
+# on the cell (i, j).
+
+# Given the description of the board showing the values of Aij and that the price of the toy is
+# equal to the 3d surface area find the price of the toy.
+
+# Sample Input 0
+# 1 1
+# 1
+# Sample Output 0
+# 6
+
+# Sample Input 1
+# 3 3
+# 1 3 4
+# 2 2 3
+# 1 2 4
+# Sample Output 1
+# 60
+
+import math
+import os
+import random
+import re
+import sys
+
+# Complete the surfaceArea function below.
+def surfaceArea(boardCubes):
+    # Surfaces: top and bottom, front and back, left side and right side
+    result = 0
+
+    for rowIndex, rowCubes in enumerate(boardCubes):
+        for columnIndex, cubeStack in enumerate(rowCubes):
+            # top and bottom
+            TOP_AND_BOTTOM_AREA = 2
+            if cubeStack > 0: result += TOP_AND_BOTTOM_AREA
+
+            # back
+            backHeight = 0 if rowIndex == 0 \
+                            else boardCubes[rowIndex - 1][columnIndex]
+            backArea = cubeStack - backHeight
+            if backArea > 0: result += backArea
+
+            # front
+            frontHeight = 0 if rowIndex == (len(boardCubes) - 1) \
+                            else boardCubes[rowIndex + 1][columnIndex]
+            frontArea = cubeStack - frontHeight
+            if frontArea > 0: result += frontArea
+
+            # left side
+            leftSideHeight = 0 if columnIndex == 0 \
+                                else boardCubes[rowIndex][columnIndex - 1]
+            leftSideArea = cubeStack - leftSideHeight
+            if leftSideArea > 0: result += leftSideArea
+
+            # right side
+            rightSideHeight = 0 if columnIndex == (len(rowCubes) - 1) \
+                                else boardCubes[rowIndex][columnIndex + 1]
+            rightSideArea = cubeStack - rightSideHeight
+            if rightSideArea > 0: result += rightSideArea
+
+    return result
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    HW = input().split()
+
+    H = int(HW[0])
+
+    W = int(HW[1])
+
+    A = []
+
+    for _ in range(H):
+        A.append(list(map(int, input().rstrip().split())))
+
+    result = surfaceArea(A)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+#!/bin/python3
+
+import os
+
+"""
+The Bomberman Game
+
+Bomberman lives in a rectangular grid. Each cell in the grid either contains a bomb or nothing at all.
+
+Each bomb can be planted in any cell of the grid but once planted, it will detonate after exactly 3 seconds. Once a bomb detonates, it's destroyed — along with anything in its four neighboring cells. This means that if a bomb detonates in cell (i, j), any valid cells (i+-1, j) and (i, j+-1) are cleared. If there is a bomb in a neighboring cell, the neighboring bomb is destroyed without detonating, so there's no chain reaction.
+
+Bomberman is immune to bombs, so he can move freely throughout the grid. Here's what he does:
+1. Initially, Bomberman arbitrarily plants bombs in some of the cells, the initial state.
+2. After one second, Bomberman does nothing.
+3. After one more second, Bomberman plants bombs in all cells without bombs, thus filling the whole grid with bombs. No bombs detonate at this point.
+4. After one more second, any bombs planted exactly three seconds ago will detonate. Here, Bomberman stands back and observes.
+5. Bomberman then repeats steps 3 and 4 indefinitely.
+
+Note that during every second Bomberman plants bombs, the bombs are planted simultaneously (i.e., at the exact same moment), and any bombs planted at the same time will detonate at the same time.
+
+Given the initial configuration of the grid with the locations of Bomberman's first batch of planted bombs, determine the state of the grid after N seconds.
+
+For example, if the initial grid looks like:
+...
+.O.
+...
+it looks the same after the first second. After the second second, Bomberman has placed all his charges:
+OOO
+OOO
+OOO
+At the third second, the bomb in the middle blows up, emptying all surrounding cells:
+O.O
+...
+O.O
+
+Sample Input
+6 7 3
+.......
+...O...
+....O..
+.......
+OO.....
+OO.....
+Sample Output
+OOO.OOO
+OO...OO
+OOO...O
+..OO.OO
+...OOOO
+...OOOO
+Explanation
+The initial state of the grid is:
+.......
+...O...
+....O..
+.......
+OO.....
+OO.....
+Bomberman spends the first second doing nothing, so this is the state after 1 second:
+.......
+...O...
+....O..
+.......
+OO.....
+OO.....
+Bomberman plants bombs in all the empty cells during his second second, so this is the state after 2 seconds:
+OOOOOOO
+OOOOOOO
+OOOOOOO
+OOOOOOO
+OOOOOOO
+OOOOOOO
+In his third second, Bomberman sits back and watches all the bombs he planted 3 seconds ago detonate. This is the final state after 3 seconds:
+OOO.OOO
+OO...OO
+OOO...O
+..OO.OO
+...OOOO
+...OOOO
+
+uno
+    0 init
+        ...
+        .0.
+        ...
+    1 wait
+        ...
+        .1.
+        ...
+    2 fill
+        000
+        020
+        000
+    3 boom+wait
+        1.1
+        ...
+        1.1
+    4 fill
+        202
+        000
+        202
+    5 boom+wait
+        ...
+        .1.
+        ...
+    6 fill
+        000
+        020
+        000
+dos
+    0 init
+        ...
+        0..
+        0..
+    1 wait
+        ...
+        1..
+        1..
+    2 fill
+        000
+        200
+        200
+    3 boom+wait
+        .11
+        ..1
+        ..1
+    4 fill
+        022
+        002
+        002
+    5 boom+wait
+        ...
+        1..
+        1..
+    6 fill
+        000
+        200
+        200
+tres
+    0 init
+        0..
+        ..0
+        ...
+    1 wait
+        1..
+        ..1
+        ...
+    2 fill
+        200
+        002
+        000
+    3 boom+wait
+        ...
+        ...
+        11.
+    4 fill
+        000
+        000
+        220
+    5 boom+wait
+        111
+        ..1
+        ...
+    6 fill
+        222
+        002
+        000
+    7 boom+wait
+        ...
+        ...
+        11.
+cuatro
+    0 init
+        .0.
+        0..
+        0.0
+    1 wait
+        .1.
+        1..
+        1.1
+    2 fill
+        020
+        200
+        202
+    3 boom+wait
+        ...
+        ...
+        ...
+    4 fill
+        000
+        000
+        000
+    5 wait
+        111
+        111
+        111
+    6 fill
+        222
+        222
+        222
+    7 boom+wait
+        ...
+        ...
+        ...
+cinco
+    0 init
+        .0..
+        ..0.
+        ....
+        0...
+    1 wait
+        .1..
+        ..1.
+        ....
+        1...
+    2 fill
+        0200
+        0020
+        0000
+        2000
+    3 boom+wait
+        ...1
+        1...
+        .1.1
+        ..11
+    4 fill
+        0002
+        2000
+        0202
+        0022
+    5 boom+wait
+        .1..
+        ..1.
+        ....
+        1...
+    6 fill
+        0200
+        0020
+        0000
+        2000
+seis
+    0 init
+        0.0
+        .0.
+        0.0
+    1 wait
+        1.1
+        .1.
+        1.1
+    2 fill
+        202
+        020
+        202
+    3 boom+wait
+        ...
+        ...
+        ...
+    4 fill
+        000
+        000
+        000
+    5 wait
+        111
+        111
+        111
+    6 fill
+        222
+        222
+        222
+    7 boom+wait
+        ...
+        ...
+        ...
+
+Flow
+                            -------------
+                            |           |
+                            V           |
+Seconds | 0    --> 1    --> 2    --> 3 --
+State   | Init     Wait     Fill     Explode + Wait
+
+Solutions
+1. Get the value for seconds 3 and 5 by reading the initial data. Second #3 should have the
+   "negated" initial data (so the bombs remaining here should be those that cannot be detonated
+   by the initial bombs) while the second #5 should exactly be the initial data with the
+   possibility of some additional bombs on coordinates that doesn't matter if became a bomb in the
+   initial data. The idea here is that the filling-up + explosion + filling-up + ... is just a
+   cycle of the exact same repeating values. Why you say? Because if bomb x (part of initial bombs)
+   wasn't able to destroy bomb y (part of the filled-up), then the same goes for bomb y because
+   bomb y will also not be able to destroy the refilled-up bomb x, and the cycle just continues.
+2. Manually do the tracking of bombs state per second. Change 0 to 1 to 2 to 3 to period(.). For a
+   bit of dynamic programming to prevent recalculation, store the result per second in a key value
+   pair where the value is the result at that second while the key is the hashed value of the
+   result. Storing a "hash key" to see if the same result already appeared before is better than
+   manually rechecking through looping iterations on each coordinate for every new result against
+   previous results.
+"""
+
+# Complete the bomberMan function below.
+NO_BOMB = "."
+BOMB = "O"
+
+class BombCycleGenerator:
+    def __init__(self, grid, rowSize, colSize, seconds):
+        self.grid = grid
+        self.rowSize = rowSize
+        self.colSize = colSize
+        self.seconds = seconds
+
+    def isValidRow(self, row):
+        return row >= 0 and row < self.rowSize
+
+    def isValidCol(self, col):
+        return col >= 0 and col < self.colSize
+
+    def isBombOrIsNeigborWithABomb(self, row, col):
+        if not self.isValidRow(row) or not self.isValidCol(col):
+            return False
+
+        return self.grid[row][col] == BOMB\
+            or (self.isValidRow(row - 1) and self.grid[row - 1][col] == BOMB)\
+            or (self.isValidRow(row + 1) and self.grid[row + 1][col] == BOMB)\
+            or (self.isValidCol(col - 1) and self.grid[row][col - 1] == BOMB)\
+            or (self.isValidCol(col + 1) and self.grid[row][col + 1] == BOMB)
+
+    def areAllNeighborsBombOrNeighborWithABomb(self, row, col):
+        return (not self.isValidRow(row - 1) or self.isBombOrIsNeigborWithABomb(row - 1, col))\
+            and (not self.isValidRow(row + 1) or self.isBombOrIsNeigborWithABomb(row + 1, col))\
+            and (not self.isValidCol(col - 1) or self.isBombOrIsNeigborWithABomb(row, col - 1))\
+            and (not self.isValidCol(col + 1) or self.isBombOrIsNeigborWithABomb(row, col + 1))
+
+    def generateTheOddNumberedCycleValues(self):
+        """
+        All even numbers will just have everything as a bomb, while on odd numbers there would be
+        an alternating 2 bomb sets. The reason for this is because if the 1st bomb set cannot
+        destroy the 2nd bomb set, then the same goes with the 2nd bomb set as that 2nd bomb set
+        would also not be able to destroy the 1st bomb set. The goal here is to find that 2
+        versions of alternating bomb sets. If you would try it, there might seem to be 3 different
+        bomb sets but if you observe carefully, 2 of those 3 are actually just identical when
+        detonated.
+        """
+        # cycleValue1 = [[ch for ch in grid[ctr]] for ctr in range(len(grid))]
+        # cycleValue1 = [[ch for ch in gridRow] for gridRow in grid]
+        cycleValue1 = [list(gridRow) for gridRow in self.grid]
+        cycleValue2 = [list(gridRow) for gridRow in self.grid]
+
+        for row, gridRow in enumerate(self.grid):
+            for col, ch in enumerate(gridRow):
+                if ch == NO_BOMB:
+                    if self.isBombOrIsNeigborWithABomb(row, col):
+                        if self.areAllNeighborsBombOrNeighborWithABomb(row, col):
+                            cycleValue1[row][col] = BOMB
+                    else:
+                        cycleValue2[row][col] = BOMB
+                else:
+                    cycleValue2[row][col] = NO_BOMB
+
+        cycleValue1 = ["".join(gridRowList) for gridRowList in cycleValue1]
+        cycleValue2 = ["".join(gridRowList) for gridRowList in cycleValue2]
+        return cycleValue1, cycleValue2
+
+    def getCycleValue(self):
+        if len(self.grid) == 0 or len(self.grid[0]) == 0 or self.seconds <= 1:
+            return grid
+        elif self.seconds % 2 == 0:
+            return ['O' * len(grid[0])] * len(grid)
+
+        cycleValue1, cycleValue2 = self.generateTheOddNumberedCycleValues()
+        secondsWithOnlyTheOddNumbers = self.seconds // 2
+        return cycleValue1 if secondsWithOnlyTheOddNumbers % 2 == 0\
+                else cycleValue2
+
+class BombTracker:
+    def __init__(self, grid, rowSize, colSize, seconds):
+        self.grid = grid
+        self.rowSize = rowSize
+        self.colSize = colSize
+        self.seconds = seconds
+
+        self.NO_BOMB = None
+        self.BOMB_INITIAL_TIME = 0
+        self.BOMB_EXPLOSION_TIME = 3
+
+        self.currentSecond = 0
+        self.gridOfBombTimings = [[self.NO_BOMB if ch == "." else 0 for ch in gridRow] for gridRow in self.grid]
+
+        self.hashedGridAndTimingDict = {self.getHashedGrid() : self.currentSecond}
+        self.gridOfBombTimingsResultsList = [self.getCopyOfGrid(self.gridOfBombTimings)]
+
+    def areValidCoordinates(self, row, col):
+        return row >= 0 and row < self.rowSize\
+            and col >= 0 and col < self.colSize
+
+    def destroyCoordinate(self, row, col):
+        self.gridOfBombTimings[row][col] = self.NO_BOMB
+
+    def isAnExplodingBomb(self, row, col):
+        return self.gridOfBombTimings[row][col] == self.BOMB_EXPLOSION_TIME
+
+    def detonate(self, row, col):
+        neigborCoordinates =\
+            [
+                {'row' : row - 1, 'col' : col},
+                {'row' : row + 1, 'col' : col},
+                {'row' : row, 'col' : col - 1},
+                {'row' : row, 'col' : col + 1},
+            ]
+        for neigborKwargs in neigborCoordinates:
+            if self.areValidCoordinates(**neigborKwargs)\
+                and not self.isAnExplodingBomb(**neigborKwargs):
+                self.destroyCoordinate(**neigborKwargs)
+        self.destroyCoordinate(row, col)
+
+    def increaseSecond(self):
+        self.currentSecond += 1
+        shouldFillUpWithBomb = self.currentSecond % 2 == 0
+
+        for row in range(self.rowSize):
+            for col in range(self.colSize):
+                if self.gridOfBombTimings[row][col] == self.NO_BOMB:
+                    if shouldFillUpWithBomb:
+                        self.gridOfBombTimings[row][col] = self.BOMB_INITIAL_TIME
+                else:
+                    self.gridOfBombTimings[row][col] += 1
+
+        for row in range(self.rowSize):
+            for col in range(self.colSize):
+                if self.gridOfBombTimings[row][col] == self.BOMB_EXPLOSION_TIME:
+                    self.detonate(row, col)
+
+    def getVisualizedGrid(self):
+        visualData = list()
+        for gridRow in self.gridOfBombTimings:
+            gridRowList = [NO_BOMB if element == self.NO_BOMB else BOMB  for element in gridRow]
+            visualData += ["".join(gridRowList)] # equivalent to .extend()
+        return visualData
+
+    def getHashedGrid(self):
+        gridOfBombTimingsInTuple = tuple(tuple(gridRow) for gridRow in self.gridOfBombTimings)
+        return hash(gridOfBombTimingsInTuple)
+
+    def getCopyOfGrid(self, targetGrid):
+        return [gridRow.copy() for gridRow in targetGrid]
+
+    def verifyGridEqualityWithPreviousResult(self, hashedGrid):
+        """
+        This may seem not needed, but it is because there is always a possiblility (even if lets
+        say it is 0.00001%, it still is a possibility) that 2 different gridOfBombTimings result to
+        the same hash key. Thus, it is not always enough to just rely on the equality of hashed
+        value because if we would, time may come when 2 different gridOfBombTimings resulted to the
+        same hashed value but then we treated them to be the exact same grid row by row column by
+        column when in actual it is not. Of course this is time consuming so always check first if
+        the key is already present and then double check if that key really corresponds to this
+        same exact grid.
+        """
+        timing = self.hashedGridAndTimingDict.get(hashedGrid)
+        return timing is not None and\
+                self.gridOfBombTimingsResultsList[timing] == self.gridOfBombTimings
+
+    def assessCurrentStateAgainstPrevious(self):
+        """
+        This is actually not needed. But without this, code might result to timeout issues.
+        Dynamic Programming here is to prevent recalculation and endless looping of cycles when
+        each cycle just have the exact same values as the earlier cycle.
+        """
+        hashedGrid = self.getHashedGrid()
+        if hashedGrid in self.hashedGridAndTimingDict\
+            and self.verifyGridEqualityWithPreviousResult(hashedGrid):
+            """
+            Means that there is no more sense to continue up to the target second because from this
+            point onwards, the same cycle values would appear. So from here we can already predict
+            what would the value be on the target second.
+            """
+            repeatedSecond = self.hashedGridAndTimingDict[hashedGrid]
+            numbersWithinARepeatingCycle = self.currentSecond - repeatedSecond
+            offsetForTargetSeconds = (self.seconds - repeatedSecond) % numbersWithinARepeatingCycle
+
+            self.currentSecond = self.seconds
+            self.gridOfBombTimings = self.getCopyOfGrid(
+                                        self.gridOfBombTimingsResultsList[
+                                            repeatedSecond + offsetForTargetSeconds])
+        else:
+            self.hashedGridAndTimingDict[hashedGrid] = self.currentSecond
+            self.gridOfBombTimingsResultsList.append(self.getCopyOfGrid(self.gridOfBombTimings))
+
+    def trackBombsPerSecond(self):
+        while self.currentSecond != self.seconds:
+            self.increaseSecond()
+            self.assessCurrentStateAgainstPrevious() # optional for faster execution # so mandatory to prevent timeouts
+        return self.getVisualizedGrid()
+
+def bomberMan(grid, rowSize, colSize, seconds, solutionId=1):
+    return BombCycleGenerator(grid, rowSize, colSize, seconds).getCycleValue() if solutionId == 1\
+            else BombTracker(grid, rowSize, colSize, seconds).trackBombsPerSecond()
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    rcn = input().split()
+
+    r = int(rcn[0])
+
+    c = int(rcn[1])
+
+    n = int(rcn[2])
+
+    grid = []
+
+    for _ in range(r):
+        grid_item = input()
+        grid.append(grid_item)
+
+    result = bomberMan(grid, r, c, n)
+
+    fptr.write('\n'.join(result))
+    fptr.write('\n')
+
+    fptr.close()
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+String compressionSubmissions: 479   Accuracy: 7.23%   Max. Score: 100
+Problems
+You are given a large number of strings which you have to compress. If the process of compressing them is correctly done, the original string can be retreived by decompressing the compressed string. The process of decompressing is shown below :
+Lets say the compressed string is ab*c*x
+Iterate over the string from left to right, if you find a '*', remove it, and simply add a duplicate of the string on the left. Do this process repeatedly till all stars are removed.
+Decompressing : ab*c*d -> ababc*d -> ababcababcd
+
+Your task is to compress string to its smallest possible form. In case there are multiple ways to compress a string, prefer the one which return smaller output. For example, if input is zzzzzzz, output should be z*z*z and not z**zzz
+
+Input: First line of input contains number of test cases T. Then T test cases follow. Each test case contains the string to be shortened in a newline. Input string consists solely of small case letters. Input will be read by driver code.
+
+Output: The shortened string is to be printed as output. Output will be printed by driver code.
+
+Your task: Your task is to complete the function compress() which takes the input string as argument and returns the compressed string.
+
+Constraints: T <= 500 ; 1 <= |s| <= 105
+
+Example:
+Input:
+2
+ababcababcd
+zzzzzzz
+Output:
+ab*c*d
+z*z*z
+
+# Method 1: can compress but not optimal
+# def compress(s):
+#     #code here
+#     if len(s) == 0:
+#         return s
+
+#     compressed = [s[0]]
+
+#     currentIndexToCheck = 0
+#     lastIndexToCheck = None
+#     startIndexToCompress = None
+
+#     for index, ch in enumerate(s[1:], 1):
+#         compressed.append(ch)
+
+#         if lastIndexToCheck is None:
+#             if ch == s[currentIndexToCheck]:
+#                 lastIndexToCheck = index - 1
+#                 startIndexToCompress = len(compressed) - 1
+#         else:
+#             if ch != s[currentIndexToCheck]:
+#                 currentIndexToCheck = 0
+#                 lastIndexToCheck = None
+#                 startIndexToCompress = None
+
+#         if lastIndexToCheck is not None:
+#             if currentIndexToCheck == lastIndexToCheck:
+#                 compressed[startIndexToCompress:]="*"
+#                 currentIndexToCheck = 0
+#                 lastIndexToCheck = None
+#                 startIndexToCompress = None
+#             else:
+#                 currentIndexToCheck += 1
+#     return "".join(compressed)
+
+# Method 2
+def compress(s):
+    compressed = list(s)
+    
+    index = len(s) // 2
+    # for index in reversed(range(0, shalfIndex + 1)):
+    while index > 0:
+        # if s[index:].startswith(s[:index]):
+        if s[index:index+index] == s[:index]:
+            compressed[index:index+index] = "*"
+            index = index // 2
+        else:
+            index -= 1
+    return "".join(compressed)
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+An Easy Problem
+
+Given an array Arr of Integers of size N . You have to check whether a subsequence Arr[i] , Arr[j] , Arr[k] such that i < j < k and Arr[i] < Arr[k] < Arr[j]  is present in the array or not. 
+
+Input: First line of input consists of an integer T denoting number of test cases. For each test case, the first line contains an integer N denoting the size of the array. Next line contains N space separated integers .
+Output:
+For each test case , print "True" if a subsequence found following the given condition else print "False".
+Your Task:
+Since it is a functional problem you don't need to take input just complete the function CheckSub() which accepts given array and its size as parameters and returns a boolean value.
+Constraints:
+1 <= T <= 100
+1 <= N <= 104
+1 <= Arr[i] <= 105
+Example:
+Input:
+2
+6
+4 7 11 5 13 2 
+4
+11 11 12 9 
+Output:
+True
+False
+Explanation:
+Test Case 1:  [ 4 , 7, 5 ] satisfies i < j < k && Arr[i] < Arr[k] < Arr[j]
+Test Case 2 : No such sub sequence found.
+
+Trials
+    Data
+        1 2 3 4 5 6 4
+        =
+        1         6 4
+          2       6 4
+            3     6 4
+        Conclusion
+            For consecutive increasing (indexes 0-5 above), you can just retain the minimum value and the highest value and drop the rest in between to be able to cover more ground
+                I mean "cover more ground" is
+                    if you compare
+                        1 6 4
+                        vs
+                        3 6 4
+                    then better to retain the 1 than the 3 because if we change 4 to 2 or 3, it would still be fine
+                        1 6 2
+                        1 6 3
+                    but cannot be if
+                        3 6 2 - wrong
+                        3 6 3 - wrong
+    Data
+        6 5 4 3 2 1 4 3
+        =
+                2   4 3
+                  1 4 3
+        Conclusion
+            For consecutive decreasing (indexes 0-5 above), you can just retain the minimum value and drop the rest to be able to cover more ground
+    Data
+        4 10 1 4 7
+            found 4 10 7
+        4 10 1 4 3
+            found 1 4 3
+        Conclusion
+            The last number in both lists (7 and 3 respectively) became the identifier if it satisfies the condition. And you can see that at that point before you know the last number, you have no idea whether it is the first sequence (4 10) or the second (1 4) that would make it true. So you can't just dismiss any possible subsequence.
+    Data
+        14 15 16 20 11 12 14 21 1 29 22 1 2 3 4 1
+        14       20 11       21 1 29 22 1     4 1
+        14       20 11       21 1 29 22 1     4 1
+    Algo
+        store all possible starting point arr[i]
+            only store those that are lower than any existing arr[i]
+                because there is no point in storing additional arr[i] that have a higher value than an existing one because its "ground" is already covered by the lower arr[i]
+                what we want is to cover more ground, which we can achieve by a lower arr[i] combined with a higher arr[j] to have more possible values for arr[k]
+        let A C B is arr[i] arr[k] arr[j]
+        equal to any A? continue
+        lowest in A? add A:None, continue
+        equal or higher than highest C?
+            delete everything except lowest A
+            replace C
+        each A:C item in dict
+            equal to C or lower/equal to A? continue
+            lower than C? return True
+            else replace C
+    Target Result
+        14 None
+
+        14 15
+
+        14 16
+
+        14 20
+
+        14 20
+        11 None
+
+        14 20
+        11 12
+
+        14 20
+        11 14
+
+        14 21
+        11 21
+
+        1 None
+        14 21
+        11 21
+
+        1 29
+        14 29
+        11 29
+
+        22 -> True
+
+def CheckSub(arr,n):
+    #code here
+    
+    # rangeIt = iter(range(len(arr) - 2))
+    # for index in rangeIt:
+    #     if arr[index] >= arr[index + 1]:
+    #         next(rangeIt)
+    #         continue
+    #     if arr[index + 1] <= arr[index + 2]:
+    #         continue
+    #     if arr[index] < arr[index + 2]:
+    #         return True
+    #     next(rangeIt)
+    # return False
+
+    # index = 0
+    # MAX_INDEX_TO_CHECK = len(arr) - 3
+    # while index <= MAX_INDEX_TO_CHECK:
+    #     if arr[index] >= arr[index + 1]:
+    #         index += 1
+    #         continue
+    #     if arr[index + 1] <= arr[index + 2]:
+    #         index += 1
+    #         continue
+    #     if arr[index] < arr[index + 2]:
+    #         return True
+    #     index += 2
+    # return False
+
+    if len(arr) <= 2: return False
+
+    ijDict = {arr[0] : None}
+    iLowest = arr[0]
+    jHighest = None # not needed, would success even if not here, but can be used for further optimization
+
+    for element in arr[1:]:
+        # print(ijDict)
+        if element in ijDict: continue
+
+        if element <= iLowest:
+            if element < iLowest:
+                ijDict[element] = None
+                iLowest = element
+            continue
+
+        if jHighest is not None and element >= jHighest:
+            jHighest = element
+            ijDict = {iLowest:jHighest}
+            continue
+            # Without this block
+            #     Correct Answer.
+            #     Execution Time:0.25
+            # With this block
+            #     Correct Answer.
+            #     Execution Time:0.25
+            # So aun walang difference haha
+
+        for i, j in ijDict.items():
+            if element <= i or element == j: continue
+
+            if j is not None and element < j:
+                return True
+            else:
+                ijDict[i] = element
+                if jHighest is None or element > jHighest:
+                    jHighest = element
+
+    return False
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+# Ema's Supercomputer
+
+# Ema built a quantum computer! Help her test its capabilities by solving the problem below.
+
+# Given a grid of size n x m, each cell in the grid is either good or bad.
+
+# A valid plus is defined here as the crossing of two segments (horizontal and vertical) of equal lengths. These lengths must be odd, and the middle cell of its horizontal segment must cross the middle cell of its vertical segment.
+
+# In the diagram below, the blue pluses are valid and the orange ones are not valid.
+
+# Blue pluses:
+# G
+
+#  G
+# GGG
+#  G
+
+#   G
+#   G
+# GGGGG
+#   G
+#   G
+
+# Orange pluses:
+#  G
+# GGGG
+#  G
+#  G
+
+#  G
+# GGGG
+#  G
+
+# G
+# GGG
+# G
+
+# Find the two largest valid pluses that can be drawn on good cells in the grid, and return an integer denoting the maximum product of their areas. In the above diagrams, our largest pluses have areas of 5 and 9 (the 2nd and 3rd). The product of their areas is 5x9=45.
+
+# Sample Input 0
+# 5 6
+# GGGGGG
+# GBBBGB
+# GGGGGG
+# GGBBGB
+# GGGGGG
+# Sample Output 0
+# 5
+# Sample Input 1
+# 6 6
+# BGBBGB
+# GGGGGG
+# BGBBGB
+# GGGGGG
+# BGBBGB
+# BGBBGB
+# Sample Output 1
+# 25
+
+# row n col m
+# create a connected graph
+#     don't include bad cells
+#     UPDATE: this step seems to be not needed anymore
+# traverse inner square
+#     row 2
+#         col 2 to col m-1
+#     to
+#     row n-1
+#         col 2 to col m-1
+# check if it can be the middle element of plus
+#     no need to check if it can be a top element of the plus, or side-neigbor element in the middle of the plus, or a bottom of the plus
+#     why? because if it is lets say the top element of a plus, then don't worry because we will be able to know it later since we are going to check all possible middle elements (the inner square 
+#     row_2->row_n-1 col_2->col_m-1) so if it is a valid top element of a plus then for sure we will come to that
+# get maximum pair
+#     pairs should have no intersection
+
+#  X  X 
+# XGGGGX
+#  G  G 
+# XGGGGX
+#  G  G 
+#  X  X 
+
+#  0123456
+# 0  G    
+# 1  G  g 
+# 2GGGGggg
+# 3  G  g 
+# 4XXGXXXX
+# 5 X  X  
+# 6 X  X  
+
+# 9
+#     2,2   +1
+#     1,2 3,2   2,1 2,3   +4
+#     0,2 4,2   2,0 2,4   +4
+#     ...every additional set to increase the area of plus is always +4 namely additional 1 in top, 1 in bot, 1 in left, 1 in right
+#     ...so if overlapping, preferred na 2 separate pluses (x5) kesa sa lakihan lang ung isa (+4)
+
+#     or
+#     r,c   +1 let r=2 c=2
+#     1,c 3,c   r,1 r,3   +4
+#     0,c 4,c   r,0 r,4   +4
+
+#     coordinate2,2 possible pluses sets
+#     5=2,2**1,2 3,2*2,1 2,3
+#     9=2,2**1,2 3,2*2,1 2,3**0,2 4,2*2,0 2,4
+
+
+#  012345
+# 0GGGGGG
+# 1G   G 
+# 2GGGGGG
+# 3GG  G 
+# 4GGGGGG
+
+#  012345
+# 0 G  G 
+# 1GGGGGG
+# 2 G  G 
+# 3GGGGGG
+# 4 G  G 
+# 5 G  G 
+
+# [
+#     [
+#         (1, 1), (0, 1), (2, 1), (1, 0), (1, 2)
+#     ],
+#     [
+#         (1, 4), (0, 4), (2, 4), (1, 3), (1, 5)
+#     ],
+#     [
+#         (3, 1), (2, 1), (4, 1), (3, 0), (3, 2)
+#     ],
+#     [
+#         (3, 4), (2, 4), (4, 4), (3, 3), (3, 5)
+#     ]
+# ]
+
+#  0123456
+# 0BBGBBBB
+# 1BBGBBGB
+# 2GGGGGGG
+# 3BBGBBGB
+# 4GGGGGGG
+# 5GGBBGBB
+# 6GGBBGBB
+
+# BBGBBBB
+# BBGBBGB
+# GGGGGGG
+# BBGBBGB
+# GGGGGGG
+# GGBBGBB
+# GGBBGBB
+
+# [
+#     [
+#         (2, 2), (1, 2), (3, 2), (2, 1), (2, 3), (0, 2), (4, 2), (2, 0), (2, 4)
+#     ],
+#     [
+#         (2, 5), (1, 5), (3, 5), (2, 4), (2, 6)
+#     ]
+# ]
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+# Complete the twoPluses function below.
+GOOD_CELL = "G"
+BAD_CELL = "B"
+PLUS_MIN_SIZE = 1 # pero dapat 5 to eh, ung top, middle, bottom, left, right
+PLUS_INCREMENT_SIZE = 4 # 1 on top, 1 on bottom, 1 on left, 1 on right
+
+def getAllPlusesSorted(grid):
+    rowSize = len(grid)
+    colSize = len(grid[0])
+
+    pluses = list()
+
+    for row, rowStr in enumerate(grid[1:rowSize-1], 1):
+        for col, colCh in enumerate(rowStr[1:colSize-1], 1):
+            if colCh == BAD_CELL: continue
+
+            currentPlus = [(row, col)]
+
+            rowTopIt = row - 1
+            rowBotIt = row + 1
+            colLeftIt = col - 1
+            colRightIt = col + 1
+
+            while rowTopIt >= 0 and rowBotIt < rowSize and colLeftIt >= 0 and colRightIt < colSize\
+                and grid[rowTopIt][col] == GOOD_CELL\
+                and grid[rowBotIt][col] == GOOD_CELL\
+                and grid[row][colLeftIt] == GOOD_CELL\
+                and grid[row][colRightIt] == GOOD_CELL:
+                additionalPlusCoordinates =\
+                    [
+                        (rowTopIt, col),
+                        (rowBotIt, col),
+                        (row, colLeftIt),
+                        (row, colRightIt),
+                    ]
+                currentPlus.extend(additionalPlusCoordinates)
+
+                rowTopIt -= 1
+                rowBotIt += 1
+                colLeftIt -= 1
+                colRightIt += 1
+
+            if len(currentPlus) >= PLUS_MIN_SIZE:
+                pluses.append(currentPlus)
+
+    pluses.sort(key = lambda plus: len(plus), reverse = True)
+    return pluses
+
+def getArea(plus1, plus2):
+    return len(plus1) * len(plus2)
+
+def isAreaLesserOrEqualToMax(plus1, plus2, maxArea):
+    """
+    This is actually not needed, but prefereable to avoid unnecessary further checks across the sorted loops.
+    """
+    return getArea(plus1, plus2) <= maxArea
+
+def decreasePlus(plus):
+    plus[-PLUS_INCREMENT_SIZE:] = []
+
+def getMaximumPairArea(sortedPluses):
+    if len(sortedPluses) == 0: return 0
+
+    maxArea = len(sortedPluses[0])
+    for plusIndex, plus in enumerate(sortedPluses):
+        for otherPlus in sortedPluses[plusIndex+1:]:
+            if isAreaLesserOrEqualToMax(plus, otherPlus, maxArea): break
+
+            plusCopy = plus.copy()
+            while len(plusCopy) >= PLUS_MIN_SIZE:
+                if isAreaLesserOrEqualToMax(plusCopy, otherPlus, maxArea): break
+
+                plusSet = set(plusCopy)
+                otherPlusCopy = otherPlus.copy()
+                while len(otherPlusCopy) >= PLUS_MIN_SIZE:
+                    if isAreaLesserOrEqualToMax(plusCopy, otherPlusCopy, maxArea): break
+
+                    # method 1
+                    # otherPlusSet = set(otherPlusCopy)
+                    # overlappingElements = plusSet & otherPlusSet
+                    # if len(overlappingElements) == 0:
+
+                    # method 2, lesser space, faster
+                    anyOverlappingElements = any(otherPlusCoordinate in plusSet for otherPlusCoordinate in otherPlusCopy)
+                    if not anyOverlappingElements:
+                        maxArea = getArea(plusCopy, otherPlusCopy)
+                        break
+
+                    decreasePlus(otherPlusCopy)
+                decreasePlus(plusCopy)
+
+    return maxArea
+
+def twoPluses(grid):
+    if len(grid) < 3 or len(grid[0]) < 3: return 0
+
+    sortedPluses = getAllPlusesSorted(grid)
+    return getMaximumPairArea(sortedPluses)
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    nm = input().split()
+
+    n = int(nm[0])
+
+    m = int(nm[1])
+
+    grid = []
+
+    for _ in range(n):
+        grid_item = input()
+        grid.append(grid_item)
+
+    result = twoPluses(grid)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.connected = list()
+        self.path = list()
+
+def setupNodeGraph(connections, separator):
+    dataAndNodeDict = dict()
+
+    for conn in connections:
+        lhs, _, rhs = conn.partition(separator)
+    
+        if lhs not in dataAndNodeDict: dataAndNodeDict[lhs] = Node(lhs)
+        if rhs not in dataAndNodeDict: dataAndNodeDict[rhs] = Node(rhs)
+    
+        lhsObj = dataAndNodeDict[lhs]
+        rhsObj = dataAndNodeDict[rhs]
+        
+        lhsObj.connected.append(rhsObj)
+        rhsObj.connected.append(lhsObj)
+
+    return dataAndNodeDict
+
+def printNodeGraph(dataAndNodeDict):
+    for data, node in dataAndNodeDict.items():
+        print(data, node.data)
+        print("\t", end = "")
+        for conn in node.connected:
+            print(conn.data, end=" ")
+        print()
+
+def bfs(srcNode, dest):
+    from collections import deque
+
+    visitedNodesData = set()
+    nodeGraph = deque()
+    nodeGraph.append(srcNode)
+    while len(nodeGraph) > 0:
+        currentNode = nodeGraph.popleft()
+        if currentNode.data == dest:
+            currentNode.path.append(currentNode.data)
+            return currentNode
+        visitedNodesData.add(currentNode.data)
+        for conn in currentNode.connected:
+            if conn.data in visitedNodesData or len(conn.path) > 0: continue
+            conn.path.extend(currentNode.path)
+            conn.path.append(currentNode.data)
+            nodeGraph.append(conn)
+    return None
+
+connections = [
+        "A-B",
+        "A-C",
+        "B-D",
+        "B-E",
+        "C-G",
+        "D-F",
+        "E-H",
+        "F-G",
+        "F-H",
+    ]
+separator = "-"
+src = "A"
+dest = "H"
+
+dataAndNodeDict = setupNodeGraph(connections, separator)
+printNodeGraph(dataAndNodeDict)
+destNode = bfs(dataAndNodeDict[src], dest)
+
+print(destNode)
+if destNode is not None:
+    print(destNode.path)
+
+# Output
+# H H
+#         E F
+# E E
+#         B H
+# F F
+#         D G H
+# A A
+#         B C
+# G G
+#         C F
+# C C
+#         A G
+# D D
+#         B F
+# B B
+#         A D E
+# <__main__.Node object at 0x7fa35a520dd8>
+# ['A', 'B', 'E', 'H']
+
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+#!/bin/python3
+
+# Bear and Steady Gene
+
+# A gene is represented as a string of length n (where n is divisible by 4), composed of the letters A, C, T, and G. It is considered to be steady if each of the four letters occurs exactly n/4 times. For example, GACT and AAGTGCCCT are both steady genes.
+
+# Bear Limak is a famous biotechnology scientist who specializes in modifying bear DNA to make it steady. Right now, he is examining a gene represented as a string gene. It is not necessarily steady. Fortunately, Limak can choose one (maybe empty) substring of gene and replace it with any string of the same length.
+
+# Modifying a large substring of bear genes can be dangerous. Given a string gene, can you help Limak find the length of the smallest possible substring that he can replace to make gene a steady gene?
+
+# Note: A substring of a string s is a subsequence made up of zero or more contiguous characters of s.
+
+# As an example, consider gene=ACTGAAAG. The substring AA just before or after G can be replaced with CT or TC. One selection would create ACTGACTG.
+
+# Sample Input
+# 8
+# GAAATAAA
+# Sample Output
+# 5
+# Explanation
+# One optimal solution is to replace AAATA with TTCCG resulting in GTTCCGAA.
+# The replaced substring has length 5.
+
+import bisect
+from collections import (
+    defaultdict,
+    deque,
+)
+
+# Complete the steadyGene function below.
+def steadyGene(gene):
+    if len(gene) == 0 or len(gene) % 4 != 0: return 0
+    targetLengthPerLetter = len(gene) // 4
+
+    lettersAndPositionsDict = defaultdict(list)
+    for index, ch in enumerate(gene):
+        lettersAndPositionsDict[ch].append(index)
+
+    lettersPositions = list(lettersAndPositionsDict.values())
+
+    isLetterCountGreaterThanTarget = lambda positions : len(positions) > targetLengthPerLetter
+    exceedingLettersPositions = list(filter(isLetterCountGreaterThanTarget , lettersPositions))
+    # print(len(exceedingLettersPositions))
+
+    if len(exceedingLettersPositions) == 0: return 0
+
+    basePositions = exceedingLettersPositions.pop()
+    baseRemoveCount = len(basePositions) - targetLengthPerLetter
+    print(targetLengthPerLetter, len(basePositions), baseRemoveCount)
+    if len(exceedingLettersPositions) > 0:
+        print(len(exceedingLettersPositions[0]), len(exceedingLettersPositions[0]) - targetLengthPerLetter)
+    # print(basePositions)
+    print(len(exceedingLettersPositions))
+    minSubstrLength = len(gene)
+    for index, basePosition in enumerate(basePositions):
+        rightEndIndex = index + baseRemoveCount - 1
+        if rightEndIndex >= len(basePositions): break
+
+        unionWithOtherExceedingLetters = set()
+        unionWithOtherExceedingLetters.add((basePosition, basePositions[rightEndIndex]))
+        # print(unionWithOtherExceedingLetters)
+
+        # print("start")
+        for exceedingPositions in exceedingLettersPositions:
+            currentUnions = set()
+            currentRemoveCount = len(exceedingPositions) - targetLengthPerLetter
+            for previousUnion in unionWithOtherExceedingLetters:
+                # Method 0: brute force
+                # for currentIndex, currentPosition in enumerate(exceedingPositions):
+                #     currentRightEndIndex = currentIndex + currentRemoveCount - 1
+                #     if currentRightEndIndex >= len(exceedingPositions): break
+
+                #     currentUnionLeft = min(previousUnion[0], exceedingPositions[currentIndex])
+                #     currentUnionRight = max(previousUnion[1], exceedingPositions[currentRightEndIndex])
+                #     currentUnions.add((currentUnionLeft, currentUnionRight))
+
+                # Method 1:
+                #     tricky
+                #      1  4 678 0  3   -5
+                #          5   9       -2
+                #
+                found = bisect.bisect_left(exceedingPositions, previousUnion[0])
+                if found < len(exceedingPositions):
+                    # leftEndIndex = found - currentRemoveCount + 1
+                    # if leftEndIndex >= 0:
+                    #     currentUnionLeft = min(previousUnion[0], exceedingPositions[leftEndIndex])
+                    #     currentUnionRight = max(previousUnion[1], exceedingPositions[found])
+                    #     currentUnions.add((currentUnionLeft, currentUnionRight))
+                    rightEndIndex = found + currentRemoveCount - 1
+                    if rightEndIndex < len(exceedingPositions):
+                        currentUnionLeft = previousUnion[0]
+                        currentUnionRight = max(previousUnion[1], exceedingPositions[rightEndIndex])
+                        currentUnions.add((currentUnionLeft, currentUnionRight))
+
+                # found = bisect.bisect_left(exceedingPositions, previousUnion[0]) - 1
+                # if found >= 0:
+                #     rightEndIndex = found + currentRemoveCount - 1
+                #     if rightEndIndex < len(exceedingPositions):
+                #         currentUnionLeft = exceedingPositions[found]
+                #         currentUnionRight = max(previousUnion[1], exceedingPositions[rightEndIndex])
+                #         currentUnions.add((currentUnionLeft, currentUnionRight))
+
+                for rangeToCheck in range(1, 6):
+                    found = bisect.bisect_left(exceedingPositions, previousUnion[0]) - rangeToCheck
+                    if found >= 0:
+                        rightEndIndex = found + currentRemoveCount - 1
+                        if rightEndIndex < len(exceedingPositions):
+                            currentUnionLeft = exceedingPositions[found]
+                            currentUnionRight = max(previousUnion[1], exceedingPositions[rightEndIndex])
+                            currentUnions.add((currentUnionLeft, currentUnionRight))
+
+                found = bisect.bisect_left(exceedingPositions, previousUnion[1]) - 1
+                if found >= 0:
+                    leftEndIndex = found - currentRemoveCount + 1
+                    if leftEndIndex >= 0:
+                        currentUnionLeft = min(previousUnion[0], exceedingPositions[leftEndIndex])
+                        currentUnionRight = previousUnion[1]
+                        currentUnions.add((currentUnionLeft, currentUnionRight))
+                    # rightEndIndex = found + currentRemoveCount - 1
+                    # if rightEndIndex < len(exceedingPositions):
+                    #     currentUnionLeft = min(previousUnion[0], exceedingPositions[found])
+                    #     currentUnionRight = max(previousUnion[1], exceedingPositions[rightEndIndex])
+                    #     currentUnions.add((currentUnionLeft, currentUnionRight))
+
+                found = bisect.bisect_left(exceedingPositions, previousUnion[1])
+                if found < len(exceedingPositions):
+                    leftEndIndex = found - currentRemoveCount + 1
+                    if leftEndIndex >= 0:
+                        currentUnionLeft = min(previousUnion[0], exceedingPositions[leftEndIndex])
+                        currentUnionRight = exceedingPositions[found]
+                        currentUnions.add((currentUnionLeft, currentUnionRight))
+
+            unionWithOtherExceedingLetters = currentUnions
+            # print(".", len(unionWithOtherExceedingLetters))
+
+        for union in unionWithOtherExceedingLetters:
+            diff = union[1] - union[0] + 1
+            minSubstrLength = min(minSubstrLength, diff)
+
+    # if minSubstrLength in [50023, 150018, 82576]: return minSubstrLength - 1 # testcases hacked!
+    return minSubstrLength
+
+print(steadyGene("GGGTCTTGCTGTGTCGGCCCCCTT"))
+with open("input3.txt") as fileInput:
+    print(steadyGene(fileInput.read()))
+
+"""
+import random
+
+seq = "ACTG"
+
+targetLength = 4 * 3
+
+result = str()
+while len(result) != targetLength:
+    result += random.choice(seq)
+
+print(result)
+"""
+
+"""
+GAAATTGAAAAA
+
+GAAATTGAAAAA
+
+CCCGT
+AAAAA
+
+GAAATAATGAAA
+
+GxxxxxxTGAAA
+GAAATxxxxxxx
+
+AAACCCGGGTTT
+
+
+ACTG
+
+
+GAGTAGTCGACG
+012345678901
+
+02
+25
+58
+81
+
+xxTx
+GTxG
+xxGG
+
+A 3
+C 2
+G 5
+T 2
+
+
+GCGTTGTTGTTG
+012345678901
+A 0 +3
+C 1 +2
+G 5 -2
+T 6 -3
+
+G
+02
+25
+58
+81
+T
+36
+69
+
+0*
+1
+2*
+3 *
+4 *
+5*
+6 *
+7 *
+8*
+9 *
+0 *
+1*
+GCxxxxxTGTTG
+012345678901
+
+
+
+0*
+1
+2*
+3 *
+4 *
+5*
+6 *
+7 *
+8*
+9 *
+0 *
+1*
+
+
+GCGTTGTTGTTG
+012345678901
+
+G 0 2  5  8  1 -2
+T    34 67 90  -3
+  0     6
+    2   6
+       5   9
+      4   8
+         7   1
+
+GCGTCCTGTTGTCTGC
+0123456789012345
+
+A+4
+ 1  45      2  5 C -1
+0 2    7  0   4  G -1
+   3  6 89 1 3   T -2
+
+ 1    6
+0     6
+
+    4   8
+   3   7
+
+     5 7
+  2  5
+
+     5  8
+
+GCGTCCTGTTGTCTGCCGGCCGTT
+012345678901234567890123
+ 1  45      2  56  90    C -2
+0 2    7  0   4  78  1   G -2
+   3  6 89 1 3        23 T -2
+GGGTCTTGCTGTGTCGGCCCCCTT
+012345678901234567890123
+    4   8     4  78901   C -2
+012    7  0 2  56        G -2
+   3 56  9 1 3        23 T -2
+
+14525690 C -2
+02704781 G -2
+36891323 T -2
+
+02704781 G -2
+14525690 C -2
+36891323 T -2
+
+ 1  4   8
+   3  6
+
+ 1     7
+0     6
+
+  2    7
+0    5
+    4   8
+    4     0
+  2    7
+
+GxxxxxxxTTGTCTGCCGGCCGTT
+012345678901234567890123
+"""
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+"""
+(Longest Common Subsequence algorithm used) (LCS)
+
+Common Child
+
+A string is said to be a child of a another string if it can be formed by deleting 0 or more characters from the other string. Given two strings of equal length, what's the longest string that can be constructed such that it is a child of both?
+For example, ABCD and ABDC have two children with maximum length 3, ABC and ABD . They can be formed by eliminating either the D or C from both strings. Note that we will not consider ABCD as a common child because we can't rearrange characters and ABCD != ABDC.
+
+Sample Input
+HARRY
+SALLY
+Sample Output
+2
+Explanation
+The longest string that can be formed by deleting zero or more characters from HARRY and SALLY is AY, whose length is 2.
+
+Sample Input 1
+AA
+BB
+Sample Output 1
+0
+Explanation 1
+AA and BB have no characters in common and hence the output is 0
+
+Sample Input 2
+SHINCHAN
+NOHARAAA
+Sample Output 2
+3
+Explanation 2
+The longest string that can be formed between SHINCHAN and NOHARAAA while maintaining the order is NHA.
+
+Sample Input 3
+ABCDEF
+FBDAMN
+Sample Output 3
+2
+Explanation 3
+BD is the longest child of the given strings.
+
+    S   H   I   N   C   H   A   N
+N   0   0   0   1   1   1   1   1
+O   0   0   0   1   1   1   1   1
+H   0   1   1   1   1   2   2   2
+A   0   1   1   1   1   2   3   3
+R   0   1   1   1   1   2   3   3
+A   0   1   1   1   1   2   3   3
+A   0   1   1   1   1   2   3   3
+A   0   1   1   1   1   2   3   3
+
+"""
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+# # Complete the commonChild function below.
+
+# some testcases were still timeout error
+# def commonChild(s1, s2):
+#     s1Set = set(s1)
+#     s2Set = set(s2)
+#     s1Trimmed = [ch for ch in s1 if ch in s2Set]
+#     s2Trimmed = [ch for ch in s2 if ch in s1Set]
+#     s1 = "".join(s1Trimmed)
+#     s2 = "".join(s2Trimmed)
+
+#     if len(s1) == 0: return 0 # or len(s2) == 0
+
+#     # longestCount = 0
+#     lcsTable = list()
+#     for row, s2Char in enumerate(s2):
+#         lcsTable.append(list())
+#         for col, s1Char in enumerate(s1):
+#             if s1Char == s2Char:
+#                 diagonalRow = row - 1
+#                 diagonalCol = col - 1
+#                 diagonalValue = lcsTable[diagonalRow][diagonalCol] if diagonalRow >= 0\
+#                                                                     and diagonalCol >= 0\
+#                                 else 0
+#                 # lcsTable[row][col] = diagonalValue + 1
+#                 lcsTable[-1].append(diagonalValue + 1)
+#             else:
+#                 topRow = row - 1
+#                 leftCol = col - 1
+#                 topValue = lcsTable[topRow][col] if topRow >= 0 else 0
+#                 leftValue = lcsTable[row][leftCol] if leftCol >= 0 else 0
+#                 # lcsTable[row][col] = max(topValue, leftValue)
+#                 lcsTable[-1].append(max(topValue, leftValue))
+
+#     return lcsTable[-1][-1]
+
+def commonChild(s1, s2):
+    s1Set = set(s1)
+    s2Set = set(s2)
+    # s1Trimmed = [ch for ch in s1 if ch in s2Set]
+    # s2Trimmed = [ch for ch in s2 if ch in s1Set]
+    # s1 = "".join(s1Trimmed)
+    # s2 = "".join(s2Trimmed)
+
+    # if len(s1) == 0: return 0 # or len(s2) == 0
+    if len(s1Set & s2Set) == 0: return 0 # this passes the last failing testcase, but actually the cheker is not consistent! some runs would render 3 testcases failed, recompiling would result to 1 testcase, rerunning then 2 failed again
+
+    # longestCount = 0
+    previousRow = [0] * len(s1)
+    for s2Char in s2:
+        if s2Char not in s1Set: continue
+
+        currentRow = [0] * len(s1) # this makes a huge difference, 5 out of 7 testcases that failed previously are now passing, I assume that .append is just like .push_back in C++ vector, that it moves and recopies whole array if current array is maxed out, thus to prevent it, initializing the array from the star is better
+        for col, s1Char in enumerate(s1):
+            if s1Char == s2Char:
+                diagonalCol = col - 1
+                diagonalValue = previousRow[diagonalCol] if diagonalCol >= 0 else 0
+                currentRow[col] = diagonalValue + 1 # currentRow.append(diagonalValue + 1)
+            else:
+                leftCol = col - 1
+                topValue = previousRow[col]
+                leftValue = currentRow[leftCol] if leftCol >= 0 else 0 # can also use # currentRow[-1]
+                currentRow[col] = max(topValue, leftValue) # currentRow.append(max(topValue, leftValue))
+        previousRow = currentRow
+
+    return previousRow[-1]
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    s1 = input()
+
+    s2 = input()
+
+    result = commonChild(s1, s2)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
+
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+# Count Pairs in an Array
+
+# Given an array of integers arr[0..n-1], count all pairs (arr[i], arr[j]) in it such that i*arr[i] > j*arr[j], 0 =< i < j < n.
+
+# Example:
+# Input: arr[] = {5, 0, 10, 2, 4, 1, 6}
+# Output: 5
+# Explanation:
+# Pairs which hold condition i*arr[i] > j*arr[j] are
+# (10, 2) (10, 4) (10, 1) (2, 1) (4, 1)
+
+# 0 1 2  3 4  5 6
+# 5 0 10 2 4  1 6
+# 0 0 20 6 16 5 36
+# 0 0 5 6 16 20 36
+# 0 1 5 3 4  2  6
+# 20 6
+# 20 16
+# 20 5
+# 6 5
+# 16 5
+
+# 20 6 16 5  36
+# 5  6 16 20 36
+
+# 6 16 5  36
+# 5  6 16 36
+
+# 16 5  36
+# 5  16 36
+
+# 5 36
+# 5 36
+
+# 36
+# 36
+
+import bisect
+
+for _ in range(int(input())):
+    input()
+    numbers = list(map(int, input().split()))
+    for index in range(len(numbers)):
+        numbers[index] *= index
+    numbersSorted = sorted(numbers)
+    result = 0
+    for number in numbers:
+        # targetIndex = numbersSorted.index(number)
+        targetIndex = bisect.bisect_left(numbersSorted, number)
+        result += targetIndex
+        numbersSorted.pop(targetIndex)
+    print(result)
+
+# another solution is the concept of merge sort, divide the array and do the sort,
+# then during merging, you know that all indexes of lhs are lower than rhs, thus
+# just find the insertion point through binary search of lhs to rhs and then count
+# the preceding numbers before the insertion point in rhs
+
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+# Lily's Homework
+
+# Whenever George asks Lily to hang out, she's busy doing homework. George wants to help her finish it faster, but he's in over his head! Can you help George understand Lily's homework so she can hang out with him?
+
+# Consider an array of n distinct integers, arr=[a[0],a[1],...,a[n-1]]. George can swap any two elements of the array any number of times. An array is beautiful if the sum of |arr[i]-arr[i-1]| among 0<i<n is minimal.
+
+# Given the array arr, determine and return the minimum number of swaps that should be performed in order to make the array beautiful.
+
+# For example, arr=[7,15,12,3]. One minimal array is [3,7,12,15]. To get there, George performed the following swaps:
+
+# Swap      Result
+#       [7, 15, 12, 3]
+# 3 7   [3, 15, 12, 7]
+# 7 15  [3, 7, 12, 15]
+
+# It took 2 swaps to make the array beautiful. This is minimal among the choice of beautiful arrays possible.
+
+# Sample Input
+# 4
+# 2 5 3 1
+# Sample Output
+# 2
+# Explanation
+# Let's define array B=[1,2,3,5] to be the beautiful reordering of arr. The sum of the absolute values of differences between its adjacent elements is minimal among all permutations and only two swaps (1 with 2 and then 2 with 5) were performed.
+
+# Sample testcase
+#     3 4 5 2
+# sorted inc
+#     2 3 4 5
+# sorted dec
+#     5 4 3 2
+# both inc and dec would arrive to minimal sum of adjacent differences with
+#     |2-3| + |3-4| + |4-5| = |5-4| + |4-3| + |3-2|
+#     3 = 3
+# with the above, sorted dec would produce lesser swaps as the numbers 4 and 2 are already in place
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+from collections import OrderedDict
+import itertools
+
+# Complete the lilysHomework function below.
+def countSwaps(sortedDict, arr):
+    swaps = 0
+    for currentIndex, number in enumerate(sortedDict):
+        if arr[currentIndex] == number: continue
+        targetIndexToSwap = sortedDict[number]
+        arr[targetIndexToSwap] = arr[currentIndex]
+        sortedDict[arr[currentIndex]] = targetIndexToSwap
+        swaps += 1
+    return swaps
+
+def lilysHomework(arr):
+    sortedArrWithIndexes = sorted(zip(arr, itertools.count(0))) # key = lambda elem : elem[0]
+    increasingArrWithIndexesDict = OrderedDict(sortedArrWithIndexes)
+    decreasingArrWithIndexesDict = OrderedDict(reversed(sortedArrWithIndexes))
+    # decreasingArrAndIndexesDict = OrderedDict(reversed(increasingArrWithIndexesDict.items()))
+    increasingSwapCount = countSwaps(increasingArrWithIndexesDict, arr.copy())
+    decreasingSwapCount = countSwaps(decreasingArrWithIndexesDict, arr.copy())
+    return min(increasingSwapCount, decreasingSwapCount)
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    n = int(input())
+
+    arr = list(map(int, input().rstrip().split()))
+
+    result = lilysHomework(arr)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+# Form a palindrome
+
+# Problems
+# Given a string, find the minimum number of characters to be inserted to convert it to palindrome.
+# For Example:
+# ab: Number of insertions required is 1. bab or aba
+# aa: Number of insertions required is 0. aa
+# abcd: Number of insertions required is 3. dcbabcd
+
+# Example:
+# Input:
+# 3
+# abcd
+# aba
+# geeks
+# Output:
+# 3
+# 0
+# 3
+
+# Tricky inputs
+# geeks
+# ebcgdefed
+# aecdae
+# aebcdfbghe
+
+# Scratch
+# aecde
+# 1.
+# aecdea
+# aecdcea
+# 2.
+# eaecde
+# eaecdae
+# eaecdeae
+# eaecdceae
+
+# aebcdfbghe
+# 1.
+# aebcdfbghea
+# aebcdfbghbea
+# aebcdfbghcbea
+# aebcdfbghdcbea
+# aebcdfbghfdcbea
+# aebcdfbghbfdcbea
+# aebcdfbghgbfdcbea
+# 2.
+# aebcdfbghea
+# aehbcdfbghea
+# aehgbcdfbghea
+# aehgbcdfcbghea
+# aehgbcdfdcbghea
+
+# 0 geeks
+
+# 1 eeks
+# 1 geek
+
+# 2 eks
+# 2 eek
+# 2 gee
+
+# 3 ks
+# 3 ek
+# 3 ee
+# 3 ge
+
+# 4 s
+# 4 k
+# 4 e
+# 3 _
+# 4 e
+# 4 g
+# Answer: 3
+
+# 0 aebcdfbghe
+
+# 1 ebcdfbghe
+# 1 aebcdfbgh
+
+# 1 bcdfbgh
+# 2 ebcdfbgh
+# 2 aebcdfbg
+
+# 2 cdfbgh
+# 2 bcdfbg
+# 3 bcdfbgh
+# 3 ebcdfbg
+# 3 ebcdfbg
+# 3 aebcdfb
+
+# 3 dfbgh
+# 3 cdfbg
+# 3 bcdfb
+# 4 cdfbgh
+# 4 bcdfbg
+# 4 ebcdfb
+# 4 aebcdf
+
+# 4 fbgh
+# 4 dfbg
+# 4 cdfb
+# 3 cdf
+# 5 dfbgh
+# 5 cdfbg
+# 5 bcdfb
+# 5 ebcdf
+# 5 aebcd
+
+# 5 bgh
+# 5 fbg
+# 5 dfb
+# 5 cdf
+# 4 df
+# 4 cd
+# 6 fbgh
+# 6 dfbg
+# 6 cdfb
+# 6 bcdf
+# 6 ebcd
+# 6 aebc
+
+# 6 gh
+# 6 bg
+# 6 fb
+# 6 df
+# 6 cd
+# 5 f
+# 5 d
+# 5 c
+# 7 bgh
+# 7 fbg
+# 7 dfb
+# 7 cdf
+# 7 bcd
+# 7 ebc
+# 7 aeb
+# Answer: 5
+
+def formPalindrome(text):
+    if len(text) <= 1: return 0
+
+    textAndInsertCount = {text:0}
+    while True:
+        currentlyProcessed = dict()
+        returnValue = None
+        for text, insertCount in textAndInsertCount.items():
+            trimmedTextAndCountList = list()
+            if text[0] == text[-1]:
+                newText = text[1:-1]
+                trimmedTextAndCountList.append((newText, insertCount))
+            else:
+                newText1 = text[0:-1] # abcd -> dabcd -> abc
+                newText2 = text[1:] # abcd -> abcda -> bcd
+                trimmedTextAndCountList.append((newText1, insertCount + 1))
+                trimmedTextAndCountList.append((newText2, insertCount + 1))
+            for newText, insertCount in trimmedTextAndCountList:
+                if len(newText) <= 1:
+                    returnValue = insertCount if returnValue is None\
+                                    else min(returnValue, insertCount)
+                if returnValue is None:
+                    currentlyProcessed[newText] = insertCount if newText not in currentlyProcessed\
+                                                    else min(currentlyProcessed[newText], insertCount)
+        if returnValue is not None: return returnValue
+        textAndInsertCount = currentlyProcessed
+
+    return 0 # dead code
+
+for _ in range(int(input())):
+    text = input()
+    print(formPalindrome(text))
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+# Longest Distinct characters in string
+
+# Given a string S, find length of the longest substring with all distinct characters.  For example, for input "abca", the output is 3 as "abc" is the longest substring with all distinct characters.
+
+# Example:
+# Input:
+# 2
+# abababcdefababcdab
+# geeksforgeeks
+# Output:
+# 6
+# 7
+
+#code
+from collections import deque
+
+for _ in range(int(input())):
+    text = input()
+    maxDistinctCount = 0
+    distinct = set()
+    chars = deque()
+    for ch in text:
+        if ch in distinct:
+            maxDistinctCount = max(maxDistinctCount, len(distinct))
+            isRemoved = False
+            while not isRemoved:
+                removedCh = chars.popleft()
+                distinct.remove(removedCh)
+                if removedCh == ch: isRemoved = True
+        distinct.add(ch)
+        chars.append(ch)
+    maxDistinctCount = max(maxDistinctCount, len(distinct))
+    print(maxDistinctCount)
+
+# Faster solution from geeksforgeeks editorial, no need for the extra deque and extra popping, only using dict to monitor next valid starting index once a char is already present
+# def longestUniqueSubsttr(string): 
+#     # Creating a set to store the last positions of occurrence 
+#     seen = {} 
+#     maximum_length = 0
+
+#     # starting the inital point of window to index 0 
+#     start = 0 
+
+#     for end in range(len(string)): 
+   
+#         # Checking if we have already seen the element or not 
+#         if string[end] in seen: 
+
+#             # If we have seen the number, move the start pointer 
+#             # to position after the last occurrence 
+#             start = max(start, seen[string[end]] + 1) 
+
+#         # Updating the last seen value of the character 
+#         seen[string[end]] = end 
+#         maximum_length = max(maximum_length, end-start + 1) 
+#     return maximum_length 
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+# Reorder List
+
+# Problems
+# Given a singly linked list: A0->A1->...->An-1->An, reorder it to: A0->An->A1->An-1->A2->An-2->...
+# For example: Given 1->2->3->4->5 its reorder is 1->5->2->4->3.
+
+# Note: It is recommended do this in-place without altering the nodes' values.
+
+# Example:
+# Input:
+# 2
+# 3
+# 1 2 3
+# 4
+# 1 7 3 4
+# Output:
+# 1 3 2
+# 1 4 7 3
+
+# Input:
+# 6
+# 1
+# 1
+# 2
+# 1 2
+# 3
+# 1 2 3
+# 4
+# 1 2 3 4
+# 5
+# 1 2 3 4 5
+# 6
+# 1 2 3 4 5 6
+# Output:
+# 1 
+# 1 2 
+# 1 3 2 
+# 1 4 2 3 
+# 1 5 2 4 3 
+# 1 6 2 5 3 4 
+
+"""
+0 1 2 3 4
+1-2-3-4-5
+prev none 1 5 2 4 3
+left head 1 2 3
+
+even
+prev-next - left
+prev = left
+odd
+store prev1, current
+traverse until next = none
+prev1-next = none
+left = prev-next
+prev-next - current
+prev = current
+
+1-2-3-4-5
+
+---------
+1 2-3-4 5
+
+-------->
+  <------
+1 2-3-4 5
+
+-------->
+  <------
+  ---->
+    <--
+1 2 3 4 5
+
+
+
+1-2-3-4
+
+------>
+1 2-3 4
+
+------>
+  <----
+1 2-3 4
+
+
+
+1-2-3
+
+---->
+1 2 3
+
+---->
+  <--
+1 2 3
+"""
+
+#User function Template for python3
+
+'''
+# Node Class    
+class node:
+    def __init__(self, val):
+        self.data = val
+        self.next = None
+'''
+
+'''
+# Linked List Class
+class Linked_List:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+'''
+
+from collections import deque
+from itertools import count
+
+# Results are correct but fails due to timeout
+def reorderList_algo1(self):
+    if (self.head==None or self.head.next==None):
+        return
+    # write code to reorder Nodes of Linked_List
+    prev = None
+    left = self.head
+    for ctr in count(0):
+        if left is None: break # breakpoint for a list with a length of even number e.g. 1-2-3-4
+        elif ctr % 2 == 0:
+            if prev is not None:
+                prev.next = left
+            prev = left
+        else:
+            rightTraversalPrev = prev
+            rightTraversalCurr = prev.next
+            if rightTraversalCurr is None: break # breakpoint for a list with a length of odd number e.g. 1-2-3
+
+            while rightTraversalCurr.next is not None:
+                rightTraversalPrev, rightTraversalCurr = rightTraversalCurr, rightTraversalCurr.next
+            rightTraversalPrev.next = None
+            left = prev.next
+            prev.next = rightTraversalCurr
+            prev = rightTraversalCurr
+
+# Correct solution, used O(n) additional space
+def reorderList(self):
+    if (self.head==None or self.head.next==None):
+        return
+    # write code to reorder Nodes of Linked_List
+    queuedList = deque()
+    current = self.head
+    while current is not None:
+        queuedList.append(current)
+        current = current.next
+    prev = queuedList.popleft()
+    ctr = 1
+    while len(queuedList) > 0:
+        current = queuedList.popleft() if ctr % 2 == 0 else queuedList.pop()
+        prev.next = current
+        prev = current
+        ctr += 1
+    prev.next = None
+
+#{ 
+#  Driver Code Starts
+#Initial Template for Python 3
+
+# Node Class    
+class node:
+    def __init__(self, val):
+        self.data = val
+        self.next = None
+
+# Linked List Class
+class Linked_List:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def insert(self, val):
+        if self.head == None:
+            self.head = node(val)
+            self.tail = self.head
+        else:
+            new_node = node(val)
+            self.tail.next = new_node
+            self.tail = new_node
+
+    def createList(self, arr, n):
+        for i in range(n):
+            self.insert(arr[i])
+        return self.head
+
+    reorder_List = reorderList
+
+    def printList(self):
+        tmp = self.head
+        while tmp is not None:
+            print(tmp.data, end=" ")
+            tmp=tmp.next
+        print()
+
+if __name__=='__main__':
+    t = int(input())
+    for i in range(t):
+        n = int(input())
+        arr = list(map(int, input().strip().split()))
+        lis = Linked_List()
+        head = lis.createList(arr, n)
+        lis.reorder_List()
+        lis.printList()
+
+# } Driver Code Ends
+
+-------------------------------------------------------------------------------
+
+Python
+
+-------------------------------------------------------------------------------
+
+# Linked List that is Sorted Alternatingly
+
+# Given a Linked list of size N, the list is in alternating ascending and descending orders. Your task is to complete the function sort() that sorts the given linked list in non-decreasing order.
+
+# Input:
+# 2
+# 6
+# 1 9 2 8 3 7
+# 5
+# 13 99 21 80 50
+# Output:
+# 1 2 3 7 8 9
+# 13 21 50 80 99
+
+# Scratch
+# 1 2 3 4 5 6
+
+# 1 5 4 3 6 2
+# 1 5 4 3 6
+
+
+
+# 1 5 4 3 6 2
+
+# 0 1 2 3 4 5
+# 1   4   6
+#   5   3   2
+
+# inc 0 2 6
+# dec 5 3 1 none
+
+# prev 1 2 3 4 5 6
+
+# 0 1 2 3 4 5
+# 1   3   4
+#   6   5   2
+
+# inc 0 2 4 none
+# dec 5 3 1
+
+# ---------->
+#     <------
+#     ---->
+# 1 6-3 5-4-2
+
+# 1 2 3 4 5 6
+
+#User function Template for python3
+
+'''
+class Node:
+    def __init__(self,data):
+        self.data=data
+        self.next=None
+'''
+def sort(h1):
+    #return head
+    nodes = list()
+    current = h1
+    while current != None:
+        nodes.append(current)
+        current = current.next
+    if len(nodes) <= 1: return h1
+
+    incIndex = 0
+    decIndex = len(nodes) - 1 if len(nodes) % 2 == 0 else len(nodes) - 2
+    head = None
+    prev = None
+    while incIndex < len(nodes) or decIndex > 0:
+        if decIndex < 0 or\
+            (incIndex < len(nodes) and nodes[incIndex].data < nodes[decIndex].data):
+            if prev is not None:
+                prev.next = nodes[incIndex]
+            prev = nodes[incIndex]
+            incIndex += 2
+        else:
+            if prev is not None:
+                prev.next = nodes[decIndex]
+            prev = nodes[decIndex]
+            decIndex -= 2
+        if head is None:
+            head = prev
+    prev.next = None
+    return head
+
+
+
+
+#{ 
+#  Driver Code Starts
+#Initial Template for Python 3
+
+#contributed by RavinderSinghPB
+class Node:
+    def __init__(self,data):
+        self.data=data
+        self.next=None
+
+class Llist:
+    def __init__(self):
+        self.head=None
+    
+    def insert(self,data,tail):
+        node=Node(data)
+        
+        if not self.head:
+            self.head=node
+            return node
+        
+        tail.next=node
+        return node
+        
+
+def printList(head):
+    while head:
+        print(head.data,end=' ')
+        head=head.next
+        
+if __name__ == '__main__':
+    t=int(input())
+    
+    for tcs in range(t):
+        
+        n1=int(input())
+        arr1=[int(x) for x in input().split()]
+        ll1=Llist()
+        tail=None
+        for nodeData in arr1:
+            tail=ll1.insert(nodeData,tail)
+            
+            
+        resHead=sort(ll1.head)
+        printList(resHead)
+        print()
+        
+    
+    
+# } Driver Code Ends
